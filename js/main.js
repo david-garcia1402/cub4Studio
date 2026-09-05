@@ -386,8 +386,10 @@ function initPortfolioCarousel(projectModal) {
   if (!cards.length) return;
 
   let index = 0;
-  let drag = { active: false, moved: false, startX: 0, startScroll: 0 };
+  let drag = { active: false, moved: false, startX: 0, startScroll: 0, pointerId: null };
   let snapTimer = 0;
+  let suppressClickUntil = 0;
+  const DRAG_THRESHOLD = 16;
 
   const maxScrollLeft = () => Math.max(0, viewport.scrollWidth - viewport.clientWidth);
 
@@ -469,40 +471,53 @@ function initPortfolioCarousel(projectModal) {
   viewport.addEventListener('pointerdown', (event) => {
     if (event.pointerType === 'mouse' && event.button !== 0) return;
     if (event.target.closest('.carousel-btn, .carousel-dot')) return;
-    drag.active = true;
     drag.moved = false;
-    drag.card = event.target.closest('.project-card[data-project]');
+    if (event.target.closest('.project-card__cta')) return;
+    drag.active = true;
+    drag.pointerId = event.pointerId;
     drag.startX = event.clientX;
     drag.startScroll = viewport.scrollLeft;
-    viewport.classList.add('is-dragging');
     viewport.classList.remove('is-jumping');
-    try { viewport.setPointerCapture(event.pointerId); } catch (err) { /* ignore */ }
   });
 
   viewport.addEventListener('pointermove', (event) => {
-    if (!drag.active) return;
+    if (!drag.active || event.pointerId !== drag.pointerId) return;
     const delta = event.clientX - drag.startX;
-    if (Math.abs(delta) > 8) drag.moved = true;
+    if (!drag.moved && Math.abs(delta) < DRAG_THRESHOLD) return;
+    if (!drag.moved) {
+      drag.moved = true;
+      viewport.classList.add('is-dragging');
+      try { viewport.setPointerCapture(event.pointerId); } catch (err) { /* ignore */ }
+    }
     viewport.scrollLeft = drag.startScroll - delta;
   });
 
-  const endDrag = () => {
+  const endDrag = (event) => {
     if (!drag.active) return;
+    if (event && event.pointerId !== drag.pointerId) return;
+    const wasMoved = drag.moved;
     drag.active = false;
+    drag.pointerId = null;
     viewport.classList.remove('is-dragging');
-    goTo(indexFromScroll());
+    if (wasMoved) {
+      goTo(indexFromScroll());
+      suppressClickUntil = Date.now() + 400;
+    }
+    return wasMoved;
   };
-  viewport.addEventListener('pointerup', endDrag);
+
+  viewport.addEventListener('pointerup', (event) => {
+    const wasMoved = endDrag(event);
+    if (wasMoved || !projectModal) return;
+    const card = event.target.closest('.project-card[data-project]');
+    if (card) projectModal.open(card.dataset.project);
+  });
   viewport.addEventListener('pointercancel', endDrag);
 
   viewport.addEventListener('click', (event) => {
-    if (drag.moved) {
-      event.preventDefault();
-      event.stopPropagation();
-      drag.moved = false;
-      drag.card = null;
-      return;
-    }
+    if (Date.now() > suppressClickUntil) return;
+    event.preventDefault();
+    event.stopPropagation();
   }, true);
 
   updateControls();
@@ -528,6 +543,7 @@ function initProjectModal() {
   let index = 0;
   let lastFocus = null;
   let lastOpenAt = 0;
+  let ignoreCloseUntil = 0;
 
   const renderFacts = (project) => {
     factsEl.innerHTML = '';
@@ -652,10 +668,12 @@ function initProjectModal() {
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    ignoreCloseUntil = Date.now() + 500;
     modal.querySelector('.project-modal__close')?.focus();
   };
 
   const close = () => {
+    if (Date.now() < ignoreCloseUntil) return;
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     modal.inert = true;
@@ -666,13 +684,16 @@ function initProjectModal() {
 
   document.querySelectorAll('.project-card[data-project]').forEach((card) => {
     card.setAttribute('tabindex', '0');
-    card.setAttribute('role', 'button');
-    card.setAttribute('aria-haspopup', 'dialog');
-    card.addEventListener('click', () => open(card.dataset.project));
+    const openFromCard = () => open(card.dataset.project);
+    card.addEventListener('click', openFromCard);
+    card.querySelector('.project-card__cta')?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      openFromCard();
+    });
     card.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
-        open(card.dataset.project);
+        openFromCard();
       }
     });
   });
