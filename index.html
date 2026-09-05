@@ -233,40 +233,131 @@
       </div>
     </section>
 
-    <!-- Portfólio (placeholder, será preenchido com projetos reais) -->
+    <!-- Portfólio -->
     <section class="section section--alt" id="portfolio">
       <div class="container">
-        <p class="section-tag">Portfólio</p>
-        <h2 class="section-title">Nossos <span class="text-gradient">projetos</span></h2>
-        <p class="section-desc">
-          Em breve, esta seção será atualizada com landing pages, criativos e vídeos/reels reais produzidos pelo cub4Studio.
-        </p>
-
-        <div class="portfolio-grid">
-          <div class="portfolio-card portfolio-card--empty reveal">
-            <div class="portfolio-placeholder-icon">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v4H4V4Zm0 6h16v10H4V10Z" fill="currentColor" opacity="0.35"/></svg>
-            </div>
-            <p>Landing Page</p>
-            <span class="badge">Em breve</span>
+        <div class="portfolio-head reveal">
+          <div>
+            <p class="section-tag">Portfólio</p>
+            <h2 class="section-title">Projetos que <span class="text-gradient">mostram o estúdio</span></h2>
+            <p class="section-desc">
+              Landing pages, criativos e vídeos gerados com IA — arraste o carrossel ou clique em um projeto para ver de perto.
+            </p>
           </div>
-          <div class="portfolio-card portfolio-card--empty reveal">
-            <div class="portfolio-placeholder-icon">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M3 5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5Z" fill="currentColor" opacity="0.35"/></svg>
-            </div>
-            <p>Criativo</p>
-            <span class="badge">Em breve</span>
-          </div>
-          <div class="portfolio-card portfolio-card--empty reveal">
-            <div class="portfolio-placeholder-icon">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7Z" fill="currentColor" opacity="0.35"/></svg>
-            </div>
-            <p>Reel / Vídeo</p>
-            <span class="badge">Em breve</span>
+          <div class="carousel-controls">
+            <button type="button" class="carousel-btn" id="carouselPrev" aria-label="Projeto anterior">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="button" class="carousel-btn" id="carouselNext" aria-label="Próximo projeto">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </div>
         </div>
       </div>
+
+      <div class="carousel-shell reveal">
+        <div class="carousel-viewport" id="carouselViewport">
+          <div class="carousel-track" id="carouselTrack">
+            <article class="project-card" data-project="econoradar">
+              <div class="project-card__media">
+                <img src="assets/portfolio/econoradar-2.jpg" alt="Campanha visual do app EconoRadar" />
+                <span class="project-card__tag">Criativos IA</span>
+              </div>
+              <div class="project-card__body">
+                <h3>EconoRadar</h3>
+                <p>Campanha de lançamento para um app de inteligência financeira — dark mode, mockups e direção de arte.</p>
+                <span class="project-card__cta">Ver projeto <span aria-hidden="true">→</span></span>
+              </div>
+            </article>
+
+            <article class="project-card" data-project="vertice">
+              <div class="project-card__media">
+                <img src="assets/portfolio/casa-vertice.jpg" alt="Penthouse de alto padrão para a landing page Casa Vértice" />
+                <span class="project-card__tag">Landing Page</span>
+              </div>
+              <div class="project-card__body">
+                <h3>Casa Vértice</h3>
+                <p>Landing conversora para um residencial de alto padrão. Desejo, prova social e agendamento de visitas.</p>
+                <span class="project-card__cta">Ver projeto <span aria-hidden="true">→</span></span>
+              </div>
+            </article>
+
+            <article class="project-card" data-project="melbrasa">
+              <div class="project-card__media">
+                <img src="assets/portfolio/mel-brasa.jpg" alt="Close cinematográfico de um steak no grill para o reel Mel &amp; Brasa" />
+                <span class="project-card__tag">Reel / Vídeo IA</span>
+              </div>
+              <div class="project-card__body">
+                <h3>Mel &amp; Brasa</h3>
+                <p>Reel gastronômico gerado com IA — close-ups cinematográficos e gancho nos primeiros segundos.</p>
+                <span class="project-card__cta">Ver projeto <span aria-hidden="true">→</span></span>
+              </div>
+            </article>
+
+            <article class="project-card" data-project="triton">
+              <div class="project-card__media">
+                <img src="assets/portfolio/triton-1.jpg" alt="Ficha técnica do compressor Triton TRI600A" />
+                <span class="project-card__tag">Catálogo &amp; Produto</span>
+              </div>
+              <div class="project-card__body">
+                <h3>Triton Máquinas</h3>
+                <p>Fichas técnicas padronizadas para a linha de compressores — produto, specs e identidade industrial.</p>
+                <span class="project-card__cta">Ver projeto <span aria-hidden="true">→</span></span>
+              </div>
+            </article>
+
+            <article class="project-card" data-project="nectar">
+              <div class="project-card__media">
+                <img src="assets/portfolio/nectar.jpg" alt="Stills de produto da campanha Néctar Atelier" />
+                <span class="project-card__tag">Criativos IA</span>
+              </div>
+              <div class="project-card__body">
+                <h3>Néctar Atelier</h3>
+                <p>Campanha de skincare com stills gerados por IA. Linguagem editorial, luz coral e paleta de marca.</p>
+                <span class="project-card__cta">Ver projeto <span aria-hidden="true">→</span></span>
+              </div>
+            </article>
+
+            <article class="project-card" data-project="nyos">
+              <div class="project-card__media project-card__media--portrait">
+                <img src="assets/portfolio/nyos.jpg" alt="Frame do documentário The Lake Nyos Mystery" />
+                <span class="project-card__tag">Documentário IA</span>
+                <span class="project-card__play" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7-11-7Z"/></svg>
+                </span>
+              </div>
+              <div class="project-card__body">
+                <h3>The Lake Nyos Mystery</h3>
+                <p>Curta documental gerado com IA — narrativa, atmosfera e motion graphics para um mistério histórico.</p>
+                <span class="project-card__cta">Assistir <span aria-hidden="true">→</span></span>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Projetos do portfólio"></div>
+      </div>
     </section>
+
+    <div class="lightbox" id="portfolioLightbox" hidden>
+      <div class="lightbox__backdrop" data-lightbox-close></div>
+      <div class="lightbox__dialog" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle">
+        <button type="button" class="lightbox__close" data-lightbox-close aria-label="Fechar">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+        <button type="button" class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Mídia anterior">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Próxima mídia">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="lightbox__stage" id="lightboxStage"></div>
+        <div class="lightbox__meta">
+          <span class="badge" id="lightboxTag"></span>
+          <h3 id="lightboxTitle"></h3>
+          <p id="lightboxDesc"></p>
+        </div>
+      </div>
+    </div>
 
     <!-- CTA final -->
     <section class="cta-banner" id="cta">
