@@ -124,16 +124,24 @@ function initContactForm() {
       _autoresponse: `Olá, ${nome}! Recebemos seu pedido de orçamento no cub4Studio e retornamos em breve.`
     };
 
+    const mailtoHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Orçamento cub4Studio — ${servico || 'Contato'}`)}&body=${encodeURIComponent(`Nome: ${nome}\nE-mail: ${email}\nServiço: ${servico}\n\n${projeto}`)}`;
+    const showSendError = () => {
+      if (!formNote) return;
+      formNote.classList.remove('form-note--success');
+      formNote.classList.add('form-note--error');
+      formNote.innerHTML = `Não foi possível enviar agora. <a href="${mailtoHref}">Abrir e-mail para ${CONTACT_EMAIL}</a>`;
+    };
+
     try {
       const controller = new AbortController();
       const timeoutId = window.setTimeout(() => controller.abort(), 12000);
+      const body = new FormData();
+      Object.entries(payload).forEach(([key, value]) => body.append(key, value));
+
       const response = await fetch(FORMSUBMIT_ENDPOINT, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        },
-        body: JSON.stringify(payload),
+        headers: { Accept: 'application/json' },
+        body,
         signal: controller.signal
       });
       window.clearTimeout(timeoutId);
@@ -141,7 +149,7 @@ function initContactForm() {
       const result = await response.json().catch(() => null);
       const success = Boolean(result && (result.success === true || result.success === 'true'));
       const message = result && typeof result.message === 'string' ? result.message : '';
-      const needsActivation = /confirm your e-?mail|please confirm|activation link|ativar o e-?mail/i.test(message);
+      const needsActivation = /activat|confirm (your )?e-?mail|check your e-?mail|ativar/i.test(message);
 
       if (success) {
         form.reset();
@@ -151,14 +159,16 @@ function initContactForm() {
       }
 
       if (needsActivation) {
-        setNote('Quase lá: confirme o e-mail de ativação enviado para cub4studio@gmail.com (só precisa fazer isso uma vez). Depois os orçamentos chegam direto na caixa de entrada.', 'success');
+        setNote('Pedido registrado. Confirme o e-mail de ativação enviado para cub4studio@gmail.com (só precisa fazer isso uma vez). Depois disso, os orçamentos caem direto na caixa de entrada.', 'success');
         setBusy(false);
         return;
       }
 
-      form.submit();
+      showSendError();
+      setBusy(false);
     } catch (error) {
-      form.submit();
+      showSendError();
+      setBusy(false);
     }
   });
 }
