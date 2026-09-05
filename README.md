@@ -53,7 +53,7 @@ A logo oficial (mascote 3D vermelho/coral + wordmark "cub4Studio") foi recebida 
 
 1. **Conteúdo do Instagram**: os textos de serviços e comprometimentos foram escritos com base na descrição fornecida pelo cliente. Ao ter acesso ao conteúdo real do perfil `@cub4studio` (confirmado como handle oficial), ajuste os textos das seções "Serviços" e "Sobre" para refletir a linguagem e o posicionamento já usados nas redes sociais.
 2. **Portfólio**: a seção `#portfolio` está com cartões de espaço reservado ("Em breve"). Quando os criativos, landing pages e reels forem enviados pelo cliente, substitua os cartões por imagens/vídeos reais dos projetos.
-3. **Formulário de contato**: atualmente o formulário apenas exibe uma mensagem de confirmação (`js/main.js`) e loga os dados no console. É necessário integrar a um serviço real de envio (ex.: endpoint de e-mail, WhatsApp Business API, Make/Zapier, CRM ou formulário de terceiros como Formspree).
+3. **Formulário de contato**: os pedidos de orçamento são enviados para `cub4studio@gmail.com` via FormSubmit. Na primeira solicitação, o estúdio precisa clicar no link de ativação que chega nesse e-mail; depois disso, cada envio cai na caixa de entrada (com resposta automática para quem pediu o orçamento).
 4. **Domínio e SEO**: revisar `meta description` e a imagem de Open Graph (`og:image`, já configurada com `logo-badge.jpg`) ao definir o domínio final.
 5. **Dados de contato**: substituir `contato@cub4studio.com` e demais placeholders pelos dados reais de contato da marca.
 

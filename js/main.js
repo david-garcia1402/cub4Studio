@@ -53,33 +53,115 @@ document.addEventListener('DOMContentLoaded', () => {
     revealEls.forEach((el) => el.classList.add('is-visible'));
   }
 
-  // Formulário de contato (placeholder até integração real, ex.: WhatsApp/CRM/e-mail)
-  const form = document.getElementById('contactForm');
-  const formNote = document.getElementById('formNote');
-
-  if (form) {
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      const data = new FormData(form);
-      const nome = data.get('nome');
-      const email = data.get('email');
-      const servico = data.get('servico');
-      const mensagem = data.get('mensagem');
-
-      // TODO: substituir por integração real (endpoint de e-mail, WhatsApp API ou CRM)
-      console.log('Novo contato cub4Studio:', { nome, email, servico, mensagem });
-
-      if (formNote) {
-        formNote.textContent = `Obrigado, ${nome}! Recebemos sua mensagem e em breve entraremos em contato.`;
-      }
-      form.reset();
-    });
-  }
-
+  initContactForm();
   initPortfolioCarousel();
   initPortfolioLightbox();
 });
+
+const CONTACT_EMAIL = 'cub4studio@gmail.com';
+const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+
+function initContactForm() {
+  const form = document.getElementById('contactForm');
+  const formNote = document.getElementById('formNote');
+  const submitBtn = document.getElementById('contactSubmit');
+  const nextInput = document.getElementById('formNext');
+  if (!form || !submitBtn) return;
+
+  const idleLabel = submitBtn.textContent;
+  const returnUrl = `${window.location.origin}${window.location.pathname}?orcamento=enviado#contato`;
+  if (nextInput) nextInput.value = returnUrl;
+
+  const setNote = (message, tone) => {
+    if (!formNote) return;
+    formNote.textContent = message;
+    formNote.classList.remove('form-note--success', 'form-note--error');
+    if (tone) formNote.classList.add(`form-note--${tone}`);
+  };
+
+  const setBusy = (busy) => {
+    submitBtn.disabled = busy;
+    submitBtn.textContent = busy ? 'Enviando orçamento...' : idleLabel;
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('orcamento') === 'enviado') {
+    setNote('Orçamento enviado! Vamos responder em breve no e-mail informado.', 'success');
+    const cleanUrl = `${window.location.pathname}#contato`;
+    window.history.replaceState({}, '', cleanUrl);
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const honey = form.querySelector('[name="_honey"]');
+    if (honey && honey.value) return;
+
+    const data = new FormData(form);
+    const nome = String(data.get('Nome') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const servico = String(data.get('Serviço') || '').trim();
+    const projeto = String(data.get('Projeto') || '').trim();
+
+    if (!nome || !email || !projeto) {
+      setNote('Preencha nome, e-mail e a descrição do projeto para solicitar o orçamento.', 'error');
+      return;
+    }
+
+    setBusy(true);
+    setNote('');
+
+    const payload = {
+      Nome: nome,
+      email,
+      Serviço: servico,
+      Projeto: projeto,
+      Origem: window.location.href,
+      _subject: `Novo orçamento cub4Studio — ${servico || 'Contato'}`,
+      _template: 'table',
+      _captcha: 'false',
+      _replyto: email,
+      _autoresponse: `Olá, ${nome}! Recebemos seu pedido de orçamento no cub4Studio e retornamos em breve.`
+    };
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 12000);
+      const response = await fetch(FORMSUBMIT_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+      window.clearTimeout(timeoutId);
+
+      const result = await response.json().catch(() => null);
+      const success = Boolean(result && (result.success === true || result.success === 'true'));
+      const message = result && typeof result.message === 'string' ? result.message : '';
+      const needsActivation = /confirm your e-?mail|please confirm|activation link|ativar o e-?mail/i.test(message);
+
+      if (success) {
+        form.reset();
+        setNote(`Obrigado, ${nome}! Seu orçamento chegou no estúdio. Respondemos em breve.`, 'success');
+        setBusy(false);
+        return;
+      }
+
+      if (needsActivation) {
+        setNote('Quase lá: confirme o e-mail de ativação enviado para cub4studio@gmail.com (só precisa fazer isso uma vez). Depois os orçamentos chegam direto na caixa de entrada.', 'success');
+        setBusy(false);
+        return;
+      }
+
+      form.submit();
+    } catch (error) {
+      form.submit();
+    }
+  });
+}
 
 const PORTFOLIO_PROJECTS = {
   econoradar: {

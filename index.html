@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=3" />
+  <link rel="stylesheet" href="css/style.css?v=4" />
 </head>
 <body>
   <!-- Fundo animado -->
@@ -374,7 +374,7 @@
         <div class="contact-copy reveal">
           <p class="section-tag">Contato</p>
           <h2 class="section-title">Vamos criar juntos?</h2>
-          <p class="section-desc">Conte um pouco sobre seu projeto e retornamos com os próximos passos.</p>
+          <p class="section-desc">Conte um pouco sobre seu projeto. O pedido chega no e-mail do estúdio e retornamos com os próximos passos.</p>
 
           <div class="contact-info">
             <a href="https://www.instagram.com/cub4studio" target="_blank" rel="noopener" class="contact-info-item">
@@ -388,31 +388,49 @@
           </div>
         </div>
 
-        <form class="contact-form reveal" id="contactForm">
+        <form
+          class="contact-form reveal"
+          id="contactForm"
+          action="https://formsubmit.co/cub4studio@gmail.com"
+          method="POST"
+        >
+          <input type="hidden" name="_subject" value="Novo orçamento — cub4Studio" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" id="formNext" value="https://cub4-studio.vercel.app/?orcamento=enviado#contato" />
+          <input
+            type="text"
+            name="_honey"
+            class="form-honeypot"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+
           <div class="form-row">
             <label for="nome">Nome</label>
-            <input type="text" id="nome" name="nome" placeholder="Seu nome" required />
+            <input type="text" id="nome" name="Nome" placeholder="Seu nome" required autocomplete="name" />
           </div>
           <div class="form-row">
             <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" placeholder="voce@email.com" required />
+            <input type="email" id="email" name="email" placeholder="voce@email.com" required autocomplete="email" />
           </div>
           <div class="form-row">
             <label for="servico">Serviço de interesse</label>
-            <select id="servico" name="servico">
-              <option value="landing-page">Landing Page Conversora</option>
-              <option value="criativos">Criativos com IA</option>
-              <option value="video-reels">Vídeos &amp; Reels com IA</option>
-              <option value="estrategia">Estratégia &amp; Automação com IA</option>
-              <option value="outro">Outro</option>
+            <select id="servico" name="Serviço">
+              <option value="Landing Page Conversora">Landing Page Conversora</option>
+              <option value="Criativos com IA">Criativos com IA</option>
+              <option value="Vídeos &amp; Reels com IA">Vídeos &amp; Reels com IA</option>
+              <option value="Estratégia &amp; Automação com IA">Estratégia &amp; Automação com IA</option>
+              <option value="Outro">Outro</option>
             </select>
           </div>
           <div class="form-row">
             <label for="mensagem">Conte sobre seu projeto</label>
-            <textarea id="mensagem" name="mensagem" rows="4" placeholder="Descreva sua ideia, marca e objetivo..." required></textarea>
+            <textarea id="mensagem" name="Projeto" rows="4" placeholder="Descreva sua ideia, marca e objetivo..." required></textarea>
           </div>
-          <button type="submit" class="btn btn--primary btn--block">Enviar mensagem</button>
-          <p class="form-note" id="formNote"></p>
+          <button type="submit" class="btn btn--primary btn--block" id="contactSubmit">Solicitar orçamento</button>
+          <p class="form-note" id="formNote" role="status" aria-live="polite"></p>
         </form>
       </div>
     </section>
@@ -445,6 +463,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=3"></script>
+  <script src="js/main.js?v=4"></script>
 </body>
 </html>

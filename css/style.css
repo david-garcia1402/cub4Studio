@@ -138,6 +138,13 @@ main, header, footer { position: relative; z-index: 1; }
 .btn--sm { padding: 10px 18px; font-size: 0.85rem; }
 .btn--lg { padding: 16px 34px; font-size: 1.05rem; }
 .btn--block { width: 100%; justify-content: center; }
+.btn:disabled,
+.btn--primary:disabled:hover {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+  box-shadow: 0 8px 30px rgba(232, 88, 63, 0.4);
+}
 
 /* ---------- Header ---------- */
 
@@ -785,6 +792,7 @@ main, header, footer { position: relative; z-index: 1; }
 }
 
 .contact-form {
+  position: relative;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -792,6 +800,15 @@ main, header, footer { position: relative; z-index: 1; }
   display: flex;
   flex-direction: column;
   gap: 18px;
+}
+.form-honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 .form-row { display: flex; flex-direction: column; gap: 8px; }
 .form-row label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
@@ -813,6 +830,8 @@ main, header, footer { position: relative; z-index: 1; }
 .form-row select:focus,
 .form-row textarea:focus { border-color: var(--coral-light); }
 .form-note { font-size: 0.85rem; color: var(--coral-light); min-height: 1em; margin: 0; }
+.form-note--success { color: #8ee7b5; }
+.form-note--error { color: #ff9b9b; }
 
 /* ---------- Footer ---------- */
 
