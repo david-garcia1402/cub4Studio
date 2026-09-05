@@ -146,24 +146,26 @@ function initPortfolioCarousel() {
   const cards = [...track.querySelectorAll('.project-card')];
   let drag = { active: false, moved: false, startX: 0, startScroll: 0 };
 
+  const maxScrollLeft = () => Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+
   const currentIndex = () => {
+    const maxScroll = maxScrollLeft();
     const left = viewport.scrollLeft;
-    let best = 0;
-    let bestDist = Infinity;
-    cards.forEach((card, i) => {
-      const dist = Math.abs(card.offsetLeft - track.offsetLeft - left);
-      if (dist < bestDist) {
-        bestDist = dist;
-        best = i;
-      }
-    });
-    return best;
+    if (maxScroll <= 1) return 0;
+    if (left <= 8) return 0;
+    if (left >= maxScroll - 8) return cards.length - 1;
+    return Math.round((left / maxScroll) * (cards.length - 1));
   };
 
   const scrollToIndex = (index) => {
-    const card = cards[Math.max(0, Math.min(cards.length - 1, index))];
+    const i = Math.max(0, Math.min(cards.length - 1, index));
+    const card = cards[i];
     if (!card) return;
-    viewport.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' });
+    const maxScroll = maxScrollLeft();
+    const target = i === cards.length - 1
+      ? maxScroll
+      : Math.min(maxScroll, card.offsetLeft - track.offsetLeft);
+    viewport.scrollTo({ left: target, behavior: 'smooth' });
   };
 
   cards.forEach((_, i) => {
@@ -185,6 +187,7 @@ function initPortfolioCarousel() {
   };
 
   viewport.addEventListener('scroll', () => requestAnimationFrame(updateControls), { passive: true });
+  window.addEventListener('resize', () => requestAnimationFrame(updateControls));
   prev.addEventListener('click', () => scrollToIndex(currentIndex() - 1));
   next.addEventListener('click', () => scrollToIndex(currentIndex() + 1));
   updateControls();
