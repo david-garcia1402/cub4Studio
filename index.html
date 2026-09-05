@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=3" />
+  <link rel="stylesheet" href="css/style.css?v=5" />
 </head>
 <body>
   <!-- Fundo animado -->
@@ -82,18 +82,22 @@
     <!-- Marquee de tags -->
     <section class="marquee" aria-hidden="true">
       <div class="marquee-track">
-        <span>Landing Pages</span><span>•</span>
-        <span>Criativos com IA</span><span>•</span>
-        <span>Vídeos &amp; Reels IA</span><span>•</span>
-        <span>Copywriting</span><span>•</span>
-        <span>Design de Conversão</span><span>•</span>
-        <span>Automação</span><span>•</span>
-        <span>Landing Pages</span><span>•</span>
-        <span>Criativos com IA</span><span>•</span>
-        <span>Vídeos &amp; Reels IA</span><span>•</span>
-        <span>Copywriting</span><span>•</span>
-        <span>Design de Conversão</span><span>•</span>
-        <span>Automação</span><span>•</span>
+        <div class="marquee-group">
+          <span>Landing Pages</span><span>•</span>
+          <span>Criativos com IA</span><span>•</span>
+          <span>Vídeos &amp; Reels IA</span><span>•</span>
+          <span>Copywriting</span><span>•</span>
+          <span>Design de Conversão</span><span>•</span>
+          <span>Automação</span><span>•</span>
+        </div>
+        <div class="marquee-group">
+          <span>Landing Pages</span><span>•</span>
+          <span>Criativos com IA</span><span>•</span>
+          <span>Vídeos &amp; Reels IA</span><span>•</span>
+          <span>Copywriting</span><span>•</span>
+          <span>Design de Conversão</span><span>•</span>
+          <span>Automação</span><span>•</span>
+        </div>
       </div>
     </section>
 
@@ -338,24 +342,31 @@
       </div>
     </section>
 
-    <div class="lightbox" id="portfolioLightbox" hidden>
-      <div class="lightbox__backdrop" data-lightbox-close></div>
-      <div class="lightbox__dialog" role="dialog" aria-modal="true" aria-labelledby="lightboxTitle">
-        <button type="button" class="lightbox__close" data-lightbox-close aria-label="Fechar">
+    <div class="project-modal" id="projectModal" aria-hidden="true" inert>
+      <div class="project-modal__backdrop" data-modal-close></div>
+      <div class="project-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+        <button type="button" class="project-modal__close" data-modal-close aria-label="Fechar">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
         </button>
-        <button type="button" class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Mídia anterior">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button type="button" class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Próxima mídia">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <div class="lightbox__stage" id="lightboxStage"></div>
-        <div class="lightbox__meta">
-          <span class="badge" id="lightboxTag"></span>
-          <h3 id="lightboxTitle"></h3>
-          <p id="lightboxDesc"></p>
+        <div class="project-modal__gallery">
+          <div class="project-modal__stage" id="projectModalStage"></div>
+          <button type="button" class="project-modal__nav project-modal__nav--prev" id="projectModalPrev" aria-label="Mídia anterior">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button type="button" class="project-modal__nav project-modal__nav--next" id="projectModalNext" aria-label="Próxima mídia">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <span class="project-modal__count" id="projectModalCount" hidden></span>
+          <div class="project-modal__thumbs" id="projectModalThumbs" hidden></div>
         </div>
+        <aside class="project-modal__info">
+          <span class="badge" id="projectModalTag"></span>
+          <h3 id="projectModalTitle"></h3>
+          <p class="project-modal__lead" id="projectModalLead"></p>
+          <p class="project-modal__desc" id="projectModalDesc"></p>
+          <div class="project-modal__facts" id="projectModalFacts"></div>
+          <a href="#contato" class="btn btn--primary" id="projectModalCta">Quero um projeto assim</a>
+        </aside>
       </div>
     </div>
 
@@ -445,6 +456,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=3"></script>
+  <script src="js/main.js?v=5"></script>
 </body>
 </html>

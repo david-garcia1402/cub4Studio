@@ -77,15 +77,46 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  initPortfolioCarousel();
-  initPortfolioLightbox();
+  initMarquee();
+  const projectModal = initProjectModal();
+  initPortfolioCarousel(projectModal);
 });
+
+function initMarquee() {
+  const marquee = document.querySelector('.marquee');
+  const track = marquee?.querySelector('.marquee-track');
+  const source = track?.querySelector('.marquee-group');
+  if (!marquee || !track || !source) return;
+
+  const fill = () => {
+    track.querySelectorAll('.marquee-group[data-clone]').forEach((el) => el.remove());
+
+    const groupWidth = source.offsetWidth;
+    if (!groupWidth) return;
+
+    const copies = Math.max(2, Math.ceil(marquee.offsetWidth / groupWidth) + 1);
+    const existing = track.querySelectorAll('.marquee-group').length;
+    for (let i = existing; i < copies; i++) {
+      const clone = source.cloneNode(true);
+      clone.setAttribute('data-clone', '');
+      track.appendChild(clone);
+    }
+
+    track.style.setProperty('--marquee-distance', `${groupWidth}px`);
+  };
+
+  fill();
+  window.addEventListener('resize', fill);
+}
 
 const PORTFOLIO_PROJECTS = {
   econoradar: {
     title: 'EconoRadar',
     tag: 'Criativos com IA',
-    description: 'Campanha de lançamento para um app de inteligência financeira. Mockups, peças de anúncio e direção de arte em dark mode — informação demais, clareza de menos, tudo em um radar só.',
+    lead: 'Campanha de lançamento para um app de inteligência financeira.',
+    description: 'Direção de arte em dark mode, mockups de produto e peças para redes. A ideia era transformar ruído de mercado em um radar único: indicadores, notícias e ativos com clareza visual — pronto para anúncio e perfil.',
+    deliverables: ['Peças de campanha', 'Mockups de app', 'Direção de arte'],
+    tools: 'IA generativa, Photoshop e direção de arte',
     images: [
       { src: 'assets/portfolio/econoradar-2.jpg', alt: 'Peça principal da campanha EconoRadar' },
       { src: 'assets/portfolio/econoradar-1.jpg', alt: 'Mockup do app EconoRadar com cards flutuantes' },
@@ -95,7 +126,10 @@ const PORTFOLIO_PROJECTS = {
   vertice: {
     title: 'Casa Vértice',
     tag: 'Landing Page',
-    description: 'Landing page conversora para um residencial de alto padrão. Hero cinematográfico, prova social e um fluxo curto até o agendamento de visita.',
+    lead: 'Landing conversora para um residencial de alto padrão.',
+    description: 'Hero cinematográfico, prova social e um fluxo curto até o agendamento de visita. Visual de penthouse ao entardecer, paleta quente e copy pensada para desejo — não para catálogo imobiliário.',
+    deliverables: ['Landing page', 'Copy de conversão', 'Visual cinematográfico'],
+    tools: 'Direção de arte, IA generativa e front-end',
     images: [
       { src: 'assets/portfolio/casa-vertice.jpg', alt: 'Visual da landing page Casa Vértice' }
     ]
@@ -103,7 +137,10 @@ const PORTFOLIO_PROJECTS = {
   melbrasa: {
     title: 'Mel & Brasa',
     tag: 'Reel / Vídeo IA',
-    description: 'Reel gastronômico gerado com IA: close-ups de fogo e selagem, ritmo de anúncio e gancho nos primeiros segundos para tráfego e redes.',
+    lead: 'Reel gastronômico gerado com IA, no ritmo de anúncio.',
+    description: 'Close-ups de fogo e selagem, gancho nos primeiros segundos e corte pensado para tráfego e redes. O objetivo era apetite imediato — sem parecer stock, sem perder a marca.',
+    deliverables: ['Roteiro', 'Vídeo gerado com IA', 'Corte para redes'],
+    tools: 'IA de vídeo, edição e direção criativa',
     images: [
       { src: 'assets/portfolio/mel-brasa.jpg', alt: 'Frame do reel Mel & Brasa' }
     ]
@@ -111,7 +148,10 @@ const PORTFOLIO_PROJECTS = {
   triton: {
     title: 'Triton Máquinas',
     tag: 'Catálogo & Produto',
-    description: 'Série de fichas técnicas padronizadas para compressores industriais — foto de produto, especificações e identidade visual da marca.',
+    lead: 'Fichas técnicas padronizadas para a linha de compressores.',
+    description: 'Foto de produto, especificações e identidade industrial em um sistema visual único. Três modelos, mesma linguagem — para o comercial vender com clareza e a marca parecer uma linha, não peças soltas.',
+    deliverables: ['Fichas técnicas', 'Padronização visual', 'Fotos de produto'],
+    tools: 'IA de produto, Photoshop e identidade visual',
     images: [
       { src: 'assets/portfolio/triton-1.jpg', alt: 'Ficha técnica Triton TRI600A' },
       { src: 'assets/portfolio/triton-2.jpg', alt: 'Ficha técnica Triton TRI860A' },
@@ -121,7 +161,10 @@ const PORTFOLIO_PROJECTS = {
   nectar: {
     title: 'Néctar Atelier',
     tag: 'Criativos com IA',
-    description: 'Campanha de skincare com stills de produto gerados por IA. Linguagem editorial, luz coral e uma paleta pensada para anúncios e feed.',
+    lead: 'Campanha de skincare com stills editoriais gerados por IA.',
+    description: 'Luz coral, paleta de marca e linguagem de revista. Peças pensadas para anúncio e feed — produto em destaque, sem cenário genérico, com a atmosfera de um atelier.',
+    deliverables: ['Stills de produto', 'Paleta de campanha', 'Peças para feed e ads'],
+    tools: 'IA generativa e direção de arte',
     images: [
       { src: 'assets/portfolio/nectar.jpg', alt: 'Still de produto da campanha Néctar Atelier' }
     ]
@@ -129,13 +172,16 @@ const PORTFOLIO_PROJECTS = {
   nyos: {
     title: 'The Lake Nyos Mystery',
     tag: 'Documentário IA',
-    description: 'Curta documental gerado com IA sobre o mistério do Lago Nyos. Narração, atmosfera e motion graphics em formato de vídeo curto.',
+    lead: 'Curta documental gerado com IA sobre o mistério do Lago Nyos.',
+    description: 'Narração, atmosfera e motion graphics em formato de vídeo curto. Uma história real tratada como mistério cinematográfico — do conceito ao cut final, com IA no meio e curadoria humana no ritmo.',
+    deliverables: ['Roteiro', 'Vídeo documental', 'Motion graphics'],
+    tools: 'IA de vídeo, narração e edição',
     video: 'https://drive.google.com/file/d/1iMwef8uLu5_Qta_GYXAMztKbwLtXgSTH/preview',
     poster: 'assets/portfolio/nyos.jpg'
   }
 };
 
-function initPortfolioCarousel() {
+function initPortfolioCarousel(projectModal) {
   const viewport = document.getElementById('carouselViewport');
   const track = document.getElementById('carouselTrack');
   const prev = document.getElementById('carouselPrev');
@@ -147,7 +193,7 @@ function initPortfolioCarousel() {
   if (!cards.length) return;
 
   let index = 0;
-  let drag = { active: false, moved: false, startX: 0, startScroll: 0 };
+  let drag = { active: false, moved: false, startX: 0, startScroll: 0, card: null };
   let snapTimer = 0;
 
   const maxScrollLeft = () => Math.max(0, viewport.scrollWidth - viewport.clientWidth);
@@ -232,6 +278,7 @@ function initPortfolioCarousel() {
     if (event.target.closest('.carousel-btn, .carousel-dot')) return;
     drag.active = true;
     drag.moved = false;
+    drag.card = event.target.closest('.project-card[data-project]');
     drag.startX = event.clientX;
     drag.startScroll = viewport.scrollLeft;
     viewport.classList.add('is-dragging');
@@ -250,35 +297,101 @@ function initPortfolioCarousel() {
     if (!drag.active) return;
     drag.active = false;
     viewport.classList.remove('is-dragging');
-    goTo(indexFromScroll());
+    if (drag.moved) goTo(indexFromScroll());
   };
   viewport.addEventListener('pointerup', endDrag);
   viewport.addEventListener('pointercancel', endDrag);
 
-  track.addEventListener('click', (event) => {
+  viewport.addEventListener('click', (event) => {
     if (drag.moved) {
       event.preventDefault();
       event.stopPropagation();
       drag.moved = false;
+      drag.card = null;
+      return;
     }
-  }, true);
+
+    const card = event.target.closest('.project-card[data-project]') || drag.card;
+    drag.card = null;
+    if (card && projectModal) projectModal.open(card.dataset.project);
+  });
 
   updateControls();
 }
 
-function initPortfolioLightbox() {
-  const lightbox = document.getElementById('portfolioLightbox');
-  const stage = document.getElementById('lightboxStage');
-  const titleEl = document.getElementById('lightboxTitle');
-  const descEl = document.getElementById('lightboxDesc');
-  const tagEl = document.getElementById('lightboxTag');
-  const prevBtn = document.getElementById('lightboxPrev');
-  const nextBtn = document.getElementById('lightboxNext');
-  if (!lightbox || !stage) return;
+function initProjectModal() {
+  const modal = document.getElementById('projectModal');
+  const stage = document.getElementById('projectModalStage');
+  const titleEl = document.getElementById('projectModalTitle');
+  const leadEl = document.getElementById('projectModalLead');
+  const descEl = document.getElementById('projectModalDesc');
+  const tagEl = document.getElementById('projectModalTag');
+  const factsEl = document.getElementById('projectModalFacts');
+  const thumbsEl = document.getElementById('projectModalThumbs');
+  const countEl = document.getElementById('projectModalCount');
+  const ctaEl = document.getElementById('projectModalCta');
+  const prevBtn = document.getElementById('projectModalPrev');
+  const nextBtn = document.getElementById('projectModalNext');
+  const gallery = modal?.querySelector('.project-modal__gallery');
+  if (!modal || !stage) return { open() {}, close() {} };
 
   let media = [];
   let index = 0;
   let lastFocus = null;
+  let lastOpenAt = 0;
+
+  const renderFacts = (project) => {
+    factsEl.innerHTML = '';
+    if (project.deliverables?.length) {
+      const fact = document.createElement('div');
+      fact.className = 'project-modal__fact';
+      const label = document.createElement('span');
+      label.textContent = 'Entregas';
+      const list = document.createElement('ul');
+      list.className = 'project-modal__chips';
+      project.deliverables.forEach((item) => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        list.appendChild(li);
+      });
+      fact.append(label, list);
+      factsEl.appendChild(fact);
+    }
+    if (project.tools) {
+      const fact = document.createElement('div');
+      fact.className = 'project-modal__fact';
+      const label = document.createElement('span');
+      label.textContent = 'Feito com';
+      const text = document.createElement('p');
+      text.textContent = project.tools;
+      fact.append(label, text);
+      factsEl.appendChild(fact);
+    }
+  };
+
+  const renderThumbs = () => {
+    thumbsEl.innerHTML = '';
+    const show = media.length > 1 && media.every((item) => item.type === 'image');
+    thumbsEl.hidden = !show;
+    gallery?.classList.toggle('has-thumbs', show);
+    if (!show) return;
+
+    media.forEach((item, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'project-modal__thumb' + (i === index ? ' is-active' : '');
+      btn.setAttribute('aria-label', `Ver imagem ${i + 1}`);
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.alt = '';
+      btn.appendChild(img);
+      btn.addEventListener('click', () => {
+        index = i;
+        render();
+      });
+      thumbsEl.appendChild(btn);
+    });
+  };
 
   const render = () => {
     const item = media[index];
@@ -304,16 +417,32 @@ function initPortfolioLightbox() {
     nextBtn.hidden = !many;
     prevBtn.disabled = index <= 0;
     nextBtn.disabled = index >= media.length - 1;
+
+    if (many) {
+      countEl.hidden = false;
+      countEl.textContent = `${index + 1} / ${media.length}`;
+    } else {
+      countEl.hidden = true;
+    }
+
+    thumbsEl.querySelectorAll('.project-modal__thumb').forEach((thumb, i) => {
+      thumb.classList.toggle('is-active', i === index);
+    });
   };
 
   const open = (projectId) => {
     const project = PORTFOLIO_PROJECTS[projectId];
     if (!project) return;
+    const now = Date.now();
+    if (now - lastOpenAt < 350 && modal.classList.contains('is-open')) return;
+    lastOpenAt = now;
 
     lastFocus = document.activeElement;
     titleEl.textContent = project.title;
+    leadEl.textContent = project.lead || '';
     descEl.textContent = project.description;
     tagEl.textContent = project.tag;
+    renderFacts(project);
 
     if (project.video) {
       media = [{ type: 'video', src: project.video, alt: project.title }];
@@ -321,15 +450,20 @@ function initPortfolioLightbox() {
       media = (project.images || []).map((img) => ({ type: 'image', ...img }));
     }
     index = 0;
+    renderThumbs();
     render();
 
-    lightbox.hidden = false;
+    modal.inert = false;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    lightbox.querySelector('.lightbox__close')?.focus();
+    modal.querySelector('.project-modal__close')?.focus();
   };
 
   const close = () => {
-    lightbox.hidden = true;
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    modal.inert = true;
     stage.innerHTML = '';
     document.body.style.overflow = '';
     if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
@@ -338,19 +472,20 @@ function initPortfolioLightbox() {
   document.querySelectorAll('.project-card[data-project]').forEach((card) => {
     card.setAttribute('tabindex', '0');
     card.setAttribute('role', 'button');
-    const openFromCard = () => open(card.dataset.project);
-    card.addEventListener('click', openFromCard);
+    card.setAttribute('aria-haspopup', 'dialog');
+    card.addEventListener('click', () => open(card.dataset.project));
     card.addEventListener('keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
-        openFromCard();
+        open(card.dataset.project);
       }
     });
   });
 
-  lightbox.querySelectorAll('[data-lightbox-close]').forEach((el) => {
+  modal.querySelectorAll('[data-modal-close]').forEach((el) => {
     el.addEventListener('click', close);
   });
+  ctaEl?.addEventListener('click', close);
   prevBtn.addEventListener('click', () => {
     index = Math.max(0, index - 1);
     render();
@@ -361,9 +496,11 @@ function initPortfolioLightbox() {
   });
 
   document.addEventListener('keydown', (event) => {
-    if (lightbox.hidden) return;
+    if (!modal.classList.contains('is-open')) return;
     if (event.key === 'Escape') close();
     if (event.key === 'ArrowLeft') prevBtn.click();
     if (event.key === 'ArrowRight') nextBtn.click();
   });
+
+  return { open, close };
 }
