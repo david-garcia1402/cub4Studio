@@ -76,4 +76,250 @@ document.addEventListener('DOMContentLoaded', () => {
       form.reset();
     });
   }
+
+  initPortfolioCarousel();
+  initPortfolioLightbox();
 });
+
+const PORTFOLIO_PROJECTS = {
+  econoradar: {
+    title: 'EconoRadar',
+    tag: 'Criativos com IA',
+    description: 'Campanha de lançamento para um app de inteligência financeira. Mockups, peças de anúncio e direção de arte em dark mode — informação demais, clareza de menos, tudo em um radar só.',
+    images: [
+      { src: 'assets/portfolio/econoradar-2.jpg', alt: 'Peça principal da campanha EconoRadar' },
+      { src: 'assets/portfolio/econoradar-1.jpg', alt: 'Mockup do app EconoRadar com cards flutuantes' },
+      { src: 'assets/portfolio/econoradar-3.jpg', alt: 'Peça de campanha EconoRadar — você no meio da informação' }
+    ]
+  },
+  vertice: {
+    title: 'Casa Vértice',
+    tag: 'Landing Page',
+    description: 'Landing page conversora para um residencial de alto padrão. Hero cinematográfico, prova social e um fluxo curto até o agendamento de visita.',
+    images: [
+      { src: 'assets/portfolio/casa-vertice.jpg', alt: 'Visual da landing page Casa Vértice' }
+    ]
+  },
+  melbrasa: {
+    title: 'Mel & Brasa',
+    tag: 'Reel / Vídeo IA',
+    description: 'Reel gastronômico gerado com IA: close-ups de fogo e selagem, ritmo de anúncio e gancho nos primeiros segundos para tráfego e redes.',
+    images: [
+      { src: 'assets/portfolio/mel-brasa.jpg', alt: 'Frame do reel Mel & Brasa' }
+    ]
+  },
+  triton: {
+    title: 'Triton Máquinas',
+    tag: 'Catálogo & Produto',
+    description: 'Série de fichas técnicas padronizadas para compressores industriais — foto de produto, especificações e identidade visual da marca.',
+    images: [
+      { src: 'assets/portfolio/triton-1.jpg', alt: 'Ficha técnica Triton TRI600A' },
+      { src: 'assets/portfolio/triton-2.jpg', alt: 'Ficha técnica Triton TRI860A' },
+      { src: 'assets/portfolio/triton-3.jpg', alt: 'Ficha técnica Triton TRI1100A' }
+    ]
+  },
+  nectar: {
+    title: 'Néctar Atelier',
+    tag: 'Criativos com IA',
+    description: 'Campanha de skincare com stills de produto gerados por IA. Linguagem editorial, luz coral e uma paleta pensada para anúncios e feed.',
+    images: [
+      { src: 'assets/portfolio/nectar.jpg', alt: 'Still de produto da campanha Néctar Atelier' }
+    ]
+  },
+  nyos: {
+    title: 'The Lake Nyos Mystery',
+    tag: 'Documentário IA',
+    description: 'Curta documental gerado com IA sobre o mistério do Lago Nyos. Narração, atmosfera e motion graphics em formato de vídeo curto.',
+    video: 'https://drive.google.com/file/d/1iMwef8uLu5_Qta_GYXAMztKbwLtXgSTH/preview',
+    poster: 'assets/portfolio/nyos.jpg'
+  }
+};
+
+function initPortfolioCarousel() {
+  const viewport = document.getElementById('carouselViewport');
+  const track = document.getElementById('carouselTrack');
+  const prev = document.getElementById('carouselPrev');
+  const next = document.getElementById('carouselNext');
+  const dotsWrap = document.getElementById('carouselDots');
+  if (!viewport || !track || !prev || !next || !dotsWrap) return;
+
+  const cards = [...track.querySelectorAll('.project-card')];
+  let drag = { active: false, moved: false, startX: 0, startScroll: 0 };
+
+  const currentIndex = () => {
+    const left = viewport.scrollLeft;
+    let best = 0;
+    let bestDist = Infinity;
+    cards.forEach((card, i) => {
+      const dist = Math.abs(card.offsetLeft - track.offsetLeft - left);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = i;
+      }
+    });
+    return best;
+  };
+
+  const scrollToIndex = (index) => {
+    const card = cards[Math.max(0, Math.min(cards.length - 1, index))];
+    if (!card) return;
+    viewport.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: 'smooth' });
+  };
+
+  cards.forEach((_, i) => {
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'carousel-dot';
+    dot.setAttribute('aria-label', `Ir para o projeto ${i + 1}`);
+    dot.addEventListener('click', () => scrollToIndex(i));
+    dotsWrap.appendChild(dot);
+  });
+
+  const updateControls = () => {
+    const i = currentIndex();
+    dotsWrap.querySelectorAll('.carousel-dot').forEach((dot, di) => {
+      dot.classList.toggle('is-active', di === i);
+    });
+    prev.disabled = i <= 0;
+    next.disabled = i >= cards.length - 1;
+  };
+
+  viewport.addEventListener('scroll', () => requestAnimationFrame(updateControls), { passive: true });
+  prev.addEventListener('click', () => scrollToIndex(currentIndex() - 1));
+  next.addEventListener('click', () => scrollToIndex(currentIndex() + 1));
+  updateControls();
+
+  viewport.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    drag.active = true;
+    drag.moved = false;
+    drag.startX = event.clientX;
+    drag.startScroll = viewport.scrollLeft;
+    viewport.classList.add('is-dragging');
+    viewport.setPointerCapture(event.pointerId);
+  });
+
+  viewport.addEventListener('pointermove', (event) => {
+    if (!drag.active) return;
+    const delta = event.clientX - drag.startX;
+    if (Math.abs(delta) > 8) drag.moved = true;
+    viewport.scrollLeft = drag.startScroll - delta;
+  });
+
+  const endDrag = () => {
+    drag.active = false;
+    viewport.classList.remove('is-dragging');
+  };
+  viewport.addEventListener('pointerup', endDrag);
+  viewport.addEventListener('pointercancel', endDrag);
+
+  track.addEventListener('click', (event) => {
+    if (drag.moved) {
+      event.preventDefault();
+      event.stopPropagation();
+      drag.moved = false;
+    }
+  }, true);
+}
+
+function initPortfolioLightbox() {
+  const lightbox = document.getElementById('portfolioLightbox');
+  const stage = document.getElementById('lightboxStage');
+  const titleEl = document.getElementById('lightboxTitle');
+  const descEl = document.getElementById('lightboxDesc');
+  const tagEl = document.getElementById('lightboxTag');
+  const prevBtn = document.getElementById('lightboxPrev');
+  const nextBtn = document.getElementById('lightboxNext');
+  if (!lightbox || !stage) return;
+
+  let media = [];
+  let index = 0;
+  let lastFocus = null;
+
+  const render = () => {
+    const item = media[index];
+    stage.innerHTML = '';
+    if (!item) return;
+
+    if (item.type === 'video') {
+      const frame = document.createElement('iframe');
+      frame.src = item.src;
+      frame.title = item.alt || 'Vídeo do projeto';
+      frame.allow = 'autoplay; encrypted-media; picture-in-picture';
+      frame.allowFullscreen = true;
+      stage.appendChild(frame);
+    } else {
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.alt = item.alt || '';
+      stage.appendChild(img);
+    }
+
+    const many = media.length > 1;
+    prevBtn.hidden = !many;
+    nextBtn.hidden = !many;
+    prevBtn.disabled = index <= 0;
+    nextBtn.disabled = index >= media.length - 1;
+  };
+
+  const open = (projectId) => {
+    const project = PORTFOLIO_PROJECTS[projectId];
+    if (!project) return;
+
+    lastFocus = document.activeElement;
+    titleEl.textContent = project.title;
+    descEl.textContent = project.description;
+    tagEl.textContent = project.tag;
+
+    if (project.video) {
+      media = [{ type: 'video', src: project.video, alt: project.title }];
+    } else {
+      media = (project.images || []).map((img) => ({ type: 'image', ...img }));
+    }
+    index = 0;
+    render();
+
+    lightbox.hidden = false;
+    document.body.style.overflow = 'hidden';
+    lightbox.querySelector('.lightbox__close')?.focus();
+  };
+
+  const close = () => {
+    lightbox.hidden = true;
+    stage.innerHTML = '';
+    document.body.style.overflow = '';
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  };
+
+  document.querySelectorAll('.project-card[data-project]').forEach((card) => {
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    const openFromCard = () => open(card.dataset.project);
+    card.addEventListener('click', openFromCard);
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openFromCard();
+      }
+    });
+  });
+
+  lightbox.querySelectorAll('[data-lightbox-close]').forEach((el) => {
+    el.addEventListener('click', close);
+  });
+  prevBtn.addEventListener('click', () => {
+    index = Math.max(0, index - 1);
+    render();
+  });
+  nextBtn.addEventListener('click', () => {
+    index = Math.min(media.length - 1, index + 1);
+    render();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (lightbox.hidden) return;
+    if (event.key === 'Escape') close();
+    if (event.key === 'ArrowLeft') prevBtn.click();
+    if (event.key === 'ArrowRight') nextBtn.click();
+  });
+}
