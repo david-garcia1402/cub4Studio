@@ -466,7 +466,14 @@ main, header, footer { position: relative; z-index: 1; }
 }
 .portfolio-head .section-desc { margin-bottom: 32px; }
 
-.carousel-controls { display: flex; gap: 10px; flex-shrink: 0; padding-bottom: 48px; }
+.carousel-controls {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+  padding-bottom: 48px;
+  position: relative;
+  z-index: 3;
+}
 .carousel-btn {
   width: 44px; height: 44px;
   border-radius: 50%;
@@ -477,9 +484,10 @@ main, header, footer { position: relative; z-index: 1; }
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  pointer-events: auto;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, opacity 0.2s ease;
 }
-.carousel-btn svg { width: 20px; height: 20px; }
+.carousel-btn svg { width: 20px; height: 20px; pointer-events: none; }
 .carousel-btn:hover:not(:disabled) {
   border-color: var(--coral-light);
   background: rgba(232, 88, 63, 0.12);
@@ -487,18 +495,32 @@ main, header, footer { position: relative; z-index: 1; }
 }
 .carousel-btn:disabled { opacity: 0.35; cursor: default; }
 
-.carousel-shell { position: relative; }
+.carousel-shell {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
 .carousel-viewport {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  scroll-padding-inline: calc((100vw - min(var(--container-w), 100vw)) / 2 + 24px);
   scrollbar-width: none;
-  padding: 8px 24px 12px;
+  padding: 8px 0 12px;
   cursor: grab;
   touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
 }
-.carousel-viewport.is-dragging { cursor: grabbing; scroll-behavior: auto; }
+.carousel-viewport.is-dragging,
+.carousel-viewport.is-jumping {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
 .carousel-viewport::-webkit-scrollbar { display: none; }
 
 .carousel-track {
@@ -594,19 +616,32 @@ main, header, footer { position: relative; z-index: 1; }
 .carousel-dots {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  align-items: center;
+  gap: 4px;
   margin-top: 22px;
+  position: relative;
+  z-index: 3;
 }
 .carousel-dot {
-  width: 8px; height: 8px;
-  border-radius: 999px;
+  width: 28px;
+  height: 28px;
   border: 0;
-  background: var(--border);
-  cursor: pointer;
   padding: 0;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.carousel-dot::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
   transition: width 0.25s ease, background 0.25s ease;
 }
-.carousel-dot.is-active {
+.carousel-dot.is-active::after {
   width: 22px;
   background: var(--coral);
 }
