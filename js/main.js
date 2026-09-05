@@ -144,62 +144,99 @@ function initPortfolioCarousel() {
   if (!viewport || !track || !prev || !next || !dotsWrap) return;
 
   const cards = [...track.querySelectorAll('.project-card')];
+  if (!cards.length) return;
+
+  let index = 0;
   let drag = { active: false, moved: false, startX: 0, startScroll: 0 };
+  let snapTimer = 0;
 
   const maxScrollLeft = () => Math.max(0, viewport.scrollWidth - viewport.clientWidth);
 
-  const currentIndex = () => {
+  const cardStep = () => {
+    const width = cards[0].getBoundingClientRect().width;
+    const gap = parseFloat(getComputedStyle(track).gap) || 20;
+    return width + gap;
+  };
+
+  const indexFromScroll = () => {
     const maxScroll = maxScrollLeft();
     const left = viewport.scrollLeft;
     if (maxScroll <= 1) return 0;
-    if (left <= 8) return 0;
-    if (left >= maxScroll - 8) return cards.length - 1;
-    return Math.round((left / maxScroll) * (cards.length - 1));
+    if (left >= maxScroll - 4) return cards.length - 1;
+    const step = cardStep();
+    if (step <= 0) return 0;
+    return Math.min(cards.length - 1, Math.max(0, Math.round(left / step)));
   };
 
-  const scrollToIndex = (index) => {
-    const i = Math.max(0, Math.min(cards.length - 1, index));
-    const card = cards[i];
-    if (!card) return;
+  const updateControls = () => {
+    dotsWrap.querySelectorAll('.carousel-dot').forEach((dot, di) => {
+      dot.classList.toggle('is-active', di === index);
+      dot.setAttribute('aria-selected', di === index ? 'true' : 'false');
+    });
+    prev.toggleAttribute('disabled', index <= 0);
+    next.toggleAttribute('disabled', index >= cards.length - 1);
+  };
+
+  const goTo = (nextIndex) => {
+    index = Math.max(0, Math.min(cards.length - 1, nextIndex));
     const maxScroll = maxScrollLeft();
-    const target = i === cards.length - 1
+    const target = index >= cards.length - 1
       ? maxScroll
-      : Math.min(maxScroll, card.offsetLeft - track.offsetLeft);
+      : Math.min(maxScroll, index * cardStep());
+
+    viewport.classList.add('is-jumping');
     viewport.scrollTo({ left: target, behavior: 'smooth' });
+    updateControls();
+
+    window.clearTimeout(snapTimer);
+    snapTimer = window.setTimeout(() => {
+      viewport.classList.remove('is-jumping');
+    }, 450);
   };
 
   cards.forEach((_, i) => {
     const dot = document.createElement('button');
     dot.type = 'button';
     dot.className = 'carousel-dot';
+    dot.setAttribute('role', 'tab');
     dot.setAttribute('aria-label', `Ir para o projeto ${i + 1}`);
-    dot.addEventListener('click', () => scrollToIndex(i));
+    dot.addEventListener('click', (event) => {
+      event.preventDefault();
+      goTo(i);
+    });
     dotsWrap.appendChild(dot);
   });
 
-  const updateControls = () => {
-    const i = currentIndex();
-    dotsWrap.querySelectorAll('.carousel-dot').forEach((dot, di) => {
-      dot.classList.toggle('is-active', di === i);
-    });
-    prev.disabled = i <= 0;
-    next.disabled = i >= cards.length - 1;
-  };
+  prev.addEventListener('click', (event) => {
+    event.preventDefault();
+    goTo(index - 1);
+  });
+  next.addEventListener('click', (event) => {
+    event.preventDefault();
+    goTo(index + 1);
+  });
 
-  viewport.addEventListener('scroll', () => requestAnimationFrame(updateControls), { passive: true });
-  window.addEventListener('resize', () => requestAnimationFrame(updateControls));
-  prev.addEventListener('click', () => scrollToIndex(currentIndex() - 1));
-  next.addEventListener('click', () => scrollToIndex(currentIndex() + 1));
-  updateControls();
+  viewport.addEventListener('scroll', () => {
+    if (drag.active || viewport.classList.contains('is-jumping')) return;
+    index = indexFromScroll();
+    updateControls();
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    index = indexFromScroll();
+    updateControls();
+  });
 
   viewport.addEventListener('pointerdown', (event) => {
     if (event.pointerType === 'mouse' && event.button !== 0) return;
+    if (event.target.closest('.carousel-btn, .carousel-dot')) return;
     drag.active = true;
     drag.moved = false;
     drag.startX = event.clientX;
     drag.startScroll = viewport.scrollLeft;
     viewport.classList.add('is-dragging');
-    viewport.setPointerCapture(event.pointerId);
+    viewport.classList.remove('is-jumping');
+    try { viewport.setPointerCapture(event.pointerId); } catch (err) { /* ignore */ }
   });
 
   viewport.addEventListener('pointermove', (event) => {
@@ -210,8 +247,10 @@ function initPortfolioCarousel() {
   });
 
   const endDrag = () => {
+    if (!drag.active) return;
     drag.active = false;
     viewport.classList.remove('is-dragging');
+    goTo(indexFromScroll());
   };
   viewport.addEventListener('pointerup', endDrag);
   viewport.addEventListener('pointercancel', endDrag);
@@ -223,6 +262,8 @@ function initPortfolioCarousel() {
       drag.moved = false;
     }
   }, true);
+
+  updateControls();
 }
 
 function initPortfolioLightbox() {
