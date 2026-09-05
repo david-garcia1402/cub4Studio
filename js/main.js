@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMarquee();
   const projectModal = initProjectModal();
   initPortfolioCarousel(projectModal);
+  initShowreel();
 });
 
 const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${SITE.email}`;
@@ -719,4 +720,392 @@ function initProjectModal() {
   });
 
   return { open, close };
+}
+
+const SHOWREEL_DURATION = 28000;
+const SHOWREEL_CHAPTERS = [
+  { id: 'brand', label: 'Estúdio', start: 0 },
+  { id: 'about', label: 'Sobre', start: 3200 },
+  { id: 'solutions', label: 'Soluções', start: 7600 },
+  { id: 'portfolio', label: 'Portfólio', start: 13200 },
+  { id: 'cta', label: 'Contato', start: 25200 }
+];
+
+const SHOWREEL_SCENES = [
+  {
+    id: 'brand',
+    start: 0,
+    end: 3200,
+    kind: 'brand',
+    kicker: 'Estúdio de criação impulsionado por IA',
+    title: 'cub<span>4</span>Studio',
+    text: 'Landing pages, criativos e vídeos que convertem — com curadoria humana.'
+  },
+  {
+    id: 'about',
+    start: 3200,
+    end: 7600,
+    kind: 'about',
+    kicker: 'Sobre o cub4Studio',
+    title: 'Criamos experiências digitais que convertem',
+    text: 'Unimos estratégia, design e IA generativa para vender mais — sem perder identidade de marca.',
+    collage: [
+      'assets/portfolio/econoradar-2.jpg',
+      'assets/portfolio/casa-vertice.jpg',
+      'assets/portfolio/mel-brasa.jpg',
+      'assets/portfolio/nectar.jpg'
+    ]
+  },
+  {
+    id: 'solutions',
+    start: 7600,
+    end: 13200,
+    kind: 'solutions',
+    kicker: 'Serviços',
+    title: 'Tudo que sua marca precisa para vender mais com IA',
+    services: [
+      { title: 'Landing Pages Conversoras', text: 'Copy, UI/UX e integração com IA.' },
+      { title: 'Criativos com IA', text: 'Peças para Ads com direção de arte.' },
+      { title: 'Vídeos & Reels IA', text: 'Gancho nos primeiros segundos.' },
+      { title: 'Estratégia & Automação', text: 'Funis, agentes e dashboards.' }
+    ]
+  },
+  {
+    id: 'econoradar',
+    start: 13200,
+    end: 15200,
+    kind: 'project',
+    kicker: 'Criativos com IA',
+    title: 'EconoRadar',
+    text: 'Campanha de lançamento em dark mode — o radar das finanças.',
+    image: 'assets/portfolio/econoradar-2.jpg'
+  },
+  {
+    id: 'vertice',
+    start: 15200,
+    end: 17200,
+    kind: 'project',
+    kicker: 'Landing Page',
+    title: 'Casa Vértice',
+    text: 'Residencial de alto padrão. Desejo, prova social e visita.',
+    image: 'assets/portfolio/casa-vertice.jpg'
+  },
+  {
+    id: 'melbrasa',
+    start: 17200,
+    end: 19200,
+    kind: 'project',
+    kicker: 'Reel / Vídeo IA',
+    title: 'Mel & Brasa',
+    text: 'Close cinematográfico e gancho nos primeiros segundos.',
+    image: 'assets/portfolio/mel-brasa.jpg'
+  },
+  {
+    id: 'triton',
+    start: 19200,
+    end: 21200,
+    kind: 'project',
+    kicker: 'Catálogo & Produto',
+    title: 'Triton Máquinas',
+    text: 'Fichas técnicas padronizadas para a linha de compressores.',
+    image: 'assets/portfolio/triton-1.jpg',
+    contain: true
+  },
+  {
+    id: 'nectar',
+    start: 21200,
+    end: 23200,
+    kind: 'project',
+    kicker: 'Criativos com IA',
+    title: 'Néctar Atelier',
+    text: 'Stills editoriais de skincare — luz coral e paleta de marca.',
+    image: 'assets/portfolio/nectar.jpg'
+  },
+  {
+    id: 'nyos',
+    start: 23200,
+    end: 25200,
+    kind: 'project',
+    kicker: 'Documentário IA',
+    title: 'The Lake Nyos Mystery',
+    text: 'Curta documental gerado com IA — atmosfera e narrativa.',
+    image: 'assets/portfolio/nyos.jpg',
+    portrait: true
+  },
+  {
+    id: 'cta',
+    start: 25200,
+    end: 28000,
+    kind: 'cta',
+    kicker: 'Vamos criar juntos?',
+    title: 'Pronto para criar sua próxima landing page com IA?',
+    text: 'Chame no WhatsApp e receba os próximos passos do orçamento.'
+  }
+];
+
+function initShowreel() {
+  const root = document.getElementById('showreel');
+  const viewport = document.getElementById('showreelViewport');
+  const chaptersEl = document.getElementById('showreelChapters');
+  const bar = document.getElementById('showreelBar');
+  const clock = document.getElementById('showreelClock');
+  const playBtn = document.getElementById('showreelPlay');
+  const replayBtn = document.getElementById('showreelReplay');
+  const closeBtn = document.getElementById('showreelClose');
+  if (!root || !viewport || !chaptersEl) return;
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let lastFocus = null;
+  let playing = false;
+  let elapsed = 0;
+  let startedAt = 0;
+  let raf = 0;
+  let ended = false;
+
+  const formatTime = (ms) => {
+    const total = Math.max(0, Math.min(SHOWREEL_DURATION, ms));
+    const seconds = Math.floor(total / 1000);
+    return `0:${String(seconds).padStart(2, '0')}`;
+  };
+
+  const build = () => {
+    viewport.innerHTML = SHOWREEL_SCENES.map((scene) => {
+      if (scene.kind === 'brand') {
+        return `<section class="showreel-scene showreel-scene--brand" data-scene="${scene.id}">
+          <div class="showreel-scene__copy">
+            <img class="showreel-badge" src="assets/img/logo-badge.jpg" alt="cub4Studio">
+            <p class="showreel-scene__kicker">${scene.kicker}</p>
+            <p>${scene.text}</p>
+          </div>
+        </section>`;
+      }
+      if (scene.kind === 'about') {
+        const frames = scene.collage.map((src) => `<img src="${src}" alt="">`).join('');
+        return `<section class="showreel-scene showreel-scene--about" data-scene="${scene.id}">
+          <div class="showreel-collage">${frames}</div>
+          <div class="showreel-scene__veil"></div>
+          <div class="showreel-scene__copy">
+            <p class="showreel-scene__kicker">${scene.kicker}</p>
+            <h2>${scene.title}</h2>
+            <p>${scene.text}</p>
+          </div>
+        </section>`;
+      }
+      if (scene.kind === 'solutions') {
+        const cards = scene.services.map((item, i) => `<article class="showreel-service" data-service="${i}">
+          <h3>${item.title}</h3>
+          <p>${item.text}</p>
+        </article>`).join('');
+        return `<section class="showreel-scene showreel-scene--solutions" data-scene="${scene.id}">
+          <div class="showreel-scene__media"><img src="assets/portfolio/mel-brasa.jpg" alt=""></div>
+          <div class="showreel-scene__veil"></div>
+          <div class="showreel-scene__copy">
+            <p class="showreel-scene__kicker">${scene.kicker}</p>
+            <h2>${scene.title}</h2>
+          </div>
+          <div class="showreel-services">${cards}</div>
+        </section>`;
+      }
+      if (scene.kind === 'cta') {
+        return `<section class="showreel-scene showreel-scene--cta" data-scene="${scene.id}">
+          <div class="showreel-scene__copy">
+            <img class="showreel-cta-icon" src="assets/img/icon-transparent.png" alt="">
+            <p class="showreel-scene__kicker">${scene.kicker}</p>
+            <h2>${scene.title}</h2>
+            <p>${scene.text}</p>
+            <a class="btn btn--primary btn--lg" data-whatsapp="Landing Page Conversora" target="_blank" rel="noopener">Falar no WhatsApp</a>
+          </div>
+        </section>`;
+      }
+      const fit = scene.contain ? ' showreel-scene__media--contain' : '';
+      const portrait = scene.portrait ? ' showreel-scene__media--portrait' : '';
+      return `<section class="showreel-scene showreel-scene--project" data-scene="${scene.id}">
+        <div class="showreel-scene__media${fit}${portrait}"><img src="${scene.image}" alt=""></div>
+        <div class="showreel-scene__veil"></div>
+        <div class="showreel-scene__copy">
+          <p class="showreel-scene__kicker">${scene.kicker}</p>
+          <h2>${scene.title}</h2>
+          <p>${scene.text}</p>
+        </div>
+      </section>`;
+    }).join('');
+
+    chaptersEl.innerHTML = SHOWREEL_CHAPTERS.map((chapter) => `<button type="button" class="showreel__chapter" data-chapter="${chapter.id}" aria-label="${chapter.label}">
+      <span></span>
+    </button>`).join('');
+
+    const cta = viewport.querySelector('.showreel-scene--cta a[data-whatsapp]');
+    if (cta) cta.href = whatsappHref('Landing Page Conversora');
+  };
+
+  const render = (time) => {
+    const t = Math.max(0, Math.min(SHOWREEL_DURATION, time));
+    SHOWREEL_SCENES.forEach((scene) => {
+      const el = viewport.querySelector(`[data-scene="${scene.id}"]`);
+      if (!el) return;
+      const isLast = scene.end >= SHOWREEL_DURATION;
+      const on = t >= scene.start && (t < scene.end || (isLast && t >= scene.start));
+      const wasOn = el.classList.contains('is-on');
+      el.classList.toggle('is-on', on);
+      if (on && !wasOn && !reducedMotion) {
+        el.querySelectorAll('img').forEach((img) => {
+          img.style.animation = 'none';
+          void img.offsetWidth;
+          img.style.animation = '';
+        });
+      }
+    });
+
+    const solutions = SHOWREEL_SCENES.find((scene) => scene.kind === 'solutions');
+    if (solutions) {
+      const span = solutions.end - solutions.start;
+      const local = t - solutions.start;
+      const index = local < 0 || local >= span ? -1 : Math.min(3, Math.floor(local / (span / 4)));
+      viewport.querySelectorAll('.showreel-service').forEach((card, i) => {
+        card.classList.toggle('is-lit', i === index || (index >= 0 && i <= index));
+      });
+    }
+
+    SHOWREEL_CHAPTERS.forEach((chapter, i) => {
+      const next = SHOWREEL_CHAPTERS[i + 1];
+      const end = next ? next.start : SHOWREEL_DURATION;
+      const button = chaptersEl.querySelector(`[data-chapter="${chapter.id}"]`);
+      if (!button) return;
+      const done = t >= end;
+      const active = t >= chapter.start && t < end;
+      button.classList.toggle('is-done', done);
+      button.classList.toggle('is-active', active);
+      const fill = done ? 100 : active ? ((t - chapter.start) / (end - chapter.start)) * 100 : 0;
+      button.style.setProperty('--fill', `${fill}%`);
+    });
+
+    if (bar) bar.style.width = `${(t / SHOWREEL_DURATION) * 100}%`;
+    if (clock) clock.textContent = `${formatTime(t)} / 0:28`;
+  };
+
+  const stopRaf = () => {
+    if (raf) window.cancelAnimationFrame(raf);
+    raf = 0;
+  };
+
+  const tick = (now) => {
+    if (!playing) return;
+    elapsed = now - startedAt;
+    if (elapsed >= SHOWREEL_DURATION) {
+      elapsed = SHOWREEL_DURATION;
+      playing = false;
+      ended = true;
+      root.classList.remove('is-playing');
+      playBtn.setAttribute('aria-label', 'Assistir de novo');
+      if (replayBtn) replayBtn.hidden = false;
+      render(elapsed);
+      stopRaf();
+      return;
+    }
+    render(elapsed);
+    raf = window.requestAnimationFrame(tick);
+  };
+
+  const playFrom = (ms) => {
+    elapsed = Math.max(0, Math.min(SHOWREEL_DURATION - 1, ms));
+    ended = false;
+    playing = true;
+    startedAt = performance.now() - elapsed;
+    root.classList.add('is-playing');
+    playBtn.setAttribute('aria-label', 'Pausar');
+    if (replayBtn) replayBtn.hidden = true;
+    stopRaf();
+    render(elapsed);
+    raf = window.requestAnimationFrame(tick);
+  };
+
+  const pause = () => {
+    if (!playing) return;
+    playing = false;
+    root.classList.remove('is-playing');
+    playBtn.setAttribute('aria-label', 'Reproduzir');
+    stopRaf();
+  };
+
+  const toggle = () => {
+    if (ended) {
+      playFrom(0);
+      return;
+    }
+    if (playing) pause();
+    else playFrom(elapsed);
+  };
+
+  const open = () => {
+    lastFocus = document.activeElement;
+    root.inert = false;
+    root.classList.add('is-open');
+    root.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    playFrom(0);
+    closeBtn?.focus();
+  };
+
+  const close = () => {
+    pause();
+    ended = false;
+    elapsed = 0;
+    root.classList.remove('is-open', 'is-playing');
+    root.setAttribute('aria-hidden', 'true');
+    root.inert = true;
+    document.body.style.overflow = '';
+    render(0);
+    if (replayBtn) replayBtn.hidden = true;
+    if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+  };
+
+  build();
+  render(0);
+
+  document.querySelectorAll('[data-showreel-open]').forEach((el) => {
+    el.addEventListener('click', (event) => {
+      event.preventDefault();
+      open();
+    });
+  });
+  closeBtn?.addEventListener('click', close);
+  playBtn?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggle();
+  });
+  replayBtn?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    playFrom(0);
+  });
+  chaptersEl.addEventListener('click', (event) => {
+    const chapter = event.target.closest('[data-chapter]');
+    if (!chapter) return;
+    const data = SHOWREEL_CHAPTERS.find((item) => item.id === chapter.dataset.chapter);
+    if (data) playFrom(data.start);
+  });
+  viewport.addEventListener('click', (event) => {
+    if (event.target.closest('a, button')) return;
+    toggle();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (!root.classList.contains('is-open')) return;
+    if (event.key === 'Escape') close();
+    if (event.key === ' ') {
+      event.preventDefault();
+      toggle();
+    }
+    if (event.key === 'ArrowRight') {
+      const next = SHOWREEL_CHAPTERS.find((chapter) => chapter.start > elapsed + 40);
+      playFrom(next ? next.start : SHOWREEL_DURATION - 1);
+    }
+    if (event.key === 'ArrowLeft') {
+      const prev = [...SHOWREEL_CHAPTERS].reverse().find((chapter) => chapter.start < elapsed - 400);
+      playFrom(prev ? prev.start : 0);
+    }
+  });
+
+  if (window.location.hash === '#apresentacao') {
+    window.setTimeout(open, 280);
+  }
 }

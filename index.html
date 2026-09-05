@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=6" />
+  <link rel="stylesheet" href="css/style.css?v=10" />
 </head>
 <body>
   <!-- Fundo animado -->
@@ -51,7 +51,24 @@
     <!-- Hero -->
     <section class="hero" id="hero">
       <div class="container hero-container">
-        <img src="assets/img/logo-badge.jpg" alt="Mascote do cub4Studio" class="hero-mascot" />
+        <button type="button" class="hero-reel" id="heroReel" data-showreel-open aria-label="Assistir apresentação do cub4Studio, 28 segundos">
+          <span class="hero-reel__stage" aria-hidden="true">
+            <img src="assets/portfolio/econoradar-2.jpg" alt="" class="hero-reel__slide" />
+            <img src="assets/portfolio/casa-vertice.jpg" alt="" class="hero-reel__slide" />
+            <img src="assets/portfolio/mel-brasa.jpg" alt="" class="hero-reel__slide" />
+            <img src="assets/portfolio/nectar.jpg" alt="" class="hero-reel__slide" />
+            <img src="assets/portfolio/nyos.jpg" alt="" class="hero-reel__slide" />
+            <img src="assets/portfolio/triton-1.jpg" alt="" class="hero-reel__slide" />
+          </span>
+          <img src="assets/img/icon-transparent.png" alt="" class="hero-reel__mascot" />
+          <span class="hero-reel__play">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7-11-7Z"/></svg>
+          </span>
+          <span class="hero-reel__meta">
+            <span class="hero-reel__label">Apresentação do estúdio</span>
+            <span class="hero-reel__time">28s</span>
+          </span>
+        </button>
         <div class="hero-inner">
           <p class="eyebrow"><span class="dot"></span> Estúdio de criação impulsionado por IA</p>
         <h1>
@@ -493,6 +510,36 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=6"></script>
+  <div class="showreel" id="showreel" aria-hidden="true" inert>
+    <div class="showreel__glow" aria-hidden="true"></div>
+    <div class="showreel__viewport" id="showreelViewport"></div>
+    <div class="showreel__chrome">
+      <div class="showreel__top">
+        <div class="showreel__chapters" id="showreelChapters" role="tablist" aria-label="Capítulos da apresentação"></div>
+        <button type="button" class="showreel__close" id="showreelClose" aria-label="Fechar apresentação">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="showreel__bottom">
+        <div class="showreel__progress" aria-hidden="true"><span class="showreel__bar" id="showreelBar"></span></div>
+        <div class="showreel__controls">
+          <button type="button" class="showreel__ctrl" id="showreelPlay" aria-label="Pausar">
+            <svg class="showreel__icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3v14H7V5Zm7 0h3v14h-3V5Z"/></svg>
+            <svg class="showreel__icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7-11-7Z"/></svg>
+          </button>
+          <span class="showreel__clock" id="showreelClock">0:00 / 0:28</span>
+          <span class="showreel__brand">
+            <img src="assets/img/icon-transparent.png" alt="" />
+            cub<span>4</span>Studio
+          </span>
+          <button type="button" class="showreel__ctrl" id="showreelReplay" aria-label="Assistir de novo" hidden>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 7H4v3M20 12a8 8 0 1 1-2.2-5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 7c2-2.4 5-4 8-4 2.2 0 4.2.7 5.8 2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js?v=10"></script>
 </body>
 </html>
