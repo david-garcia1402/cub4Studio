@@ -386,7 +386,7 @@ function initPortfolioCarousel(projectModal) {
   if (!cards.length) return;
 
   let index = 0;
-  let drag = { active: false, moved: false, startX: 0, startScroll: 0, card: null };
+  let drag = { active: false, moved: false, startX: 0, startScroll: 0 };
   let snapTimer = 0;
 
   const maxScrollLeft = () => Math.max(0, viewport.scrollWidth - viewport.clientWidth);
@@ -490,7 +490,7 @@ function initPortfolioCarousel(projectModal) {
     if (!drag.active) return;
     drag.active = false;
     viewport.classList.remove('is-dragging');
-    if (drag.moved) goTo(indexFromScroll());
+    goTo(indexFromScroll());
   };
   viewport.addEventListener('pointerup', endDrag);
   viewport.addEventListener('pointercancel', endDrag);
@@ -503,11 +503,7 @@ function initPortfolioCarousel(projectModal) {
       drag.card = null;
       return;
     }
-
-    const card = event.target.closest('.project-card[data-project]') || drag.card;
-    drag.card = null;
-    if (card && projectModal) projectModal.open(card.dataset.project);
-  });
+  }, true);
 
   updateControls();
 }
