@@ -743,6 +743,11 @@ main, header, footer { position: relative; z-index: 1; }
   transition: color 0.2s ease;
 }
 .contact-info-item:hover { color: var(--coral-light); }
+.contact-info-item svg,
+.footer-social svg {
+  flex-shrink: 0;
+  overflow: visible;
+}
 
 .contact-form {
   background: var(--surface);
