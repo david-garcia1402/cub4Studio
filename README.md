@@ -53,9 +53,9 @@ A logo oficial (mascote 3D vermelho/coral + wordmark "cub4Studio") foi recebida 
 
 1. **Conteúdo do Instagram**: os textos de serviços e comprometimentos foram escritos com base na descrição fornecida pelo cliente. Ao ter acesso ao conteúdo real do perfil `@cub4studio` (confirmado como handle oficial), ajuste os textos das seções "Serviços" e "Sobre" para refletir a linguagem e o posicionamento já usados nas redes sociais.
 2. **Portfólio**: a seção `#portfolio` está com cartões de espaço reservado ("Em breve"). Quando os criativos, landing pages e reels forem enviados pelo cliente, substitua os cartões por imagens/vídeos reais dos projetos.
-3. **Formulário de contato**: atualmente o formulário apenas exibe uma mensagem de confirmação (`js/main.js`) e loga os dados no console. É necessário integrar a um serviço real de envio (ex.: endpoint de e-mail, WhatsApp Business API, Make/Zapier, CRM ou formulário de terceiros como Formspree).
-4. **Domínio e SEO**: revisar `meta description` e a imagem de Open Graph (`og:image`, já configurada com `logo-badge.jpg`) ao definir o domínio final.
-5. **Dados de contato**: substituir `contato@cub4studio.com` e demais placeholders pelos dados reais de contato da marca.
+3. **Formulário e WhatsApp**: os pedidos de orçamento vão para `cub4studio@gmail.com` via FormSubmit. O WhatsApp `(47) 99994-0399` é o CTA principal (botão flutuante, hero, banner e contato), com mensagem pronta. Na primeira solicitação por e-mail, confirme o link de ativação do FormSubmit.
+4. **Analytics**: o site dispara o evento `generate_lead` no envio do formulário e no clique do WhatsApp. Ative Web Analytics no projeto da Vercel. Para GA4 e Meta Pixel, cole os IDs em `SITE.ga4` e `SITE.metaPixel` em `js/main.js`.
+5. **Domínio e SEO**: revisar `meta description` e a imagem de Open Graph (`og:image`, já configurada com `logo-badge.jpg`) ao definir o domínio final.
 
 ## Publicação em um repositório remoto (GitHub)
 

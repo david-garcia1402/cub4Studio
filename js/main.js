@@ -1,5 +1,13 @@
 // cub4Studio — interações básicas do site
 
+const SITE = {
+  email: 'cub4studio@gmail.com',
+  whatsapp: '5547999940399',
+  whatsappDisplay: '(47) 99994-0399',
+  ga4: '',
+  metaPixel: ''
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   // Ano dinâmico no rodapé
   const yearEl = document.getElementById('year');
@@ -53,34 +61,219 @@ document.addEventListener('DOMContentLoaded', () => {
     revealEls.forEach((el) => el.classList.add('is-visible'));
   }
 
-  // Formulário de contato (placeholder até integração real, ex.: WhatsApp/CRM/e-mail)
-  const form = document.getElementById('contactForm');
-  const formNote = document.getElementById('formNote');
-
-  if (form) {
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      const data = new FormData(form);
-      const nome = data.get('nome');
-      const email = data.get('email');
-      const servico = data.get('servico');
-      const mensagem = data.get('mensagem');
-
-      // TODO: substituir por integração real (endpoint de e-mail, WhatsApp API ou CRM)
-      console.log('Novo contato cub4Studio:', { nome, email, servico, mensagem });
-
-      if (formNote) {
-        formNote.textContent = `Obrigado, ${nome}! Recebemos sua mensagem e em breve entraremos em contato.`;
-      }
-      form.reset();
-    });
-  }
-
+  initAnalytics();
+  initWhatsappLinks();
+  initContactForm();
   initMarquee();
   const projectModal = initProjectModal();
   initPortfolioCarousel(projectModal);
 });
+
+const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${SITE.email}`;
+
+function whatsappMessage(service) {
+  const chosen = (service || '').trim();
+  if (chosen) return `Oi, vi o site do cub4Studio e quero orçamento de ${chosen}.`;
+  return 'Oi, vi o site do cub4Studio e quero um orçamento.';
+}
+
+function whatsappHref(service) {
+  return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(whatsappMessage(service))}`;
+}
+
+function selectedService() {
+  return String(document.getElementById('servico')?.value || '').trim();
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function trackLead(source, service) {
+  const payload = { source, service: service || '' };
+  if (typeof window.va === 'function') {
+    window.va('event', { name: 'generate_lead', data: payload });
+  }
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'generate_lead', { method: source, service: payload.service });
+  }
+  if (typeof window.fbq === 'function') {
+    window.fbq('track', 'Lead', { content_name: payload.service || 'orçamento', source });
+  }
+}
+
+function initAnalytics() {
+  if (SITE.ga4) {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${SITE.ga4}`;
+    document.head.appendChild(script);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function gtag() { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', SITE.ga4);
+  }
+
+  if (SITE.metaPixel) {
+    const fbq = window.fbq = function () {
+      fbq.callMethod ? fbq.callMethod.apply(fbq, arguments) : fbq.queue.push(arguments);
+    };
+    if (!window._fbq) window._fbq = fbq;
+    fbq.push = fbq;
+    fbq.loaded = true;
+    fbq.version = '2.0';
+    fbq.queue = [];
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+    document.head.appendChild(script);
+    window.fbq('init', SITE.metaPixel);
+    window.fbq('track', 'PageView');
+  }
+}
+
+function serviceFromTrigger(el) {
+  if (el.hasAttribute('data-whatsapp-generic')) return '';
+  return el.getAttribute('data-whatsapp') || selectedService();
+}
+
+function initWhatsappLinks() {
+  const refresh = () => {
+    document.querySelectorAll('[data-whatsapp]').forEach((el) => {
+      el.href = whatsappHref(serviceFromTrigger(el));
+    });
+  };
+
+  document.getElementById('servico')?.addEventListener('change', refresh);
+  document.addEventListener('click', (event) => {
+    const el = event.target.closest('[data-whatsapp]');
+    if (!el) return;
+    trackLead('whatsapp', serviceFromTrigger(el));
+  });
+  refresh();
+}
+
+function initContactForm() {
+  const form = document.getElementById('contactForm');
+  const formNote = document.getElementById('formNote');
+  const submitBtn = document.getElementById('contactSubmit');
+  const nextInput = document.getElementById('formNext');
+  if (!form || !submitBtn) return;
+
+  const idleLabel = submitBtn.textContent;
+  const returnUrl = `${window.location.origin}${window.location.pathname}?orcamento=enviado#contato`;
+  if (nextInput) nextInput.value = returnUrl;
+
+  const setNote = (message, tone) => {
+    if (!formNote) return;
+    formNote.textContent = message;
+    formNote.classList.remove('form-note--success', 'form-note--error');
+    if (tone) formNote.classList.add(`form-note--${tone}`);
+  };
+
+  const setBusy = (busy) => {
+    submitBtn.disabled = busy;
+    submitBtn.textContent = busy ? 'Enviando orçamento...' : idleLabel;
+  };
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('orcamento') === 'enviado') {
+    setNote('Orçamento enviado! Vamos responder em breve no e-mail informado.', 'success');
+    const cleanUrl = `${window.location.pathname}#contato`;
+    window.history.replaceState({}, '', cleanUrl);
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const honey = form.querySelector('[name="_honey"]');
+    if (honey && honey.value) return;
+
+    const data = new FormData(form);
+    const nome = String(data.get('Nome') || '').trim();
+    const email = String(data.get('email') || '').trim();
+    const servico = String(data.get('Serviço') || '').trim();
+    const projeto = String(data.get('Projeto') || '').trim();
+
+    if (!nome || !email || !projeto) {
+      setNote('Preencha nome, e-mail e a descrição do projeto para solicitar o orçamento.', 'error');
+      return;
+    }
+
+    setBusy(true);
+    setNote('');
+
+    const payload = {
+      Nome: nome,
+      email,
+      Serviço: servico,
+      Projeto: projeto,
+      Origem: window.location.href,
+      _subject: `Novo orçamento cub4Studio — ${servico || 'Contato'}`,
+      _template: 'table',
+      _captcha: 'false',
+      _replyto: email,
+      _autoresponse: `Olá, ${nome}! Recebemos seu pedido de orçamento no cub4Studio e retornamos em breve.`
+    };
+
+    const mailtoHref = `mailto:${SITE.email}?subject=${encodeURIComponent(`Orçamento cub4Studio — ${servico || 'Contato'}`)}&body=${encodeURIComponent(`Nome: ${nome}\nE-mail: ${email}\nServiço: ${servico}\n\n${projeto}`)}`;
+    const showSendError = () => {
+      if (!formNote) return;
+      formNote.classList.remove('form-note--success');
+      formNote.classList.add('form-note--error');
+      formNote.innerHTML = `Não foi possível enviar agora. <a href="${whatsappHref(servico)}" data-whatsapp="${escapeHtml(servico)}" target="_blank" rel="noopener">Falar no WhatsApp</a> ou <a href="${mailtoHref}">abrir e-mail</a>.`;
+    };
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => controller.abort(), 12000);
+      const body = new FormData();
+      Object.entries(payload).forEach(([key, value]) => body.append(key, value));
+
+      const response = await fetch(FORMSUBMIT_ENDPOINT, {
+        method: 'POST',
+        headers: { Accept: 'application/json' },
+        body,
+        signal: controller.signal
+      });
+      window.clearTimeout(timeoutId);
+
+      const result = await response.json().catch(() => null);
+      const success = Boolean(result && (result.success === true || result.success === 'true'));
+      const message = result && typeof result.message === 'string' ? result.message : '';
+      const needsActivation = /activat|confirm (your )?e-?mail|check your e-?mail|ativar/i.test(message);
+
+      if (success) {
+        form.reset();
+        trackLead('form', servico);
+        formNote.classList.remove('form-note--error');
+        formNote.classList.add('form-note--success');
+        formNote.innerHTML = `Obrigado, ${escapeHtml(nome)}! Seu orçamento chegou no estúdio. Quer agilizar? <a href="${whatsappHref(servico)}" data-whatsapp="${escapeHtml(servico)}" target="_blank" rel="noopener">Continuar no WhatsApp</a>.`;
+        setBusy(false);
+        return;
+      }
+
+      if (needsActivation) {
+        trackLead('form', servico);
+        formNote.classList.remove('form-note--error');
+        formNote.classList.add('form-note--success');
+        formNote.innerHTML = `Pedido registrado. Confirme o e-mail de ativação enviado para ${SITE.email} (só uma vez). Enquanto isso, <a href="${whatsappHref(servico)}" data-whatsapp="${escapeHtml(servico)}" target="_blank" rel="noopener">fale no WhatsApp</a>.`;
+        setBusy(false);
+        return;
+      }
+
+      showSendError();
+      setBusy(false);
+    } catch (error) {
+      showSendError();
+      setBusy(false);
+    }
+  });
+}
 
 function initMarquee() {
   const marquee = document.querySelector('.marquee');
@@ -448,6 +641,12 @@ function initProjectModal() {
     index = 0;
     renderThumbs();
     render();
+
+    if (ctaEl) {
+      const service = project.tag || '';
+      ctaEl.setAttribute('data-whatsapp', service);
+      ctaEl.href = whatsappHref(service);
+    }
 
     modal.inert = false;
     modal.classList.add('is-open');
