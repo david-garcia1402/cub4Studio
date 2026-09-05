@@ -64,8 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnalytics();
   initWhatsappLinks();
   initContactForm();
-  initPortfolioCarousel();
-  initPortfolioLightbox();
+  initMarquee();
+  const projectModal = initProjectModal();
+  initPortfolioCarousel(projectModal);
 });
 
 const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${SITE.email}`;
@@ -273,10 +274,6 @@ function initContactForm() {
     }
   });
 }
-  initMarquee();
-  const projectModal = initProjectModal();
-  initPortfolioCarousel(projectModal);
-});
 
 function initMarquee() {
   const marquee = document.querySelector('.marquee');
@@ -648,6 +645,12 @@ function initProjectModal() {
     index = 0;
     renderThumbs();
     render();
+
+    if (ctaEl) {
+      const service = project.tag || '';
+      ctaEl.setAttribute('data-whatsapp', service);
+      ctaEl.href = whatsappHref(service);
+    }
 
     modal.inert = false;
     modal.classList.add('is-open');
