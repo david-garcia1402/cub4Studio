@@ -3,7 +3,6 @@
 const SITE = {
   email: 'cub4studio@gmail.com',
   whatsapp: '5547999940399',
-  whatsappDisplay: '(47) 99994-0399',
   ga4: '',
   metaPixel: ''
 };
