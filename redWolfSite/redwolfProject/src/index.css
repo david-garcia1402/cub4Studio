@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #070708;
+  --ink-soft: #111113;
+  --paper: #f4ede4;
+  --paper-dim: #b8afa4;
+  --ember: #c8102e;
+  --ember-bright: #ef3340;
+  --ember-deep: #7a0e1c;
+  --line: rgba(200, 16, 46, 0.28);
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper: var(--paper);
+  --color-paper-dim: var(--paper-dim);
+  --color-ember: var(--ember);
+  --color-ember-bright: var(--ember-bright);
+  --color-ember-deep: var(--ember-deep);
+  --color-line: var(--line);
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cinzel", ui-serif, Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--ember) 70%, transparent);
+  color: white;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.ember-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--ember) 20%,
+    var(--ember-bright) 50%,
+    var(--ember) 80%,
+    transparent
+  );
+}
+
+.ken-burns {
+  animation: kenBurns 28s ease-in-out infinite alternate;
+}
+
+@keyframes kenBurns {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.14) translate3d(-2%, -1.5%, 0);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rise {
+  animation: rise 0.9s ease both;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.btn-ember {
+  background: linear-gradient(120deg, #7a0e1c, #ef3340, #c8102e, #7a0e1c);
+  background-size: 220% 220%;
+  color: #fff7f4;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.btn-ember:hover {
+  animation: shimmer 1.4s linear infinite;
+  box-shadow: 0 10px 40px rgba(200, 16, 46, 0.35);
+  transform: translateY(-1px);
+}
+
+.marquee {
+  animation: marquee 38s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.glow-ring {
+  box-shadow: 0 0 0 1px rgba(200, 16, 46, 0.35), 0 0 40px rgba(200, 16, 46, 0.12);
+}
