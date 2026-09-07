@@ -1,0 +1,31 @@
+{
+  "episode_id": "000",
+  "slug": "template",
+  "title_options": [
+    "Pulo no jardim",
+    "Pipoca dança",
+    "Nino vem junto"
+  ],
+  "hashtags": ["viladopulo", "pipocaenino", "shortsinfantil", "3d", "danca"],
+  "duration_sec": 24,
+  "hook_0_3s": "Close de Pipoca já no primeiro pulo, cachecol coral voando no beat.",
+  "beats": [
+    { "t": "0-3s", "visual": "Close Pipoca pulando", "music": "grito de entrada + ukulele" },
+    { "t": "3-12s", "visual": "Plano médio, Nino entra", "music": "verso 1" },
+    { "t": "12-21s", "visual": "Os dois dançam juntos", "music": "refrão" },
+    { "t": "21-24s", "visual": "Abraço e freeze", "music": "último pulo, pulo" }
+  ],
+  "payoff": "Pipoca e Nino se abraçam e congelam sorrindo.",
+  "camera": "Close no hook, médio na dança, push-in suave no payoff. 9:16.",
+  "motion_prompt": "Same 3D marmoset as the reference image hops on the beat, coral scarf fluttering, tiny green parakeet joins, gentle push-in, locked faces.",
+  "song_brief": {
+    "style": "kids dance, ukulele, handclaps, xylophone, PT-BR",
+    "bpm": 100,
+    "lyrics_pt": "Pipoca pula, Nino vem / Pulo, pulo, Vila do Pulo!"
+  },
+  "scene": "jardim",
+  "outfit": "canonico",
+  "characters": ["pipoca", "nino"],
+  "made_for_kids": true,
+  "language": "pt-BR"
+}

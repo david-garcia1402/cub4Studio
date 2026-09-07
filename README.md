@@ -26,10 +26,15 @@ cub4studio/
 │       ├── favicon-192.png         # Favicon / ícone para dispositivos (192×192)
 │       ├── favicon-512.png         # Favicon em alta resolução (512×512)
 │       └── source/                 # Arquivo original enviado pelo cliente (referência)
+├── studio/             # Fábrica de Shorts infantis (Vila do Pulo) — ver studio/README.md
 └── README.md
 ```
 
 Sem dependências, sem build step: HTML, CSS e JavaScript puros. Basta abrir `index.html` no navegador ou publicar em qualquer serviço de hospedagem estática (Vercel, Netlify, GitHub Pages, Cloudflare Pages etc.).
+
+## Fábrica de Shorts — Vila do Pulo
+
+A pasta [`studio/`](studio/README.md) é a linha de produção de Shorts 9:16 em PT-BR (Pipoca + Nino). IP original, pipeline still → Kling → Suno → FFmpeg, com porta humana de QA. O MoneyPrinterTurbo entra só como compositor local. Comece por `studio/ip/bible.md`.
 
 ## Como visualizar localmente
 
