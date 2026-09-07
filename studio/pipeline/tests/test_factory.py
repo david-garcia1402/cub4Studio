@@ -8,8 +8,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from beats import even_cuts  # noqa: E402
+from assemble import assemble  # noqa: E402
 from pack_metadata import pack  # noqa: E402
 from paths import EPISODES  # noqa: E402
+from qa_gate import is_approved, write_qa, CHECKS  # noqa: E402
 from radar import analyze  # noqa: E402
 from validate_brief import validate_brief_dict, validate_episode_dir  # noqa: E402
 
@@ -64,6 +66,24 @@ def test_pack_metadata(tmp_path: Path) -> None:
     assert payload["privacyStatus"] == "private"
 
 
+def test_assemble_requires_qa(tmp_path: Path) -> None:
+    episode = tmp_path / "blocked"
+    episode.mkdir()
+    (episode / "brief.json").write_text(
+        (EPISODES / "2026-09-07-festa-no-jardim" / "brief.json").read_text(encoding="utf-8"),
+        encoding="utf-8",
+    )
+    (episode / "takes").mkdir()
+    assert is_approved(episode) is False
+    try:
+        assemble(episode, draft=False)
+        raise AssertionError("assemble deveria recusar sem QA")
+    except RuntimeError as exc:
+        assert "QA" in str(exc)
+    write_qa(episode, "teste", True, {key: True for key in CHECKS}, "ok")
+    assert is_approved(episode) is True
+
+
 if __name__ == "__main__":
     test_all_production_briefs()
     test_forbidden_word_is_caught()
@@ -73,4 +93,5 @@ if __name__ == "__main__":
 
     with tempfile.TemporaryDirectory() as tmp:
         test_pack_metadata(Path(tmp))
+        test_assemble_requires_qa(Path(tmp) / "qa-case")
     print("tests ok")

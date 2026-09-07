@@ -160,8 +160,36 @@ def assemble(episode: Path, *, draft: bool = False, intro: Path | None = None) -
         prefix_intro(intro, short, with_intro)
         short = with_intro
 
-    run(["ffmpeg", "-y", "-ss", "00:00:01", "-i", str(short), "-frames:v", "1", str(out / "thumb-a.png")])
-    run(["ffmpeg", "-y", "-sseof", "-2", "-i", str(short), "-frames:v", "1", str(out / "thumb-b.png")])
+    run(
+        [
+            "ffmpeg",
+            "-y",
+            "-ss",
+            "00:00:01",
+            "-i",
+            str(short),
+            "-frames:v",
+            "1",
+            "-update",
+            "1",
+            str(out / "thumb-a.png"),
+        ]
+    )
+    run(
+        [
+            "ffmpeg",
+            "-y",
+            "-sseof",
+            "-2",
+            "-i",
+            str(short),
+            "-frames:v",
+            "1",
+            "-update",
+            "1",
+            str(out / "thumb-b.png"),
+        ]
+    )
     raw.unlink(missing_ok=True)
     concat_list.unlink(missing_ok=True)
     return short
