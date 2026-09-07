@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+:root {
+  --ember: #c45c26;
+  --ember-deep: #9a3f16;
+  --brass: #c9a56a;
+  --cream: #f4ead8;
+  --linen: #faf6ee;
+  --ink: #16110d;
+  --bark: #2a2118;
+  --smoke: #6d6256;
+  --wine: #6e2d28;
+}
+
+@theme inline {
+  --color-ember: var(--ember);
+  --color-ember-deep: var(--ember-deep);
+  --color-brass: var(--brass);
+  --color-cream: var(--cream);
+  --color-linen: var(--linen);
+  --color-ink: var(--ink);
+  --color-bark: var(--bark);
+  --color-smoke: var(--smoke);
+  --color-wine: var(--wine);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--linen);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: #c45c26;
+  color: #fff8ee;
+}
+
+.font-display {
+  font-family: var(--font-display), ui-serif, Georgia, serif;
+}
+
+.grain {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.hairline {
+  background: linear-gradient(90deg, transparent, #c9a56a, transparent);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.delay-1 {
+  animation-delay: 120ms;
+}
+.delay-2 {
+  animation-delay: 240ms;
+}
+.delay-3 {
+  animation-delay: 380ms;
+}
+.delay-4 {
+  animation-delay: 520ms;
+}
