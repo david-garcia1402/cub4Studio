@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+:root {
+  --night: #0b0907;
+  --ink: #16110c;
+  --paper: #f4ead8;
+  --cream: #efe2cc;
+  --gold: #d4a017;
+  --gold-soft: #e8c36a;
+  --chili: #c23b22;
+  --avocado: #6b8f3a;
+  --leaf: #3d5c2e;
+  --sand: #c4a574;
+  --muted: #b8a894;
+  --line: rgba(244, 234, 216, 0.12);
+  --background: #0b0907;
+  --foreground: #f4ead8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-night: var(--night);
+  --color-ink: var(--ink);
+  --color-paper: var(--paper);
+  --color-cream: var(--cream);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-chili: var(--chili);
+  --color-avocado: var(--avocado);
+  --color-leaf: var(--leaf);
+  --color-sand: var(--sand);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-script: "Ephesis", cursive;
+  --radius-xl: 1.25rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--night);
+  color: var(--paper);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--chili);
+  color: var(--paper);
+}
+
+.font-display {
+  font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+}
+
+.font-script {
+  font-family: var(--font-ephesis), cursive;
+}
+
+.papel {
+  background-image: radial-gradient(
+      circle at 20% 10%,
+      rgba(212, 160, 23, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(circle at 80% 0%, rgba(194, 59, 34, 0.12), transparent 32%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 2l3 10h10l-8 6 3 10-8-6-8 6 3-10-8-6h10z' fill='%23d4a017' fill-opacity='0.05'/%3E%3C/svg%3E");
+}
+
+.grain::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.gold-line {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold-soft),
+    transparent
+  );
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.9s ease both;
+}
+
+.animate-float {
+  animation: float-slow 5s ease-in-out infinite;
+}
