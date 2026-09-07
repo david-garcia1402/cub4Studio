@@ -1,0 +1,31 @@
+{
+  "episode_id": "004",
+  "slug": "corrida-das-frutas",
+  "title_options": [
+    "Corrida das frutas",
+    "Caju rolou",
+    "Pipoca e o caju"
+  ],
+  "hashtags": ["viladopulo", "pipocaenino", "frutas", "shortsinfantil", "3d"],
+  "duration_sec": 24,
+  "hook_0_3s": "Um caju de brinquedo rola e Pipoca corre atrás dançando, não desesperado.",
+  "beats": [
+    { "t": "0-3s", "visual": "Caju laranja rola em direção à câmera, Pipoca entra", "music": "slide de xilofone" },
+    { "t": "3-12s", "visual": "Perseguição dançante entre goiabas e bananas no chão", "music": "verso da corrida" },
+    { "t": "12-21s", "visual": "Nino empurra o caju de volta com o bico, os dois riem", "music": "refrão" },
+    { "t": "21-24s", "visual": "Os dois sentados no caju como se fosse puff", "music": "acorde quente" }
+  ],
+  "payoff": "Pipoca e Nino sentados no caju, sem morder de forma nojenta, só descanso feliz.",
+  "camera": "Hook com o caju em primeiro plano, tracking lateral da corrida, médio no puff.",
+  "motion_prompt": "Same reference 3D marmoset does a playful dance-chase after a toy cashew fruit, green parakeet nudges the fruit back, they sit on it smiling, no eating mess, no people, stylized 3D farm path, locked faces.",
+  "song_brief": {
+    "style": "kids dance-chase, ukulele, woodblocks, PT-BR",
+    "bpm": 108,
+    "lyrics_pt": "Rola o caju, Pipoca vem / Nino empurra também / Pulo, pulo, Vila do Pulo!"
+  },
+  "scene": "jardim",
+  "outfit": "canonico",
+  "characters": ["pipoca", "nino"],
+  "made_for_kids": true,
+  "language": "pt-BR"
+}

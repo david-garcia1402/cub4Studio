@@ -1,0 +1,139 @@
+{
+  "name": "Vila do Pulo — gerar episódio",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "description": "brief.json → still fal.ai → Kling I2V → download → assemble draft. Para no QA humano."
+  },
+  "nodes": [
+    {
+      "id": "webhook",
+      "name": "Webhook brief",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "parameters": {
+        "path": "vila-do-pulo-generate",
+        "httpMethod": "POST",
+        "responseMode": "onReceived",
+        "options": {}
+      }
+    },
+    {
+      "id": "guard",
+      "name": "Guard kids-safe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [240, 0],
+      "parameters": {
+        "jsCode": "const brief = $json.brief || $json;\nconst banned = ['peppa','bluey','cocomelon','baby','bebê','aprenda','vairalvideo','ducklingspro'];\nconst blob = JSON.stringify(brief).toLowerCase();\nfor (const w of banned) { if (blob.includes(w)) throw new Error('brief bloqueado: ' + w); }\nif (brief.made_for_kids !== true) throw new Error('made_for_kids obrigatório');\nif (!(brief.characters || []).includes('pipoca')) throw new Error('falta Pipoca');\nreturn [{ json: { brief, slug: brief.slug, episode_id: brief.episode_id } }];"
+      }
+    },
+    {
+      "id": "notion-create",
+      "name": "Notion → Gerando",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [480, 0],
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "create",
+        "databaseId": "={{$env.NOTION_DATABASE_ID}}",
+        "title": "={{$json.brief.title_options[0]}}",
+        "propertiesUi": {
+          "propertyValues": [
+            { "key": "Status|select", "selectValue": "Gerando" },
+            { "key": "episode_id|rich_text", "textContent": "={{$json.episode_id}}" },
+            { "key": "slug|rich_text", "textContent": "={{$json.slug}}" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fal-still",
+      "name": "fal.ai still",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [720, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/flux/dev",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ prompt: $json.brief.motion_prompt, image_size: { width: 1080, height: 1920 }, num_images: 1 }) }}"
+      }
+    },
+    {
+      "id": "wait-still",
+      "name": "Espera still 20s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [960, 0],
+      "parameters": { "amount": 20, "unit": "seconds" }
+    },
+    {
+      "id": "kling",
+      "name": "fal.ai Kling I2V",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1200, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "https://queue.fal.run/fal-ai/kling-video/v3/pro/image-to-video",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ prompt: $('guard').item.json.brief.motion_prompt, duration: '12', aspect_ratio: '9:16' }) }}"
+      }
+    },
+    {
+      "id": "wait-video",
+      "name": "Espera vídeo 90s",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1440, 0],
+      "parameters": { "amount": 90, "unit": "seconds" }
+    },
+    {
+      "id": "notion-qa",
+      "name": "Notion → QA",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [1680, 0],
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "update",
+        "pageId": "={{$('notion-create').item.json.id}}",
+        "simple": false,
+        "propertiesUi": {
+          "propertyValues": [
+            { "key": "Status|select", "selectValue": "QA" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "respond",
+      "name": "Resposta",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1920, 0],
+      "parameters": {
+        "jsCode": "return [{ json: { status: 'ready_for_human_qa', next: 'python3 studio/pipeline/qa_gate.py <pasta> && python3 studio/pipeline/assemble.py <pasta>', auto_publish: false } }];"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook brief": { "main": [[{ "node": "Guard kids-safe", "type": "main", "index": 0 }]] },
+    "Guard kids-safe": { "main": [[{ "node": "Notion → Gerando", "type": "main", "index": 0 }]] },
+    "Notion → Gerando": { "main": [[{ "node": "fal.ai still", "type": "main", "index": 0 }]] },
+    "fal.ai still": { "main": [[{ "node": "Espera still 20s", "type": "main", "index": 0 }]] },
+    "Espera still 20s": { "main": [[{ "node": "fal.ai Kling I2V", "type": "main", "index": 0 }]] },
+    "fal.ai Kling I2V": { "main": [[{ "node": "Espera vídeo 90s", "type": "main", "index": 0 }]] },
+    "Espera vídeo 90s": { "main": [[{ "node": "Notion → QA", "type": "main", "index": 0 }]] },
+    "Notion → QA": { "main": [[{ "node": "Resposta", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}
