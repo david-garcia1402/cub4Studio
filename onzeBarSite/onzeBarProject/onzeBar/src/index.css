@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Instrument Serif", "Times New Roman", serif;
+  --font-sans: "Outfit", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --color-ink: #0b0a09;
+  --color-ink-soft: #161310;
+  --color-cream: #f3ead8;
+  --color-cream-dim: #c9bba3;
+  --color-gold: #c9a36a;
+  --color-gold-bright: #e8c99a;
+  --color-copper: #b56b3a;
+  --color-line: rgba(201, 163, 106, 0.22);
+}
+
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-gold) 55%, transparent);
+  color: var(--color-ink);
+}
+
+.vignette::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(11, 10, 9, 0.72) 100%);
+}
+
+.hairline {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-line),
+    transparent
+  );
+}
+
+.marquee-track {
+  animation: marquee 32s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+}
+
+img {
+  max-width: 100%;
+  image-rendering: auto;
+}
