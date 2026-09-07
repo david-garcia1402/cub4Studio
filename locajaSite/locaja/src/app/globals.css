@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f4f7f5;
+  --foreground: #163024;
+  --locaja: #00a651;
+  --locaja-dark: #2a5640;
+  --ink: #1e3d2e;
+  --sand: #f4f7f5;
+  --paper: #ffffff;
+  --steel: #4d6759;
+  --safety: #00a651;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-locaja: #00a651;
+  --color-locaja-dark: #2a5640;
+  --color-ink: #1e3d2e;
+  --color-sand: #f4f7f5;
+  --color-paper: #ffffff;
+  --color-steel: #4d6759;
+  --color-safety: #00a651;
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-barlow);
+}
+
+* {
+  scrollbar-color: #00a651 transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+}
+
+::selection {
+  background: #00a651;
+  color: white;
+}
+
+.display {
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.field {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(42, 86, 64, 0.14);
+  background: #ffffff;
+  padding: 0.85rem 1rem;
+  color: #1e3d2e;
+  outline: none;
+}
+
+.field:focus {
+  border-color: #00a651;
+  box-shadow: 0 0 0 4px rgba(0, 166, 81, 0.14);
+}
+
+.photo-plate {
+  background:
+    radial-gradient(circle at 50% 40%, #ffffff 0%, #eef4f0 72%);
+}
