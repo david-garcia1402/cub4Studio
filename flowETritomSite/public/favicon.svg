@@ -1,5 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
-  <rect width="64" height="64" rx="12" fill="#0B1F33"/>
-  <path d="M14 40c7-9 11-4 16 0s9 7 16 0" stroke="#F5C400" stroke-width="4" stroke-linecap="round"/>
-  <text x="32" y="30" text-anchor="middle" fill="#fff" font-family="Arial Black, sans-serif" font-size="13" font-weight="800">FVT</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="Grupo FVT">
+  
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F2CF5B"/>
+      <stop offset="0.5" stop-color="#DDB53A"/>
+      <stop offset="1" stop-color="#C9A227"/>
+    </linearGradient>
+    <linearGradient id="goldText" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6D76A"/>
+      <stop offset="1" stop-color="#D4AC2E"/>
+    </linearGradient>
+    <radialGradient id="navyGlow" cx="0.5" cy="0.42" r="0.65">
+      <stop offset="0" stop-color="#143252"/>
+      <stop offset="1" stop-color="#071628"/>
+    </radialGradient>
+  </defs>
+  <circle cx="500" cy="500" r="500" fill="url(#gold)"/>
+  <circle cx="500" cy="500" r="440" fill="url(#navyGlow)"/>
+  <path d="M235.84 710.60L142.76 710.60L142.76 289.40L324.76 289.40L324.76 352.32L235.84 352.32L235.84 458.40L313.32 458.40L313.32 523.40L235.84 523.40L235.84 710.60ZM533.28 710.60L435.00 710.60L359.08 289.40L438.64 289.40L483.88 575.40L526 289.40L610.24 289.40L533.28 710.60ZM794.32 710.60L700.72 710.60L700.72 358.56L637.28 358.56L637.28 289.40L857.24 289.40L857.24 358.56L794.32 358.56L794.32 710.60Z" fill="#FFFFFF"/>
 </svg>

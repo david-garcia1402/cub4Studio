@@ -31,28 +31,26 @@ export function LogoTriton({ className = "h-12", variant = "dark" }: LogoProps) 
 
 type GrupoProps = {
   className?: string;
+  /** Mantido por compatibilidade; o emblema circular é a única marca do grupo. */
   variant?: "navy" | "light" | "emblem";
+  loading?: "eager" | "lazy";
 };
 
-export function LogoGrupoFVT({ className = "h-16 w-auto", variant = "navy" }: GrupoProps) {
-  const src =
-    variant === "light"
-      ? "/logos/grupo-fvt-light.png"
-      : variant === "emblem"
-        ? "/logos/grupo-fvt-emblem.png"
-        : "/logos/grupo-fvt-navy.png";
-  const size =
-    variant === "emblem"
-      ? { width: 400, height: 400 }
-      : { width: 1600, height: 640 };
-
+/**
+ * Emblema circular do Grupo FVT (GRUPO / FVT / 11 ANOS).
+ * SVG vetorial com texto convertido em paths: nítido em qualquer tamanho e sem depender de fontes.
+ * Funciona sobre fundo claro ou escuro (o círculo é preenchido em navy).
+ */
+export function LogoGrupoFVT({ className = "h-24 w-24", loading = "eager" }: GrupoProps) {
   return (
     <img
-      src={src}
-      alt="Grupo FVT — Flow e Triton"
-      className={`block object-contain ${className}`}
-      width={size.width}
-      height={size.height}
+      src="/logos/grupo-fvt-emblem.svg"
+      alt="Grupo FVT — 11 anos"
+      className={`block aspect-square object-contain ${className}`}
+      width={1000}
+      height={1000}
+      loading={loading}
+      decoding="async"
     />
   );
 }

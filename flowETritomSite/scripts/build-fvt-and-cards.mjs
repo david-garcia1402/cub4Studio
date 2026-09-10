@@ -14,26 +14,20 @@ const downloads = "C:/Users/David/Downloads/Grupo-FVT-Logo";
 mkdirSync(cards, { recursive: true });
 mkdirSync(downloads, { recursive: true });
 
-async function raster(svgName, outName, width, height, background) {
-  const buf = await sharp(path.join(logos, svgName), { density: 220 })
-    .resize(width, height, { fit: "contain", background })
-    .png({ compressionLevel: 6 })
-    .toBuffer();
-  const dests = [outName, outName.replace("fvt", "ftv")];
-  for (const name of dests) {
-    await sharp(buf).toFile(path.join(logos, name));
-  }
-}
-
+// A marca do Grupo FVT é o emblema circular vetorial (grupo-fvt-emblem.svg, texto em paths).
+// Aqui só rasterizamos os PNGs derivados (transparentes) e a imagem Open Graph.
 const navy = { r: 11, g: 31, b: 51, alpha: 1 };
 const paper = { r: 247, g: 244, b: 238, alpha: 1 };
+const emblemSvg = path.join(logos, "grupo-fvt-emblem.svg");
 
-await raster("grupo-fvt.svg", "grupo-fvt-navy.png", 1600, 640, navy);
-await raster("grupo-fvt-transparente.svg", "grupo-fvt-light.png", 1600, 580, paper);
-await raster("grupo-fvt-emblem.svg", "grupo-fvt-emblem.png", 800, 800, navy);
+await sharp(emblemSvg, { density: 300 }).resize(1024, 1024).png({ compressionLevel: 9 }).toFile(path.join(logos, "grupo-fvt-emblem.png"));
+await sharp(emblemSvg, { density: 300 }).resize(512, 512).png({ compressionLevel: 9 }).toFile(path.join(logos, "grupo-fvt-emblem-512.png"));
 
-copyFileSync(path.join(logos, "grupo-fvt.svg"), path.join(logos, "grupo-ftv.svg"));
-copyFileSync(path.join(logos, "grupo-fvt-transparente.svg"), path.join(logos, "grupo-ftv-transparente.svg"));
+const ogEmblem = await sharp(emblemSvg, { density: 300 }).resize(520, 520).png().toBuffer();
+await sharp({ create: { width: 1200, height: 630, channels: 4, background: navy } })
+  .composite([{ input: ogEmblem, left: 340, top: 55 }])
+  .jpeg({ quality: 90 })
+  .toFile(path.join(logos, "grupo-fvt-og.jpg"));
 
 const catalogBits = new Set([
   "bit-65mm-cir-65.webp",
@@ -121,14 +115,7 @@ await toSquare(
   false,
 );
 
-const pack = [
-  "grupo-fvt.svg",
-  "grupo-fvt-transparente.svg",
-  "grupo-fvt-emblem.svg",
-  "grupo-fvt-navy.png",
-  "grupo-fvt-light.png",
-  "grupo-fvt-emblem.png",
-];
+const pack = ["grupo-fvt-emblem.svg", "grupo-fvt-emblem.png", "grupo-fvt-emblem-512.png", "grupo-fvt-og.jpg"];
 
 for (const file of pack) {
   copyFileSync(path.join(logos, file), path.join(downloads, file));
@@ -140,12 +127,10 @@ writeFileSync(
     "GRUPO FVT — identidade do site",
     "",
     "Arquivos:",
-    "- grupo-fvt.svg                 marca completa com fundo navy (vetor)",
-    "- grupo-fvt-transparente.svg    marca sem fundo, para fundos claros (vetor)",
-    "- grupo-fvt-emblem.svg          emblema isolado (vetor)",
-    "- grupo-fvt-navy.png            versão raster com fundo navy",
-    "- grupo-fvt-light.png           versão raster com fundo claro",
-    "- grupo-fvt-emblem.png          símbolo isolado",
+    "- grupo-fvt-emblem.svg          emblema circular GRUPO / FVT / 11 ANOS (vetor, texto em paths)",
+    "- grupo-fvt-emblem.png          emblema 1024x1024, fundo transparente",
+    "- grupo-fvt-emblem-512.png      emblema 512x512, fundo transparente",
+    "- grupo-fvt-og.jpg              imagem para redes sociais (1200x630, fundo navy)",
     "",
     "As letras da marca são FVT (não FTV).",
     "",

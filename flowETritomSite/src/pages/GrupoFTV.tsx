@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { LogoFlow, LogoGrupoFVT, LogoTriton } from "../components/Logos";
 import { WhatsAppButton } from "../components/WhatsAppButton";
+import { Differentials } from "../components/Differentials";
 import { ADDRESS, HOURS, group, waLink } from "../data";
 
 export function GrupoFVT() {
@@ -12,23 +13,26 @@ export function GrupoFVT() {
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:py-20">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.28em] text-yellow">Institucional · 11 anos</p>
-            <h1 className="mt-4 max-w-xl font-display text-4xl leading-tight sm:text-6xl">
-              Um grupo. Três marcas. Uma operação.
-            </h1>
-            <p className="mt-4 max-w-xl text-base leading-7 text-white/85 sm:text-lg">
-              O Grupo FVT reúne três marcas sob a mesma operação. Neste site, a Flow e a Triton concentram o
-              atendimento de perfuração, estoque e pós-venda.
-            </p>
-            <div className="mt-8 overflow-hidden rounded-2xl border border-gold/40 bg-navy shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
-              <LogoGrupoFVT className="h-auto w-full" />
+            <div className="mt-6 flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+              <LogoGrupoFVT className="h-40 w-40 shrink-0 drop-shadow-[0_24px_50px_rgba(0,0,0,0.5)] sm:h-48 sm:w-48" />
+              <div>
+                <h1 className="max-w-xl font-display text-4xl leading-tight sm:text-5xl lg:text-6xl">
+                  Um grupo. Três marcas. Uma operação.
+                </h1>
+                <p className="mt-4 max-w-xl text-base leading-7 text-white/85 sm:text-lg">
+                  O Grupo FVT reúne três marcas sob a mesma operação. Neste site, a Flow e a Triton concentram o
+                  atendimento de perfuração, estoque e pós-venda.
+                </p>
+              </div>
             </div>
-            <a
-              href="/logos/grupo-fvt-navy.png"
-              download="Grupo-FVT-navy.png"
-              className="mt-4 inline-flex text-sm font-semibold text-yellow underline decoration-yellow/40"
-            >
-              Baixar logo PNG
-            </a>
+            <div className="mt-6 flex flex-wrap gap-4 text-sm font-semibold text-yellow">
+              <a href="/logos/grupo-fvt-emblem.png" download="Grupo-FVT-emblema.png" className="underline decoration-yellow/40">
+                Baixar logo PNG
+              </a>
+              <a href="/logos/grupo-fvt-emblem.svg" download="Grupo-FVT-emblema.svg" className="underline decoration-yellow/40">
+                Baixar logo SVG (vetor)
+              </a>
+            </div>
           </div>
           <figure className="relative overflow-hidden rounded-3xl border border-white/10">
             <img
@@ -43,7 +47,7 @@ export function GrupoFVT() {
                 <p className="font-display text-xl tracking-wide">{group.founder}</p>
                 <p className="text-sm text-white/80">{group.founderRole}</p>
               </div>
-              <LogoGrupoFVT variant="emblem" className="h-16 w-16 rounded-xl border border-gold/40 sm:h-20 sm:w-20" />
+              <LogoGrupoFVT className="h-16 w-16 drop-shadow-lg sm:h-20 sm:w-20" />
             </figcaption>
           </figure>
         </div>
@@ -103,6 +107,8 @@ export function GrupoFVT() {
           </div>
         </div>
       </section>
+
+      <Differentials layout="cards" className="border-t border-navy/10" />
 
       <section className="bg-navy px-4 py-16 text-white sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">

@@ -1,14 +1,23 @@
 import { Link } from "react-router-dom";
 import { LogoFlow, LogoGrupoFVT, LogoTriton } from "./Logos";
-import { ADDRESS, EMAIL, FACEBOOK, INSTAGRAM, MAPS_EMBED, MAPS_URL, PHONE_ALT, PHONE_DISPLAY } from "../data";
+import { PhoneLinks } from "./PhoneLinks";
+import { ADDRESS, EMAIL, FACEBOOK, INSTAGRAM, MAPS_EMBED, MAPS_URL, differentials } from "../data";
 
 export function Footer() {
   return (
     <footer className="bg-navy text-white">
       <div className="h-1 hairline" />
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 lg:grid-cols-4">
-        <div className="space-y-4">
-          <LogoGrupoFVT className="h-auto w-full max-w-[280px] rounded-xl border border-gold/30" />
+        <div className="space-y-5">
+          <Link to="/grupo-fvt" className="flex items-center gap-4" aria-label="Grupo FVT">
+            <LogoGrupoFVT className="h-24 w-24 shrink-0 sm:h-28 sm:w-28" loading="lazy" />
+            <span>
+              <span className="block font-display text-2xl leading-none tracking-wide">Grupo FVT</span>
+              <span className="mt-1 block text-[11px] font-semibold uppercase tracking-[0.18em] text-yellow">
+                Soluções · Equipamentos · Confiança
+              </span>
+            </span>
+          </Link>
           <div className="flex flex-wrap items-end gap-8">
             <LogoFlow variant="light" className="h-14 w-auto" />
             <LogoTriton variant="light" className="h-16 w-auto" />
@@ -17,6 +26,13 @@ export function Footer() {
             Flow e Triton pertencem ao Grupo FVT. Distribuição de equipamentos para poços artesianos, mineração e
             sondagem, com sede própria em Itapema-SC.
           </p>
+          <ul className="flex flex-wrap gap-2 text-[11px] font-semibold uppercase tracking-wide text-white/80">
+            {differentials.map((d) => (
+              <li key={d.id} className="rounded-full border border-white/15 px-2.5 py-1">
+                {d.title}
+              </li>
+            ))}
+          </ul>
         </div>
         <div>
           <h2 className="font-display text-sm tracking-[0.2em] text-yellow">INSTITUCIONAL</h2>
@@ -36,10 +52,11 @@ export function Footer() {
         </div>
         <div>
           <h2 className="font-display text-sm tracking-[0.2em] text-yellow">CONTATO</h2>
-          <ul className="mt-4 space-y-2 text-sm text-white/80">
-            <li>{PHONE_DISPLAY}</li>
-            <li>{PHONE_ALT}</li>
-            <li>{EMAIL}</li>
+          <PhoneLinks tone="dark" className="mt-4 text-white/85" />
+          <ul className="mt-3 space-y-2 text-sm text-white/80">
+            <li>
+              <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+            </li>
             <li>{ADDRESS}</li>
             <li>
               <a className="underline decoration-yellow/40" href={INSTAGRAM} target="_blank" rel="noreferrer">

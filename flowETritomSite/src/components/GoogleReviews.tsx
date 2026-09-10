@@ -1,4 +1,5 @@
-import { ADDRESS, GOOGLE_REVIEWS_URL, HOURS, PHONE_ALT, PHONE_DISPLAY, googlePlace } from "../data";
+import { ADDRESS, GOOGLE_REVIEWS_URL, HOURS, googlePlace } from "../data";
+import { PhoneLinks } from "./PhoneLinks";
 
 function Stars() {
   return (
@@ -54,10 +55,8 @@ export function GoogleReviews() {
               <li>{googlePlace.reviewCount} avaliações no Google</li>
               <li>{ADDRESS}</li>
               <li>{HOURS}</li>
-              <li>
-                {PHONE_DISPLAY} · {PHONE_ALT}
-              </li>
             </ul>
+            <PhoneLinks className="mt-3 text-navy" />
             <a
               href={GOOGLE_REVIEWS_URL}
               target="_blank"

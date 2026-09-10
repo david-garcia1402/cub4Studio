@@ -1,6 +1,8 @@
 import { FormEvent, useState } from "react";
 import { WhatsAppIcon } from "../components/WhatsAppButton";
-import { ADDRESS, EMAIL, HOURS, MAPS_EMBED, PHONE_ALT, PHONE_DISPLAY, waLink } from "../data";
+import { PhoneIcon } from "../components/PhoneLinks";
+import { Differentials } from "../components/Differentials";
+import { ADDRESS, EMAIL, HOURS, MAPS_EMBED, PHONE_FIXO, PHONE_FIXO_TEL, PHONE_WHATSAPP, waLink } from "../data";
 
 export function Contact() {
   const [sent, setSent] = useState(false);
@@ -32,10 +34,25 @@ export function Contact() {
 
       <section className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-2">
         <div className="space-y-5">
-          <div className="rounded-2xl border border-navy/10 p-6">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold">Telefone / WhatsApp</p>
-            <p className="mt-2 text-2xl font-bold text-navy">{PHONE_DISPLAY}</p>
-            <p className="text-sm text-muted">{PHONE_ALT}</p>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="rounded-2xl border border-navy/10 p-6">
+              <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-gold">
+                <PhoneIcon className="h-4 w-4" /> Telefone fixo
+              </p>
+              <a href={`tel:${PHONE_FIXO_TEL}`} className="mt-2 block text-2xl font-bold text-navy">
+                {PHONE_FIXO}
+              </a>
+              <p className="mt-1 text-sm text-muted">Somente ligação — este número não tem WhatsApp.</p>
+            </div>
+            <div className="rounded-2xl border border-[#25D366]/40 bg-[#25D366]/5 p-6">
+              <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#128C4A]">
+                <WhatsAppIcon className="h-4 w-4" /> WhatsApp
+              </p>
+              <a href={waLink()} target="_blank" rel="noopener noreferrer" className="mt-2 block text-2xl font-bold text-navy">
+                {PHONE_WHATSAPP}
+              </a>
+              <p className="mt-1 text-sm text-muted">Mensagens e ligações. Atendimento comercial e técnico.</p>
+            </div>
           </div>
           <div className="rounded-2xl border border-navy/10 p-6">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold">E-mail</p>
@@ -89,6 +106,8 @@ export function Contact() {
           {sent ? <p className="mt-3 text-sm text-muted">Abrimos o WhatsApp com a sua mensagem.</p> : null}
         </form>
       </section>
+
+      <Differentials layout="cards" className="border-t border-navy/10" />
     </main>
   );
 }

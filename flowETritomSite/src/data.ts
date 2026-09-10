@@ -10,9 +10,56 @@ export type Product = {
   image: string;
 };
 
-export const WHATSAPP = "554720334417";
-export const PHONE_DISPLAY = "(47) 2033-4417";
-export const PHONE_ALT = "(47) 99918-9698";
+/** Telefone fixo — SOMENTE LIGAÇÃO. Este número não tem WhatsApp. */
+export const PHONE_FIXO = "(47) 2033-4417";
+export const PHONE_FIXO_TEL = "+554720334417";
+/** Celular comercial — WhatsApp e ligação. */
+export const PHONE_WHATSAPP = "(47) 99918-9698";
+export const WHATSAPP = "5547999189698";
+
+/** @deprecated use PHONE_FIXO (somente ligação) */
+export const PHONE_DISPLAY = PHONE_FIXO;
+/** @deprecated use PHONE_WHATSAPP */
+export const PHONE_ALT = PHONE_WHATSAPP;
+
+/** Vídeos institucionais / produto em operação (hospedados em /public/videos, 720p otimizado). */
+export const VIDEOS = {
+  flowBemVindo: {
+    src: "/videos/flow-bemvindo.mp4",
+    poster: "/videos/flow-bemvindo-poster.webp",
+    title: "Flow — equipamentos para poços artesianos em operação",
+    /** Fonte original enviada pelo cliente (1080x1920, 84 MB). */
+    source: "https://flowequipamentos.com/wp-content/uploads/2025/09/FLOW-BEMVINDO.mp4",
+  },
+} as const;
+
+/** Diferenciais do negócio — devem aparecer com destaque no site (SEO + confiança). */
+export const differentials = [
+  {
+    id: "envios",
+    kicker: "Brasil",
+    title: "Envios para todo o Brasil",
+    text: "Estoque próprio em Itapema-SC e despacho para todos os estados, com rastreamento do pedido até a entrega.",
+  },
+  {
+    id: "transporte",
+    kicker: "100%",
+    title: "Transporte dedicado 100% seguro",
+    text: "Carga embalada, protegida e acompanhada do nosso estoque até a sua operação, com transportadoras homologadas.",
+  },
+  {
+    id: "garantia",
+    kicker: "NF-e",
+    title: "Produtos com nota fiscal e garantia",
+    text: "Equipamentos originais, faturados com nota fiscal eletrônica e garantia conforme cada linha de produto.",
+  },
+  {
+    id: "seguranca",
+    kicker: "Técnico",
+    title: "Perfurando com segurança",
+    text: "Orientação técnica para escolher martelo, bit, pressão e vazão certos para o seu solo — e suporte após a venda para operar sem paradas e sem riscos.",
+  },
+] as const;
 export const EMAIL = "comercial@flowequipamentos.com";
 export const ADDRESS = "R. 2150, nº 276 — Sertão do Trombudo, Itapema - SC";
 export const HOURS = "Seg a sex · 08h00–12h00 e 13h30–17h30";
@@ -481,30 +528,3 @@ export const group = {
     },
   ],
 } as const;
-
-export const faqs = [
-  {
-    q: "A Flow & Triton atende só Santa Catarina?",
-    a: "Atendemos todo o Brasil, com estoque em Itapema-SC e envio via transportadoras parceiras, com rastreamento e nota fiscal.",
-  },
-  {
-    q: "O que cada marca comercializa?",
-    a: "A Flow e a Triton pertencem ao Grupo FVT, que reúne três marcas. A Flow concentra ferramentas e equipamentos para poços artesianos e perfuração DTH/rotativa. A Triton cobre máquinas, compressores, mineração, fundações e sondagem.",
-  },
-  {
-    q: "Posso pedir um orçamento personalizado?",
-    a: "Sim. A equipe técnica indica o item certo para solo, vazão, pressão e profundidade. Use o WhatsApp ou o formulário de contato.",
-  },
-  {
-    q: "Quais formas de pagamento?",
-    a: "Boleto, Pix e cartão de crédito, com condições flexíveis conforme o pedido.",
-  },
-  {
-    q: "Os produtos têm garantia?",
-    a: "Sim. São originais, com qualidade assegurada pelos fabricantes e garantia conforme cada linha.",
-  },
-  {
-    q: "Há suporte depois da compra?",
-    a: "Sim. Orientamos instalação, uso e manutenção preventiva — não é só venda de catálogo.",
-  },
-];
