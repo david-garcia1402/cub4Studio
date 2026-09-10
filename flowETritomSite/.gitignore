@@ -1,0 +1,10 @@
+node_modules
+dist
+.DS_Store
+pdf-pages
+onboarding-extract.txt
+extract-pdf.cjs
+extract-pdf.mjs
+extract-pdf-rest.cjs
+process-assets.cjs
+*.zip

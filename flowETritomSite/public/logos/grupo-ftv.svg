@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" role="img" aria-labelledby="fvtTitle">
+  <title id="fvtTitle">Grupo FVT</title>
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F8D24A"/>
+      <stop offset="1" stop-color="#C9A227"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="480" rx="28" fill="#0B1F33"/>
+  <rect x="16" y="16" width="1168" height="448" rx="18" fill="none" stroke="#C9A227" stroke-width="2"/>
+
+  <g transform="translate(72 112)">
+    <path d="M110 6 L198 56 L110 106 L22 56 Z" fill="url(#gold)"/>
+    <path d="M110 76 L198 126 L110 176 L22 126 Z" fill="#E8C35A"/>
+    <path d="M110 146 L174 184 L110 248 L46 184 Z" fill="#C9A227"/>
+  </g>
+
+  <text x="328" y="168" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" letter-spacing="10" fill="#E8C35A">GRUPO</text>
+  <path fill="#FFFFFF" d="M328 186 H454 V216 H364 V250 H438 V280 H364 V348 H328 Z"/>
+  <path fill="#FFFFFF" d="M468 186 L506 186 L548 328 L590 186 L628 186 L560 348 L536 348 Z"/>
+  <path fill="#FFFFFF" d="M644 186 H790 V216 H736 V348 H698 V216 H644 Z"/>
+  <rect x="328" y="366" width="462" height="7" rx="3.5" fill="#F5C400"/>
+  <text x="328" y="404" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="2.4" fill="#E8C35A">SOLUCOES  |  EQUIPAMENTOS  |  CONFIANCA</text>
+
+  <g transform="translate(912 116)">
+    <circle cx="110" cy="122" r="108" fill="none" stroke="#C9A227" stroke-width="3"/>
+    <circle cx="110" cy="122" r="92" fill="#081827"/>
+    <circle cx="110" cy="122" r="86" fill="none" stroke="#E8C35A" stroke-width="2"/>
+    <text x="110" y="128" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="78" fill="#FFFFFF">11</text>
+    <text x="110" y="168" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" letter-spacing="6" fill="#E8C35A">ANOS</text>
+  </g>
+</svg>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 420" role="img" aria-labelledby="fvtTitleLight">
+  <title id="fvtTitleLight">Grupo FVT</title>
+  <defs>
+    <linearGradient id="gold2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E8C35A"/>
+      <stop offset="1" stop-color="#C9A227"/>
+    </linearGradient>
+    <linearGradient id="yellow2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F8D24A"/>
+      <stop offset="1" stop-color="#F5C400"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(18 56)">
+    <path d="M108 8 L196 52 V168 C196 214 154 246 108 268 C62 246 20 214 20 168 V52 Z" fill="none" stroke="url(#gold2)" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M108 78 L168 122 L148 134 L108 106 L68 134 L48 122 Z" fill="url(#yellow2)"/>
+    <path d="M108 118 L168 162 L148 174 L108 146 L68 174 L48 162 Z" fill="url(#yellow2)"/>
+    <path d="M108 158 L168 202 L148 214 L108 186 L68 214 L48 202 Z" fill="#C9A227"/>
+  </g>
+
+  <text x="280" y="148" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" letter-spacing="10" fill="#C9A227">GRUPO</text>
+  <path fill="#0B1F33" d="M276 166 H402 V196 H312 V230 H386 V260 H312 V328 H276 Z"/>
+  <path fill="#0B1F33" d="M416 166 L454 166 L496 308 L538 166 L576 166 L508 328 L484 328 Z"/>
+  <path fill="#0B1F33" d="M592 166 H738 V196 H684 V328 H646 V196 H592 Z"/>
+  <rect x="280" y="344" width="458" height="7" rx="3.5" fill="url(#yellow2)"/>
+  <text x="280" y="384" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" letter-spacing="2.4" fill="#0B1F33">SOLUCOES  |  EQUIPAMENTOS  |  CONFIANCA</text>
+
+  <g transform="translate(860 70)">
+    <circle cx="110" cy="122" r="108" fill="none" stroke="url(#gold2)" stroke-width="3"/>
+    <circle cx="110" cy="122" r="92" fill="#0B1F33"/>
+    <circle cx="110" cy="122" r="86" fill="none" stroke="#E8C35A" stroke-width="2"/>
+    <text x="110" y="128" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="78" fill="#FFFFFF">11</text>
+    <text x="110" y="168" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800" letter-spacing="6" fill="#E8C35A">ANOS</text>
+  </g>
+</svg>

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Emblema Grupo FVT">
+  <defs>
+    <linearGradient id="eg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F8D24A"/>
+      <stop offset="1" stop-color="#C9A227"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" rx="36" fill="#0B1F33"/>
+  <rect x="14" y="14" width="372" height="372" rx="26" fill="none" stroke="#C9A227" stroke-width="3"/>
+  <g transform="translate(90 58)">
+    <path d="M110 8 L198 58 L110 108 L22 58 Z" fill="url(#eg)"/>
+    <path d="M110 78 L198 128 L110 178 L22 128 Z" fill="#E8C35A"/>
+    <path d="M110 148 L174 186 L110 250 L46 186 Z" fill="#C9A227"/>
+  </g>
+  <text x="200" y="360" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="42" letter-spacing="6" fill="#FFFFFF">FVT</text>
+</svg>

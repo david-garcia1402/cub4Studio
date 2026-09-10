@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Oswald", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --color-navy: #0b1f33;
+  --color-navy-2: #122a44;
+  --color-ink: #101418;
+  --color-paper: #f4f1ea;
+  --color-sand: #ebe6db;
+  --color-yellow: #f5c400;
+  --color-gold: #c9a227;
+  --color-copper: #c56a32;
+  --color-muted: #5c6570;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  background: var(--color-yellow);
+  color: var(--color-navy);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+}
+
+.hairline {
+  background: linear-gradient(90deg, transparent, #d4af37, transparent);
+}
+
+.panel-flow {
+  background:
+    linear-gradient(180deg, rgba(244, 241, 234, 0.92) 0%, rgba(255, 255, 255, 0.88) 100%),
+    url("/brand/flow-hero.webp") center / cover no-repeat;
+}
+
+.panel-triton {
+  background:
+    linear-gradient(180deg, rgba(11, 31, 51, 0.28) 0%, rgba(11, 31, 51, 0.55) 100%),
+    url("/brand/triton-hero.webp") center / cover no-repeat;
+}
