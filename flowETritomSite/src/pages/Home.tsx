@@ -20,15 +20,15 @@ const previewIds = ["cir-90", "mission-80", "bit-90", "bomba-4", "tri600", "perf
 const flowPreview = products.filter((p) => previewIds.includes(p.id) && p.brand === "flow");
 const tritonPreview = products.filter((p) => previewIds.includes(p.id) && p.brand === "triton");
 
-/** Miniaturas de produto que aparecem no banner para já sugerir o catálogo de cada marca. */
-const heroThumbs = {
+/** Miniaturas de produto da seção "Sobre o grupo" — já sugerem o catálogo de cada marca. */
+const brandThumbs = {
   flow: [
     { src: "/images/cards/martelo-cir-90.webp", alt: "Martelo DTH CIR 90" },
     { src: "/images/cards/bit-90-mm-cir-90.webp", alt: "Bit 90 mm" },
     { src: "/images/cards/produto-7755.webp", alt: "Motobomba submersa 4 polegadas" },
   ],
   triton: [
-    { src: "/brand/compressor.webp", alt: "Compressor portátil Triton" },
+    { src: "/images/cards/triton-compressor.webp", alt: "Compressor portátil Triton TRI600A-18G2" },
     { src: "/images/cards/img-7101.webp", alt: "Hastes e perfuratriz pneumática" },
     { src: "/images/cards/img-7391.webp", alt: "Bits roscados para desmonte" },
   ],
@@ -39,7 +39,7 @@ function ThumbStrip({ items, ring }: { items: { src: string; alt: string }[]; ri
     <ul className="mt-5 grid grid-cols-3 gap-2">
       {items.map((t) => (
         <li key={t.src} className={`overflow-hidden rounded-xl border ${ring} bg-white`}>
-          <img src={t.src} alt={t.alt} className="aspect-square h-auto w-full object-cover" width={300} height={300} loading="eager" decoding="async" />
+          <img src={t.src} alt={t.alt} className="aspect-square h-auto w-full object-cover" width={300} height={300} loading="lazy" decoding="async" />
         </li>
       ))}
     </ul>
@@ -50,9 +50,109 @@ export function Home() {
   return (
     <main>
       {/* ------------------------------------------------------------------ */}
-      {/* HERO — Flow | Grupo FVT | Triton, com foto de fundo segmentada       */}
+      {/* HERO — painéis Flow | Triton, emblema do Grupo FVT no centro         */}
       {/* ------------------------------------------------------------------ */}
-      <section className="relative overflow-hidden bg-navy text-white" aria-label="Grupo FVT — Flow e Triton">
+      <section className="relative bg-navy" aria-label="Grupo FVT — Flow e Triton">
+        <div className="relative grid lg:min-h-[86vh] lg:grid-cols-2">
+          {/*
+            As artes de fundo (flow-hero / triton-hero, 1400x1597) já trazem a logo de cada marca na faixa
+            central da imagem — por isso não repetimos a logo por cima.
+            Mobile: a arte ocupa os 58% superiores do painel (inteira, sem corte da logo) e o conteúdo fica no
+            terço inferior sobre navy. Desktop: a arte preenche o painel, deslocada para fora do centro
+            (translate de 8%, sem zoom, para preservar as máquinas) para a logo não ficar atrás do emblema FVT; um vignette escurece a costura.
+          */}
+          {/* FLOW */}
+          <article className="relative min-h-[88vh] overflow-hidden bg-navy sm:min-h-[80vh] lg:min-h-0">
+            <img
+              src="/brand/flow-hero.webp"
+              alt="Flow — soluções para perfuração de rocha: compressor e bits DTH"
+              className="absolute inset-x-0 top-0 h-[58%] w-full object-cover object-[70%_center] lg:inset-0 lg:h-full lg:-translate-x-[8%] lg:object-[center_40%]"
+              width={1400}
+              height={1597}
+              fetchPriority="high"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy from-42% via-navy/85 via-52% to-transparent to-62% lg:from-0% lg:via-navy/75 lg:via-28% lg:to-58%" aria-hidden="true" />
+            <div className="absolute inset-y-0 right-0 hidden w-[24%] bg-gradient-to-r from-transparent to-navy to-60% lg:block" aria-hidden="true" />
+            <div className="relative flex h-full min-h-[88vh] flex-col justify-end p-6 pb-28 text-white sm:min-h-[80vh] sm:p-10 sm:pb-32 lg:min-h-[86vh] lg:pb-12 lg:pr-36 xl:pr-44">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-yellow">Marca do Grupo FVT</p>
+              <h2 className="mt-2 max-w-md font-display text-3xl sm:text-4xl">Equipamentos para poços artesianos</h2>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link to="/flow" className="rounded-full bg-yellow px-5 py-3 text-sm font-bold text-navy hover:bg-[#ffd54a]">
+                  Ver catálogo Flow
+                </Link>
+                <a href={CATALOG_URL} className="rounded-full border border-white/30 px-5 py-3 text-sm font-bold text-white hover:bg-white/10">
+                  PDF 2025
+                </a>
+              </div>
+              <ul className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wide">
+                {flowCategories.slice(1).map((c) => (
+                  <li key={c.id} className="rounded-full bg-white/15 px-3 py-1">
+                    {c.label}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+
+          {/* EMBLEMA DO GRUPO FVT — no mobile fica entre os painéis; no desktop, centro exato entre as marcas */}
+          <div className="relative z-10 -mb-10 -mt-24 flex flex-col items-center text-center lg:absolute lg:left-1/2 lg:top-1/2 lg:my-0 lg:-translate-x-1/2 lg:-translate-y-1/2">
+            <div className="rounded-full bg-navy/40 p-2 shadow-[0_30px_80px_rgba(0,0,0,0.55)] ring-1 ring-gold/40 backdrop-blur-sm">
+              <Link to="/grupo-fvt" aria-label="Conhecer o Grupo FVT">
+                <LogoGrupoFVT className="h-40 w-40 sm:h-48 sm:w-48 lg:h-56 lg:w-56 xl:h-64 xl:w-64" />
+              </Link>
+            </div>
+            <h1 className="mt-4 rounded-full bg-navy/80 px-4 py-2 font-display text-sm tracking-[0.12em] text-white shadow-lg ring-1 ring-white/10 backdrop-blur sm:text-base">
+              Flow e Triton. <span className="text-yellow">Um só grupo.</span>
+            </h1>
+          </div>
+
+          {/* TRITON */}
+          <article className="relative min-h-[88vh] overflow-hidden bg-navy sm:min-h-[80vh] lg:min-h-0">
+            <img
+              src="/brand/triton-hero.webp"
+              alt="Triton — máquinas e compressores: perfuratriz em pedreira"
+              className="absolute inset-x-0 top-0 h-[58%] w-full object-cover object-[30%_center] lg:inset-0 lg:h-full lg:translate-x-[8%] lg:object-[center_40%]"
+              width={1400}
+              height={1597}
+              fetchPriority="high"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-navy from-42% via-navy/85 via-52% to-transparent to-62% lg:from-0% lg:via-navy/75 lg:via-28% lg:to-58%" aria-hidden="true" />
+            <div className="absolute inset-y-0 left-0 hidden w-[24%] bg-gradient-to-l from-transparent to-navy to-60% lg:block" aria-hidden="true" />
+            {/* Mobile: funde o topo da arte Triton com o emblema que fica na costura entre os painéis */}
+            <div className="absolute inset-x-0 top-0 h-[16%] bg-gradient-to-b from-navy via-navy/70 to-transparent lg:hidden" aria-hidden="true" />
+            <div className="relative flex h-full min-h-[88vh] flex-col justify-end p-6 pt-28 text-white sm:min-h-[80vh] sm:p-10 sm:pt-32 lg:min-h-[86vh] lg:pl-36 lg:pt-10 xl:pl-44">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-yellow">Marca do Grupo FVT</p>
+              <h2 className="mt-2 max-w-md font-display text-3xl sm:text-4xl">Máquinas e compressores</h2>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link to="/triton" className="rounded-full bg-yellow px-5 py-3 text-sm font-bold text-navy hover:bg-[#ffd54a]">
+                  Ver catálogo Triton
+                </Link>
+                <WhatsAppButton href={waLink("Olá! Quero falar com a Triton sobre máquinas e compressores.")} variant="outline">
+                  Falar com vendas
+                </WhatsAppButton>
+              </div>
+              <ul className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wide">
+                {tritonCategories.slice(1).map((c) => (
+                  <li key={c.id} className="rounded-full bg-white/15 px-3 py-1">
+                    {c.label}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+
+          {/* Divisor central (desktop) */}
+          <div className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-gold/70 to-transparent lg:block" aria-hidden="true" />
+        </div>
+      </section>
+
+      {/* Diferenciais em barra (alta visibilidade, logo abaixo do banner) */}
+      <Differentials layout="strip" />
+
+      {/* ------------------------------------------------------------------ */}
+      {/* SOBRE O GRUPO — Flow | FVT | Triton com foto de fundo segmentada     */}
+      {/* ------------------------------------------------------------------ */}
+      <section className="relative overflow-hidden bg-navy text-white" aria-labelledby="sobre-grupo-title">
         <div className="absolute inset-0 grid grid-cols-1 lg:grid-cols-2" aria-hidden="true">
           {/* Lado Flow: perfuração de poço artesiano. Lado Triton: perfuratriz e compressor em pedreira. */}
           <img
@@ -61,7 +161,7 @@ export function Home() {
             className="hidden h-full w-full object-cover object-center opacity-45 lg:block"
             width={1080}
             height={720}
-            fetchPriority="high"
+            loading="lazy"
           />
           <img
             src="/images/setor-mineracao.webp"
@@ -69,15 +169,15 @@ export function Home() {
             className="h-full w-full object-cover object-center opacity-45"
             width={1080}
             height={720}
-            fetchPriority="high"
+            loading="lazy"
           />
         </div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(11,31,51,0.45)_0%,rgba(11,31,51,0.82)_65%,rgba(11,31,51,0.95)_100%)]" aria-hidden="true" />
         <div className="absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-gold/60 to-transparent lg:block" aria-hidden="true" />
 
-        <div className="relative mx-auto max-w-7xl px-4 pb-12 pt-10 sm:px-6 sm:pb-16 sm:pt-12 lg:pb-20 lg:pt-14">
+        <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
           <p className="text-center text-[11px] font-semibold uppercase tracking-[0.3em] text-yellow sm:text-xs">
-            {group.name} · Itapema · Santa Catarina · 11 anos
+            Sobre o grupo · Itapema<span className="hidden sm:inline"> · Santa Catarina</span> · 11 anos
           </p>
 
           <div className="mt-8 grid items-center gap-6 sm:grid-cols-2 lg:grid-cols-[1fr_minmax(280px,0.9fr)_1fr] lg:gap-8">
@@ -85,9 +185,9 @@ export function Home() {
             <article className="order-2 rounded-3xl bg-white/95 p-5 text-navy shadow-[0_24px_60px_rgba(0,0,0,0.35)] backdrop-blur sm:p-6 lg:order-1">
               <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-gold">Marca do Grupo FVT</p>
               <LogoFlow className="mt-2 h-12 w-auto sm:h-14" />
-              <h2 className="mt-4 font-display text-2xl leading-tight">Poços artesianos e perfuração DTH</h2>
+              <h3 className="mt-4 font-display text-2xl leading-tight">Poços artesianos e perfuração DTH</h3>
               <p className="mt-2 text-sm leading-6 text-ink/75">Martelos DTH, bits, brocas rotativas, hastes e motobombas.</p>
-              <ThumbStrip items={heroThumbs.flow} ring="border-navy/10" />
+              <ThumbStrip items={brandThumbs.flow} ring="border-navy/10" />
               <ul className="mt-4 flex flex-wrap gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-navy">
                 {flowCategories.slice(1).map((c) => (
                   <li key={c.id} className="rounded-full bg-sand px-2.5 py-1">
@@ -102,13 +202,13 @@ export function Home() {
 
             {/* GRUPO FVT */}
             <div className="order-1 flex flex-col items-center text-center sm:col-span-2 lg:order-2 lg:col-span-1">
-              <LogoGrupoFVT className="h-44 w-44 drop-shadow-[0_24px_50px_rgba(0,0,0,0.5)] sm:h-52 sm:w-52 lg:h-64 lg:w-64 xl:h-72 xl:w-72" />
-              <h1 className="mt-6 font-display text-3xl leading-tight sm:text-4xl">
-                Flow e Triton. <span className="text-yellow">Um só grupo.</span>
-              </h1>
+              <LogoGrupoFVT className="h-44 w-44 drop-shadow-[0_24px_50px_rgba(0,0,0,0.5)] sm:h-52 sm:w-52 lg:h-64 lg:w-64 xl:h-72 xl:w-72" loading="lazy" />
+              <h2 id="sobre-grupo-title" className="mt-6 font-display text-3xl leading-tight sm:text-4xl">
+                {group.name}: <span className="text-yellow">{group.mission.title}</span>
+              </h2>
               <p className="mt-3 max-w-md text-sm leading-6 text-white/80 sm:text-base">
-                {group.mission.title} Equipamentos para perfuração, bombeamento e operação de campo — da ferramenta à máquina, com estoque
-                em Itapema e envio para todo o Brasil.
+                Flow e Triton pertencem ao Grupo FVT. Equipamentos para perfuração, bombeamento e operação de campo — da ferramenta à
+                máquina, com estoque em Itapema e envio para todo o Brasil.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Link to="/grupo-fvt" className="rounded-full bg-yellow px-5 py-3 text-sm font-bold text-navy hover:bg-[#ffd54a]">
@@ -124,9 +224,9 @@ export function Home() {
             <article className="order-3 rounded-3xl border border-white/15 bg-navy/75 p-5 shadow-[0_24px_60px_rgba(0,0,0,0.35)] backdrop-blur sm:p-6">
               <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-yellow">Marca do Grupo FVT</p>
               <LogoTriton variant="light" className="mt-2 h-14 w-auto sm:h-16" />
-              <h2 className="mt-4 font-display text-2xl leading-tight">Máquinas e compressores</h2>
+              <h3 className="mt-4 font-display text-2xl leading-tight">Máquinas e compressores</h3>
               <p className="mt-2 text-sm leading-6 text-white/80">Perfuratrizes, compressores, desmonte de rocha, fundações e sondagem.</p>
-              <ThumbStrip items={heroThumbs.triton} ring="border-white/15" />
+              <ThumbStrip items={brandThumbs.triton} ring="border-white/15" />
               <ul className="mt-4 flex flex-wrap gap-1.5 text-[11px] font-semibold uppercase tracking-wide">
                 {tritonCategories.slice(1).map((c) => (
                   <li key={c.id} className="rounded-full bg-white/12 px-2.5 py-1">
@@ -142,17 +242,14 @@ export function Home() {
         </div>
       </section>
 
-      {/* Diferenciais em barra (alta visibilidade, logo abaixo do banner) */}
-      <Differentials layout="strip" />
-
       {/* ------------------------------------------------------------------ */}
-      {/* VÍDEO — produto FVT trabalhando (antes das avaliações)              */}
+      {/* VÍDEO — produto FVT trabalhando                                      */}
       {/* ------------------------------------------------------------------ */}
-      <section className="relative overflow-hidden bg-navy px-4 py-16 text-white sm:px-6" aria-labelledby="video-title">
+      <section className="relative overflow-hidden bg-navy-2 px-4 py-16 text-white sm:px-6" aria-labelledby="video-title">
         <div className="absolute inset-0 opacity-15" aria-hidden="true">
-          <img src="/brand/compressor.webp" alt="" className="h-full w-full object-cover" width={1400} height={800} loading="lazy" />
+          <img src="/images/flow-build.webp" alt="" className="h-full w-full object-cover" width={1400} height={800} loading="lazy" />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/70" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-2 via-navy-2/90 to-navy-2/70" aria-hidden="true" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-yellow">Grupo FVT em operação</p>
@@ -185,86 +282,6 @@ export function Home() {
       </section>
 
       <GoogleReviews />
-
-      {/* ------------------------------------------------------------------ */}
-      {/* MARCAS — painéis Flow / Triton                                       */}
-      {/* ------------------------------------------------------------------ */}
-      <section className="lg:grid lg:min-h-[78vh] lg:grid-cols-2" aria-label="Marcas">
-        <article className="relative min-h-[70vh] overflow-hidden border-b border-navy/10 lg:border-b-0 lg:border-r">
-          <img
-            src="/brand/flow-hero.webp"
-            alt="Compressor e bits Flow em operação de perfuração"
-            className="absolute inset-0 h-full w-full object-cover"
-            width={1400}
-            height={800}
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-white/55 to-white/30" />
-          <div className="relative flex min-h-[70vh] flex-col justify-end p-6 sm:p-10">
-            <div className="w-fit rounded-2xl bg-white/95 px-5 py-4 shadow-lg">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-gold">Marca do Grupo FVT</p>
-              <LogoFlow className="h-16 w-auto sm:h-20 lg:h-24" />
-            </div>
-            <h2 className="mt-6 max-w-md font-display text-3xl text-navy sm:text-4xl">Equipamentos para poços artesianos</h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-ink/80 sm:text-base">
-              Martelos DTH, bits, brocas rotativas, hastes e motobombas. Estoque em Itapema e envio para todo o Brasil.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link to="/flow" className="rounded-full bg-navy px-5 py-3 text-sm font-bold text-white">
-                Ver catálogo Flow
-              </Link>
-              <a href={CATALOG_URL} className="rounded-full border border-navy/20 bg-white/80 px-5 py-3 text-sm font-bold text-navy">
-                PDF 2025
-              </a>
-            </div>
-            <ul className="mt-6 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wide text-navy">
-              {flowCategories.slice(1).map((c) => (
-                <li key={c.id} className="rounded-full bg-white/80 px-3 py-1">
-                  {c.label}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </article>
-
-        <article className="relative min-h-[70vh] overflow-hidden">
-          <img
-            src="/brand/triton-hero.webp"
-            alt="Perfuratriz Triton em pedreira"
-            className="absolute inset-0 h-full w-full object-cover"
-            width={1400}
-            height={800}
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/55 to-navy/15" />
-          <div className="relative flex min-h-[70vh] flex-col justify-end p-6 text-white sm:p-10">
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-yellow">Marca do Grupo FVT</p>
-            <LogoTriton variant="light" className="mt-2 h-20 w-auto sm:h-24 lg:h-28 drop-shadow-sm" />
-            <h2 className="mt-6 max-w-md font-display text-3xl sm:text-4xl">Máquinas e compressores</h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-white/85 sm:text-base">
-              Perfuratrizes, compressores, ferramentas de desmonte, fundações e sondagem — a linha pesada da operação.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link to="/triton" className="rounded-full bg-yellow px-5 py-3 text-sm font-bold text-navy">
-                Ver catálogo Triton
-              </Link>
-              <WhatsAppButton
-                href={waLink("Olá! Quero falar com a Triton sobre máquinas e compressores.")}
-                variant="outline"
-              >
-                Falar com vendas
-              </WhatsAppButton>
-            </div>
-            <ul className="mt-6 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wide">
-              {tritonCategories.slice(1).map((c) => (
-                <li key={c.id} className="rounded-full bg-white/15 px-3 py-1">
-                  {c.label}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </article>
-      </section>
 
       {/* ------------------------------------------------------------------ */}
       {/* PRODUTOS — prévia                                                    */}

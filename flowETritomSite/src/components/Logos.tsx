@@ -10,8 +10,8 @@ export function LogoFlow({ className = "h-11", variant = "dark" }: LogoProps) {
       src={src}
       alt="flow. soluções para perfuração de rocha"
       className={`block w-auto object-contain object-left ${className}`}
-      width={420}
-      height={213}
+      width={1572}
+      height={895}
     />
   );
 }

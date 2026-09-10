@@ -8,7 +8,13 @@ export function GrupoFVT() {
   return (
     <main>
       <section className="relative overflow-hidden bg-navy text-white">
-        <img src="/brand/banner.webp" alt="" className="absolute inset-0 h-full w-full object-cover opacity-25" />
+        <img
+          src="/images/setor-mineracao.webp"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover opacity-30"
+          width={1080}
+          height={720}
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-navy/80 via-navy/75 to-navy" />
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:py-20">
           <div>
