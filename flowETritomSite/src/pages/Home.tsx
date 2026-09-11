@@ -8,38 +8,83 @@ import { WhatsAppButton } from "../components/WhatsAppButton";
 import {
   CATALOG_URL,
   VIDEOS,
+  brandThumbnails,
+  catalogLink,
+  featuredByBrand,
   flowCategories,
   group,
-  products,
   sectors,
   tritonCategories,
   waLink,
 } from "../data";
 
-const previewIds = ["cir-90", "mission-80", "bit-90", "bomba-4", "tri600", "perfuratriz", "bits-roscados", "coroas"];
-const flowPreview = products.filter((p) => previewIds.includes(p.id) && p.brand === "flow");
-const tritonPreview = products.filter((p) => previewIds.includes(p.id) && p.brand === "triton");
+const flowPreview = featuredByBrand("flow");
+const tritonPreview = featuredByBrand("triton");
 
-/** Miniaturas de produto da seção "Sobre o grupo" — já sugerem o catálogo de cada marca. */
-const brandThumbs = {
-  flow: [
-    { src: "/images/cards/martelo-cir-90.webp", alt: "Martelo DTH CIR 90" },
-    { src: "/images/cards/bit-90-mm-cir-90.webp", alt: "Bit 90 mm" },
-    { src: "/images/cards/produto-7755.webp", alt: "Motobomba submersa 4 polegadas" },
-  ],
-  triton: [
-    { src: "/images/cards/triton-compressor.webp", alt: "Compressor portátil Triton TRI600A-18G2" },
-    { src: "/images/cards/img-7101.webp", alt: "Hastes e perfuratriz pneumática" },
-    { src: "/images/cards/img-7391.webp", alt: "Bits roscados para desmonte" },
-  ],
+/**
+ * Seção "Sobre o grupo" — imagem principal de cada marca (slot para as fotos que o cliente está separando)
+ * + miniaturas de produto. Trocar `feature.src` quando as imagens definitivas chegarem.
+ */
+const brandMedia = {
+  flow: {
+    // Imagem de IA autorizada pelo cliente — linha CIR em campo. Foto de cena: preenche o quadro (cover).
+    feature: {
+      src: "/images/martelo-cir-capa.webp",
+      alt: "Martelos DTH Flow linha CIR em frente à perfuratriz",
+      fit: "cover" as const,
+      position: "object-[center_42%]",
+      width: 800,
+      height: 800,
+    },
+    thumbs: brandThumbnails.flow,
+  },
+  triton: {
+    feature: {
+      src: "/images/triton-tri600-compressor.webp",
+      alt: "Compressor portátil Triton TRI600A-18G2",
+      fit: "cover" as const,
+      position: "object-center",
+      width: 1216,
+      height: 840,
+    },
+    thumbs: brandThumbnails.triton,
+  },
 };
 
-function ThumbStrip({ items, ring }: { items: { src: string; alt: string }[]; ring: string }) {
+type FeatureImageProps = {
+  src: string;
+  alt: string;
+  fit: "cover" | "contain";
+  position: string;
+  width: number;
+  height: number;
+};
+
+function FeatureImage({ src, alt, fit, position, width, height }: FeatureImageProps) {
+  const contain = fit === "contain";
+  return (
+    <div className={`-mx-5 -mt-5 overflow-hidden rounded-t-3xl sm:-mx-6 sm:-mt-6 ${contain ? "bg-[#f3f3f3]" : ""}`}>
+      <img
+        src={src}
+        alt={alt}
+        className={`aspect-[16/10] h-auto w-full ${contain ? "object-contain p-2 sm:p-3" : "object-cover"} ${position} sm:aspect-[16/9] lg:aspect-[4/3] xl:aspect-[16/10]`}
+        width={width}
+        height={height}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  );
+}
+
+function ThumbStrip({ items, ring }: { items: { src: string; alt: string; href: string }[]; ring: string }) {
   return (
     <ul className="mt-5 grid grid-cols-3 gap-2">
       {items.map((t) => (
         <li key={t.src} className={`overflow-hidden rounded-xl border ${ring} bg-white`}>
-          <img src={t.src} alt={t.alt} className="aspect-square h-auto w-full object-cover" width={300} height={300} loading="lazy" decoding="async" />
+          <Link to={t.href} className="block focus-visible:outline-2 focus-visible:outline-yellow" aria-label={`Ver catálogo: ${t.alt}`}>
+            <img src={t.src} alt={t.alt} className="aspect-square h-auto w-full bg-[#f7f4ee] object-cover object-center transition-transform duration-300 hover:scale-[1.03]" width={300} height={300} loading="lazy" decoding="async" />
+          </Link>
         </li>
       ))}
     </ul>
@@ -85,9 +130,9 @@ export function Home() {
                 </a>
               </div>
               <ul className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wide">
-                {flowCategories.slice(1).map((c) => (
+                {flowCategories.map((c) => (
                   <li key={c.id} className="rounded-full bg-white/15 px-3 py-1">
-                    {c.label}
+                    {c.shortLabel ?? c.label}
                   </li>
                 ))}
               </ul>
@@ -132,9 +177,9 @@ export function Home() {
                 </WhatsAppButton>
               </div>
               <ul className="mt-5 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-wide">
-                {tritonCategories.slice(1).map((c) => (
+                {tritonCategories.map((c) => (
                   <li key={c.id} className="rounded-full bg-white/15 px-3 py-1">
-                    {c.label}
+                    {c.shortLabel ?? c.label}
                   </li>
                 ))}
               </ul>
@@ -175,23 +220,31 @@ export function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(11,31,51,0.45)_0%,rgba(11,31,51,0.82)_65%,rgba(11,31,51,0.95)_100%)]" aria-hidden="true" />
         <div className="absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-gold/60 to-transparent lg:block" aria-hidden="true" />
 
-        <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:py-20">
+        {/*
+          Container fluido (até 1760px): os cards das marcas ocupam o espaço lateral que sobrava,
+          com uma imagem principal grande no topo — slot para as fotos que o cliente está separando.
+        */}
+        <div className="relative mx-auto max-w-[1760px] px-4 py-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
           <p className="text-center text-[11px] font-semibold uppercase tracking-[0.3em] text-yellow sm:text-xs">
             Sobre o grupo · Itapema<span className="hidden sm:inline"> · Santa Catarina</span> · 11 anos
           </p>
 
-          <div className="mt-8 grid items-center gap-6 sm:grid-cols-2 lg:grid-cols-[1fr_minmax(280px,0.9fr)_1fr] lg:gap-8">
+          <div className="mt-8 grid items-center gap-6 sm:grid-cols-2 lg:grid-cols-[1.25fr_minmax(300px,0.72fr)_1.25fr] lg:gap-6 xl:gap-10">
             {/* FLOW */}
             <article className="order-2 rounded-3xl bg-white/95 p-5 text-navy shadow-[0_24px_60px_rgba(0,0,0,0.35)] backdrop-blur sm:p-6 lg:order-1">
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-gold">Marca do Grupo FVT</p>
+              <FeatureImage {...brandMedia.flow.feature} />
+              <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.22em] text-gold">Marca do Grupo FVT</p>
               <LogoFlow className="mt-2 h-12 w-auto sm:h-14" />
-              <h3 className="mt-4 font-display text-2xl leading-tight">Poços artesianos e perfuração DTH</h3>
-              <p className="mt-2 text-sm leading-6 text-ink/75">Martelos DTH, bits, brocas rotativas, hastes e motobombas.</p>
-              <ThumbStrip items={brandThumbs.flow} ring="border-navy/10" />
+              <h3 className="mt-4 font-display text-2xl leading-tight xl:text-3xl">Poços artesianos e perfuração DTH</h3>
+              <p className="mt-2 text-sm leading-6 text-ink/75">
+                Martelos, bits, brocas, hastes, coroas e bombas — perfuração DTH, rotativa, horizontal, Top Hammer, sondagens e
+                bombeamento.
+              </p>
+              <ThumbStrip items={brandMedia.flow.thumbs} ring="border-navy/10" />
               <ul className="mt-4 flex flex-wrap gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-navy">
-                {flowCategories.slice(1).map((c) => (
+                {flowCategories.map((c) => (
                   <li key={c.id} className="rounded-full bg-sand px-2.5 py-1">
-                    {c.label}
+                    {c.shortLabel ?? c.label}
                   </li>
                 ))}
               </ul>
@@ -208,7 +261,7 @@ export function Home() {
               </h2>
               <p className="mt-3 max-w-md text-sm leading-6 text-white/80 sm:text-base">
                 Flow e Triton pertencem ao Grupo FVT. Equipamentos para perfuração, bombeamento e operação de campo — da ferramenta à
-                máquina, com estoque em Itapema e envio para todo o Brasil.
+                máquina, com estoque em Itapema, envio para todo o Brasil e suporte técnico pós-venda.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-3">
                 <Link to="/grupo-fvt" className="rounded-full bg-yellow px-5 py-3 text-sm font-bold text-navy hover:bg-[#ffd54a]">
@@ -222,15 +275,18 @@ export function Home() {
 
             {/* TRITON */}
             <article className="order-3 rounded-3xl border border-white/15 bg-navy/75 p-5 shadow-[0_24px_60px_rgba(0,0,0,0.35)] backdrop-blur sm:p-6">
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-yellow">Marca do Grupo FVT</p>
+              <FeatureImage {...brandMedia.triton.feature} />
+              <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.22em] text-yellow">Marca do Grupo FVT</p>
               <LogoTriton variant="light" className="mt-2 h-14 w-auto sm:h-16" />
-              <h3 className="mt-4 font-display text-2xl leading-tight">Máquinas e compressores</h3>
-              <p className="mt-2 text-sm leading-6 text-white/80">Perfuratrizes, compressores, desmonte de rocha, fundações e sondagem.</p>
-              <ThumbStrip items={brandThumbs.triton} ring="border-white/15" />
+              <h3 className="mt-4 font-display text-2xl leading-tight xl:text-3xl">Máquinas e compressores</h3>
+              <p className="mt-2 text-sm leading-6 text-white/80">
+                Perfuratrizes para poços artesianos, HDD e mineração. Compressores a diesel para poços, pedreiras e construção civil; elétricos para fundações e saneamento.
+              </p>
+              <ThumbStrip items={brandMedia.triton.thumbs} ring="border-white/15" />
               <ul className="mt-4 flex flex-wrap gap-1.5 text-[11px] font-semibold uppercase tracking-wide">
-                {tritonCategories.slice(1).map((c) => (
+                {tritonCategories.map((c) => (
                   <li key={c.id} className="rounded-full bg-white/12 px-2.5 py-1">
-                    {c.label}
+                    {c.shortLabel ?? c.label}
                   </li>
                 ))}
               </ul>
@@ -250,7 +306,7 @@ export function Home() {
           <img src="/images/flow-build.webp" alt="" className="h-full w-full object-cover" width={1400} height={800} loading="lazy" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-r from-navy-2 via-navy-2/90 to-navy-2/70" aria-hidden="true" />
-        <div className="relative mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 xl:grid-cols-[1fr_1.1fr]">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-yellow">Grupo FVT em operação</p>
             <h2 id="video-title" className="mt-2 font-display text-3xl sm:text-4xl">
@@ -261,7 +317,7 @@ export function Home() {
               com o mesmo padrão que a Triton leva para máquinas e compressores.
             </p>
             <ul className="mt-6 grid gap-3 text-sm text-white/85 sm:grid-cols-2">
-              {["Estoque próprio em Itapema-SC", "Expedição para todo o Brasil", "Orientação técnica antes da compra", "Suporte após a venda"].map((t) => (
+              {["Estoque próprio em Itapema-SC", "Expedição para todo o Brasil", "Orientação técnica antes da compra", "Suporte técnico pós-venda"].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-yellow" aria-hidden="true" />
                   {t}
@@ -277,7 +333,16 @@ export function Home() {
               </a>
             </div>
           </div>
-          <VideoPlayer video={VIDEOS.flowBemVindo} mode="player" />
+          <div className="grid w-full gap-6 sm:grid-cols-2">
+            <div>
+              <VideoPlayer video={VIDEOS.flowBemVindo} mode="player" />
+              <p className="mt-4 text-center text-sm font-semibold text-white/85">Conheça a Flow</p>
+            </div>
+            <div>
+              <VideoPlayer video={VIDEOS.perfuratrizDemonstracao} mode="player" />
+              <p className="mt-4 text-center text-sm font-semibold text-white/85">Perfuratriz · demonstração real</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -290,19 +355,19 @@ export function Home() {
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-gold">Flow</p>
-            <h2 className="mt-2 font-display text-3xl text-navy">Linha de poços e DTH</h2>
+            <h2 className="mt-2 font-display text-3xl text-navy">Destaques Flow</h2>
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               {flowPreview.map((item) => (
-                <ProductCard key={item.id} item={item} href="/flow" />
+                <ProductCard key={item.id} item={item} href={catalogLink(item)} />
               ))}
             </div>
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.25em] text-copper">Triton</p>
-            <h2 className="mt-2 font-display text-3xl text-navy">Máquinas, mineração e sondagem</h2>
+            <h2 className="mt-2 font-display text-3xl text-navy">Destaques Triton</h2>
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               {tritonPreview.map((item) => (
-                <ProductCard key={item.id} item={item} href="/triton" />
+                <ProductCard key={item.id} item={item} href={catalogLink(item)} />
               ))}
             </div>
           </div>

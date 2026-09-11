@@ -2,7 +2,55 @@ import { Link } from "react-router-dom";
 import { LogoFlow, LogoGrupoFVT, LogoTriton } from "../components/Logos";
 import { WhatsAppButton } from "../components/WhatsAppButton";
 import { Differentials } from "../components/Differentials";
-import { ADDRESS, HOURS, group, waLink } from "../data";
+import { ADDRESS, HOURS, catalogLink, categoriesByBrand, featuredByBrand, group, waLink, type Brand } from "../data";
+
+function BrandCatalogPreview({ brand }: { brand: Brand }) {
+  const dark = brand === "triton";
+  const items = featuredByBrand(brand).slice(0, 3);
+  return (
+    <div className="mt-6">
+      <ul className="grid gap-3 sm:grid-cols-3" aria-label={`Produtos ${dark ? "Triton" : "Flow"}`}>
+        {items.map((item) => (
+          <li key={item.id}>
+            <Link
+              to={catalogLink(item)}
+              className={`group flex h-full flex-col overflow-hidden rounded-2xl border transition hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-yellow ${
+                dark ? "border-white/15 bg-white/5" : "border-navy/10 bg-paper"
+              }`}
+            >
+              <img
+                src={item.image}
+                alt={item.name}
+                className="aspect-square h-auto w-full bg-[#f7f4ee] object-cover object-center"
+                width={480}
+                height={480}
+                loading="lazy"
+                decoding="async"
+              />
+              <span className="p-3 font-display text-base leading-snug">{item.name}</span>
+              <span className={`mt-auto px-3 pb-3 text-xs font-semibold ${dark ? "text-yellow" : "text-muted"}`}>Ver no catálogo →</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <ul className="mt-5 flex flex-wrap gap-2" aria-label="Linhas de produtos">
+        {categoriesByBrand[brand].map((category) => (
+          <li key={category.id}>
+            <Link
+              to={`/${brand}?categoria=${category.id}`}
+              title={category.label}
+              className={`inline-block rounded-full px-3 py-1.5 text-xs font-semibold ${
+                dark ? "bg-white/10 text-white/90 hover:bg-white/20" : "bg-sand text-navy hover:bg-yellow"
+              }`}
+            >
+              {category.shortLabel ?? category.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export function GrupoFVT() {
   return (
@@ -27,7 +75,7 @@ export function GrupoFVT() {
                 </h1>
                 <p className="mt-4 max-w-xl text-base leading-7 text-white/85 sm:text-lg">
                   O Grupo FVT reúne três marcas sob a mesma operação. Neste site, a Flow e a Triton concentram o
-                  atendimento de perfuração, estoque e pós-venda.
+                  atendimento de perfuração, estoque e suporte técnico pós-venda.
                 </p>
               </div>
             </div>
@@ -40,13 +88,26 @@ export function GrupoFVT() {
               </a>
             </div>
           </div>
-          <figure className="relative overflow-hidden rounded-3xl border border-white/10">
+          {/*
+            Fundador: recorte sem fundo (claudio-cutout.webp) ampliado sobre a fachada do galpão em Itapema.
+            A fachada fica suavizada/escurecida para o corpo ganhar escala sem competir com o texto.
+          */}
+          <figure className="relative aspect-[3/4] overflow-hidden rounded-3xl border border-white/10 bg-navy-2 sm:aspect-[4/5] lg:aspect-[3/4]">
             <img
-              src="/images/claudio.webp"
-              alt={`${group.founder}, ${group.founderRole} do Grupo FVT, com bit DTH no estoque de Itapema`}
-              className="h-full w-full object-cover object-[center_20%]"
-              width={1080}
-              height={1440}
+              src="/images/galpao-itapema.webp"
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 h-full w-full scale-105 object-cover object-[40%_top] opacity-70 blur-[1.5px]"
+              width={763}
+              height={936}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-navy/20 via-navy/35 to-navy" aria-hidden="true" />
+            <img
+              src="/images/claudio-cutout.webp"
+              alt={`${group.founder}, ${group.founderRole} do Grupo FVT, com bit DTH em frente ao galpão de Itapema`}
+              className="absolute inset-x-0 bottom-0 mx-auto h-[96%] w-auto max-w-none object-contain object-bottom drop-shadow-[0_30px_50px_rgba(0,0,0,0.6)]"
+              width={617}
+              height={1039}
             />
             <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-navy via-navy/80 to-transparent p-5">
               <div>
@@ -87,7 +148,7 @@ export function GrupoFVT() {
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
             O cliente escolhe pela necessidade técnica. O grupo garante a mesma base: estoque em Itapema, envio nacional
-            e suporte depois da venda.
+            e suporte técnico pós-venda.
           </p>
           <div className="mt-10 grid gap-6 lg:grid-cols-2">
             <article className="rounded-3xl border border-navy/10 bg-white p-8">
@@ -97,6 +158,7 @@ export function GrupoFVT() {
               <p className="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-gold">Marca do grupo</p>
               <h3 className="mt-1 font-display text-3xl text-navy">Flow</h3>
               <p className="mt-3 text-sm leading-7 text-muted">{group.brands[0].text}</p>
+              <BrandCatalogPreview brand="flow" />
               <Link to="/flow" className="mt-6 inline-flex rounded-full bg-navy px-5 py-3 text-sm font-bold text-white">
                 Ver catálogo Flow
               </Link>
@@ -106,6 +168,7 @@ export function GrupoFVT() {
               <p className="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-yellow">Marca do grupo</p>
               <h3 className="mt-1 font-display text-3xl">Triton</h3>
               <p className="mt-3 text-sm leading-7 text-white/80">{group.brands[1].text}</p>
+              <BrandCatalogPreview brand="triton" />
               <Link to="/triton" className="mt-6 inline-flex rounded-full bg-yellow px-5 py-3 text-sm font-bold text-navy">
                 Ver catálogo Triton
               </Link>

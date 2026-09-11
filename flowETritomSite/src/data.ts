@@ -7,7 +7,28 @@ export type Product = {
   name: string;
   summary: string;
   specs: string;
+  /** Imagem principal (card). */
   image: string;
+  /** Galeria — fotos enviadas pelo cliente. Quando presente, o card mostra miniaturas para alternar e abre lightbox. */
+  images?: string[];
+  /**
+   * Como a capa (`image`) preenche o quadro do card: "contain" (padrão, produto recortado) ou
+   * "cover" (foto de cena/ambiente, ocupa o quadro inteiro). As demais fotos da galeria usam "contain".
+   */
+  coverFit?: "contain" | "cover";
+  /**
+   * "aprovado" = foto + descrição enviadas pelo cliente na fase 2 (formato final).
+   * Sem status = item do protótipo (catálogo 2025), mantido até o cliente enviar o modelo novo.
+   */
+  status?: "aprovado";
+};
+
+export type Category = {
+  id: string;
+  label: string;
+  shortLabel?: string;
+  /** O que a categoria inclui (definido pelo cliente). */
+  includes: readonly string[];
 };
 
 /** Telefone fixo — SOMENTE LIGAÇÃO. Este número não tem WhatsApp. */
@@ -30,6 +51,12 @@ export const VIDEOS = {
     title: "Flow — equipamentos para poços artesianos em operação",
     /** Fonte original enviada pelo cliente (1080x1920, 84 MB). */
     source: "https://flowequipamentos.com/wp-content/uploads/2025/09/FLOW-BEMVINDO.mp4",
+  },
+  perfuratrizDemonstracao: {
+    src: "/videos/perfuratriz-demonstracao.mp4",
+    poster: "/videos/perfuratriz-demonstracao-poster.webp",
+    title: "Triton — perfuratriz em demonstração",
+    source: "public/images/imagensVideosReaisFVT/IMG_0877.MP4",
   },
 } as const;
 
@@ -57,7 +84,7 @@ export const differentials = [
     id: "seguranca",
     kicker: "Técnico",
     title: "Perfurando com segurança",
-    text: "Orientação técnica para escolher martelo, bit, pressão e vazão certos para o seu solo — e suporte após a venda para operar sem paradas e sem riscos.",
+    text: "Orientação técnica para escolher martelo, bit, pressão e vazão certos para o seu solo — e suporte técnico pós-venda para operar sem paradas e sem riscos.",
   },
 ] as const;
 export const EMAIL = "comercial@flowequipamentos.com";
@@ -87,63 +114,109 @@ export const googlePlace = {
 export const waLink = (text?: string) =>
   `https://wa.me/${WHATSAPP}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
 
-export const flowCategories = [
-  { id: "todos", label: "Todos" },
-  { id: "dth", label: "Perfuração DTH" },
-  { id: "rotativa", label: "Perfuração rotativa" },
-  { id: "hastes", label: "Hastes" },
-  { id: "bombas", label: "Bombeamento" },
+/** Opções pré-setadas do formulário de contato. */
+export const requestTypes = [
+  "Orçamento",
+  "Dúvida técnica — qual equipamento usar",
+  "Prazo de entrega e frete",
+  "Suporte técnico pós-venda",
+  "Outro assunto",
 ] as const;
 
-export const tritonCategories = [
-  { id: "todos", label: "Todos" },
-  { id: "maquinas", label: "Máquinas" },
-  { id: "compressores", label: "Compressores" },
-  { id: "mineracao", label: "Mineração e desmonte" },
-  { id: "fundacoes", label: "Fundações" },
-  { id: "sondagem", label: "Sondagem e geotécnica" },
+export const BRAZIL_STATES = [
+  "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI",
+  "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO",
 ] as const;
 
-export const categoryLabel: Record<string, string> = {
-  dth: "Perfuração DTH",
-  rotativa: "Perfuração rotativa",
-  hastes: "Hastes",
-  bombas: "Bombeamento",
-  maquinas: "Máquinas",
-  compressores: "Compressores",
-  mineracao: "Mineração e desmonte",
-  fundacoes: "Fundações",
-  sondagem: "Sondagem e geotécnica",
+export type ContactPrefill = {
+  brand?: Brand;
+  category?: string;
+  product?: string;
+  type?: (typeof requestTypes)[number];
 };
 
-export const products: Product[] = [
+/** Link para /contato com campos pré-preenchidos via query string. */
+export const contactLink = (p: ContactPrefill = {}) => {
+  const q = new URLSearchParams();
+  if (p.brand) q.set("marca", p.brand);
+  if (p.category) q.set("categoria", p.category);
+  if (p.product) q.set("produto", p.product);
+  if (p.type) q.set("tipo", p.type);
+  const s = q.toString();
+  return `/contato${s ? `?${s}` : ""}`;
+};
+
+/** Frase padrão do grupo — usar sempre esta forma (pedido do cliente). */
+export const AFTER_SALES = "Suporte técnico pós-venda";
+
+/** Categorias e o que cada uma inclui — definição do cliente (10/09/2026). */
+export const flowCategories: readonly Category[] = [
+  { id: "dth", label: "Perfuração DTH", includes: ["Martelos", "Bits", "Hastes"] },
+  { id: "rotativa", label: "Perfuração Rotativa", includes: ["Brocas"] },
+  { id: "horizontal", label: "Perfuração Horizontal", includes: ["Brocas", "Hastes"] },
   {
-    id: "cir-linha",
+    id: "top-hammer",
+    label: "Top Hammer",
+    includes: ["Punhos", "Luvas", "Hastes", "Bits", "Perfuratrizes manuais", "Barras mina", "Taper bit", "Mangueiras e conectores"],
+  },
+  { id: "sondagens", label: "Sondagens", includes: ["Coroas", "Calibradores", "Barriletes"] },
+  { id: "bombeamento", label: "Bombeamento", includes: ["Bombas submersas", "Bombas de superfície"] },
+];
+
+export const tritonCategories: readonly Category[] = [
+  { id: "perfuratrizes-pocos", label: "Perfuratrizes para poços artesianos — máquinas rotativas", shortLabel: "Poços artesianos · rotativas", includes: ["Perfuratrizes para poços artesianos", "Máquinas rotativas"] },
+  { id: "horizontal-hdd", label: "Máquinas para perfuração horizontal HDD", shortLabel: "Perfuração horizontal HDD", includes: ["Máquinas para perfuração horizontal HDD"] },
+  { id: "mineracao-rochas", label: "Perfuratrizes para mineração e desmonte de rochas", shortLabel: "Mineração e desmonte", includes: ["Perfuratrizes para mineração", "Perfuratrizes para desmonte de rochas"] },
+  { id: "diesel-pocos", label: "Compressores de ar a diesel para poços artesianos", shortLabel: "Diesel · poços artesianos", includes: ["Compressores de ar a diesel para poços artesianos"] },
+  { id: "diesel-pedreiras", label: "Compressores de ar a diesel para pedreiras e construção civil", shortLabel: "Diesel · pedreiras e construção", includes: ["Compressores de ar a diesel para pedreiras", "Compressores de ar a diesel para construção civil"] },
+  { id: "eletricos-fundacoes", label: "Compressores elétricos para fundações e saneamento", shortLabel: "Elétricos · fundações e saneamento", includes: ["Compressores elétricos para fundações", "Compressores elétricos para saneamento"] },
+];
+
+export const categoriesByBrand: Record<Brand, readonly Category[]> = {
+  flow: flowCategories,
+  triton: tritonCategories,
+};
+
+export const categoryLabel: Record<string, string> = Object.fromEntries(
+  [...flowCategories, ...tritonCategories].map((c) => [c.id, c.label]),
+);
+export const products: Product[] = [
+  // ------------------------------------------------------------------
+  // FLOW · PERFURAÇÃO DTH — produto 1 aprovado pelo cliente (fotos reais)
+  // ------------------------------------------------------------------
+  {
+    id: "martelos-cir",
     brand: "flow",
     category: "dth",
     name: "Martelos CIR",
-    summary: "Linha de baixa pressão para compressores de 5 a 10 BAR, mínimo 200 PCM.",
-    specs: "CIR 65 · CIR 76 · CIR 90 · CIR 110 · CIR 130",
-    image: "/images/martelos-cir-1.webp",
+    summary: "Martelos de baixa pressão utilizados para compressores de 5 a 10 BAR, mínimo 200 PCM.",
+    specs: "Baixa pressão · 5 a 10 BAR · mín. 200 PCM",
+    // Capa: imagem de IA autorizada pelo cliente (linha CIR em campo). Galeria: fotos reais do estoque.
+    image: "/images/martelo-cir-capa.webp",
+    coverFit: "cover",
+    images: ["/images/martelo-cir-capa.webp", "/images/martelo-cir-1.webp", "/images/martelo-cir-2.webp", "/images/martelo-cir-3.webp"],
+    status: "aprovado",
   },
+  // FLOW · PERFURAÇÃO DTH — produto 2 aprovado pelo cliente (M3 e M4, fotos reais)
   {
-    id: "cir-90",
+    id: "martelos-semi-turbinados",
     brand: "flow",
     category: "dth",
-    name: "Martelo CIR 90",
-    summary: "Médio porte, resistência e rendimento em diferentes tipos de solo.",
-    specs: "CIR 90 · baixa pressão",
-    image: "/images/martelo-cir-90.webp",
+    name: "Martelos Semi Turbinados",
+    summary: "Martelos de média pressão utilizados para compressores de 8 a 13 BAR, mínimo 300 PCM.",
+    specs: "Média pressão · 8 a 13 BAR · mín. 300 PCM",
+    image: "/images/martelo-semi-turbinado-capa.webp",
+    coverFit: "cover",
+    images: [
+      "/images/martelo-semi-turbinado-capa.webp",
+      "/images/martelo-semi-turbinado-m3.webp",
+      "/images/martelo-semi-turbinado-m4.webp",
+    ],
+    status: "aprovado",
   },
-  {
-    id: "cir-110",
-    brand: "flow",
-    category: "dth",
-    name: "Martelo CIR 110",
-    summary: "Mais robustez para potência e profundidade na perfuração.",
-    specs: "CIR 110 · baixa pressão",
-    image: "/images/martelo-cir-110.webp",
-  },
+  // ------------------------------------------------------------------
+  // Itens abaixo: catálogo do protótipo, aguardando modelo/descrição do cliente
+  // ------------------------------------------------------------------
   {
     id: "mission-40",
     brand: "flow",
@@ -169,7 +242,8 @@ export const products: Product[] = [
     name: "Martelo Mission 60",
     summary: "Indicado para furos mais profundos, com alto rendimento e vida útil.",
     specs: "MISSION 60 · alta pressão",
-    image: "/images/martelo-mission-60.webp",
+    image: "/images/reais-fvt/martelo-mission60.webp",
+    images: ["/images/reais-fvt/martelo-mission60.webp", "/images/reais-fvt/bit-dth.webp"],
   },
   {
     id: "mission-80",
@@ -268,7 +342,8 @@ export const products: Product[] = [
     name: "Brocas PDC em asa",
     summary: "Corte rotativo para mineração, construção e exploração.",
     specs: "PDC asa · 3 e 6 vias",
-    image: "/images/broca-pdc.webp",
+    image: "/images/reais-fvt/broca-pdc.webp",
+    images: ["/images/reais-fvt/broca-pdc.webp"],
   },
   {
     id: "triconicas",
@@ -277,7 +352,8 @@ export const products: Product[] = [
     name: "Brocas tricônicas",
     summary: "Botão e fresadas, corpo robusto. Diâmetros de 115 mm a 350 mm.",
     specs: "Ø 115–350 mm",
-    image: "/images/broca-triconica.webp",
+    image: "/images/reais-fvt/broca-triconica.webp",
+    images: ["/images/reais-fvt/broca-triconica.webp"],
   },
   {
     id: "alargadores",
@@ -291,16 +367,17 @@ export const products: Product[] = [
   {
     id: "hastes-flow",
     brand: "flow",
-    category: "hastes",
+    category: "dth",
     name: "Hastes de perfuração",
     summary: "Transmitem ar comprimido até a ponta da broca, com precisão.",
     specs: "Rosca API · pronta entrega",
-    image: "/images/hastes.webp",
+    image: "/images/reais-fvt/hastes-perfuracao.webp",
+    images: ["/images/reais-fvt/hastes-perfuracao.webp", "/images/reais-fvt/hastes-estoque.webp", "/images/reais-fvt/hastes-expedicao.webp"],
   },
   {
     id: "bomba-2",
     brand: "flow",
-    category: "bombas",
+    category: "bombeamento",
     name: 'Motobomba submersa 2"',
     summary: "Captação em poços artesianos, irrigação e cisternas.",
     specs: '2"',
@@ -309,7 +386,7 @@ export const products: Product[] = [
   {
     id: "bomba-25",
     brand: "flow",
-    category: "bombas",
+    category: "bombeamento",
     name: 'Motobomba submersa 2,5"',
     summary: "Multestágio para poços e abastecimento doméstico.",
     specs: '2,5"',
@@ -318,7 +395,7 @@ export const products: Product[] = [
   {
     id: "bomba-3",
     brand: "flow",
-    category: "bombas",
+    category: "bombeamento",
     name: 'Motobomba submersa 3"',
     summary: "Vazão maior para irrigação e prédios de pequeno porte.",
     specs: '3"',
@@ -327,88 +404,38 @@ export const products: Product[] = [
   {
     id: "bomba-4",
     brand: "flow",
-    category: "bombas",
+    category: "bombeamento",
     name: 'Motobomba submersa 4"',
     summary: "Aço inox AISI 304, motor IP68, para poços e irrigação.",
     specs: '4" · até 80 m de imersão',
     image: "/images/produto-7755.webp",
+    images: ["/images/produto-7755.webp", "/images/reais-fvt/bombas-submersas.webp"],
   },
   {
     id: "superficie",
     brand: "flow",
-    category: "bombas",
+    category: "bombeamento",
     name: "Motobombas de superfície",
     summary: "Autoescorvante, autoaspirante e centrífuga para captação.",
     specs: "Superfície · alta vazão",
-    image: "/images/produto-7757.webp",
+    image: "/images/reais-fvt/bomba-superficie.webp",
+    images: ["/images/reais-fvt/bomba-superficie.webp", "/images/reais-fvt/bomba-superficie-jet.webp"],
   },
-  {
-    id: "tri600",
-    brand: "triton",
-    category: "compressores",
-    name: "Compressor TRI600A-18G2",
-    summary: "Compressor portátil de alta pressão para DTH e operação de campo. Motor Cummins.",
-    specs: "600 cfm · 18 bar · 162 kW · 240 L",
-    image: "/images/triton-tri600-hero.webp",
-  },
-  {
-    id: "tri600-manut",
-    brand: "triton",
-    category: "compressores",
-    name: "TRI600A-18G2 — acesso e manutenção",
-    summary: "Portas amplas, inspeção rápida e projeto robusto para campo.",
-    specs: "3 t · saídas G1¼ e G¾ · CN III",
-    image: "/images/triton-tri600-manutencao.webp",
-  },
-  {
-    id: "tri600-painel",
-    brand: "triton",
-    category: "compressores",
-    name: "TRI600A-18G2 — painel de controle",
-    summary: "Painel integrado, leitura rápida de parâmetros e operação simples.",
-    specs: "18 bar · 162 kW",
-    image: "/images/triton-tri600-painel.webp",
-  },
-  {
-    id: "csh350",
-    brand: "triton",
-    category: "compressores",
-    name: "Compressor CSH350A-10",
-    summary: "Portátil 350 cfm para fundações, DTH leve e obras.",
-    specs: "10 m³/min · 10 bar · 93 kW · 2 t",
-    image: "/images/triton-csh350-ficha.webp",
-  },
-  {
-    id: "compressor-campo",
-    brand: "triton",
-    category: "compressores",
-    name: "Compressores portáteis Triton",
-    summary: "Linha de ar comprimido para pedreira, mineração e sondagem.",
-    specs: "Alta pressão · reboque",
-    image: "/images/triton-tri600-vista.webp",
-  },
-  {
-    id: "perfuratriz",
-    brand: "triton",
-    category: "maquinas",
-    name: "Perfuratriz sobre esteiras",
-    summary: "Máquinas para perfuração de rocha em pedreiras e mineração.",
-    specs: "Esteiras · operação de campo",
-    image: "/brand/perfuratriz.webp",
-  },
+  // FLOW · TOP HAMMER (punhos, luvas, hastes, bits, perfuratrizes manuais, barras mina, taper bit, mangueiras e conectores)
   {
     id: "perfuratriz-pneu",
-    brand: "triton",
-    category: "maquinas",
-    name: "Perfuratriz pneumática",
+    brand: "flow",
+    category: "top-hammer",
+    name: "Perfuratriz pneumática manual",
     summary: "Manual e de coluna para fundações, tirantes e contenções.",
     specs: "Manual · coluna",
-    image: "/images/img-7101.webp",
+    image: "/images/reais-fvt/perfuratrizes-manuais.webp",
+    images: ["/images/reais-fvt/perfuratrizes-manuais.webp", "/images/reais-fvt/perfuratriz-manual.webp"],
   },
   {
     id: "bits-roscados",
-    brand: "triton",
-    category: "mineracao",
+    brand: "flow",
+    category: "top-hammer",
     name: "Bits lisos e Retrac",
     summary: "Fragmentação e desmonte com roscas R e T.",
     specs: "R25 · R28 · R32 · T38 · T45 · T51",
@@ -416,17 +443,18 @@ export const products: Product[] = [
   },
   {
     id: "taper",
-    brand: "triton",
-    category: "mineracao",
+    brand: "flow",
+    category: "top-hammer",
     name: "Taper bits",
     summary: "Bits cônicos para desmonte em pedreiras e mineração.",
     specs: "32 a 42 mm",
-    image: "/images/wa-150405.webp",
+    image: "/images/reais-fvt/taper-bits.webp",
+    images: ["/images/reais-fvt/taper-bits.webp"],
   },
   {
     id: "luvas",
-    brand: "triton",
-    category: "mineracao",
+    brand: "flow",
+    category: "top-hammer",
     name: "Luvas e punhos",
     summary: "Acoplamentos e shanks para perfuratrizes de superfície.",
     specs: "COP131 · VL140 · YH80 · AL600",
@@ -434,8 +462,8 @@ export const products: Product[] = [
   },
   {
     id: "sextavadas",
-    brand: "triton",
-    category: "mineracao",
+    brand: "flow",
+    category: "top-hammer",
     name: "Hastes sextavadas",
     summary: "Rosca redonda e rosca dupla para desmonte de rochas.",
     specs: "Rosca redonda · dupla",
@@ -443,17 +471,17 @@ export const products: Product[] = [
   },
   {
     id: "integrais",
-    brand: "triton",
-    category: "mineracao",
-    name: "Brocas integrais e ponteiras",
+    brand: "flow",
+    category: "top-hammer",
+    name: "Barras mina e ponteiras",
     summary: "Hastes integrais e ponteiras para desmonte.",
     specs: "22 · 26 · 32 · 36 · 40 mm",
     image: "/images/wa-150822.webp",
   },
   {
     id: "rompedor",
-    brand: "triton",
-    category: "fundacoes",
+    brand: "flow",
+    category: "top-hammer",
     name: "Rompedor pneumático",
     summary: "Manual para contenções, concreto e desmonte em obra.",
     specs: "Manual · bits e ponteiras",
@@ -461,17 +489,18 @@ export const products: Product[] = [
   },
   {
     id: "ponteiras",
-    brand: "triton",
-    category: "fundacoes",
+    brand: "flow",
+    category: "top-hammer",
     name: "Bits de fresadoras e ponteiras",
     summary: "Pontas para rompedores e bits de fresadora.",
     specs: "Moil · talhadeira",
     image: "/images/img-7476.webp",
   },
+  // FLOW · SONDAGENS (coroas, calibradores, barriletes)
   {
     id: "coroas",
-    brand: "triton",
-    category: "sondagem",
+    brand: "flow",
+    category: "sondagens",
     name: "Coroas diamantadas",
     summary: "Coleta de testemunho para geotécnica e sondagem.",
     specs: "PQ · HQ · NQ",
@@ -479,14 +508,106 @@ export const products: Product[] = [
   },
   {
     id: "barriletes",
-    brand: "triton",
-    category: "sondagem",
+    brand: "flow",
+    category: "sondagens",
     name: "Barriletes e calibradores",
     summary: "Tubos de testemunho e calibradores para manter o diâmetro.",
     specs: "Sondagem · geotécnica",
     image: "/images/img-7625.webp",
   },
+  // ------------------------------------------------------------------
+  // TRITON · categorias do cliente (10/09/2026). Sem modelo/potência nas
+  // perfuratrizes sem ficha confirmada.
+  // ------------------------------------------------------------------
+  {
+    id: "perfuratriz",
+    brand: "triton",
+    category: "perfuratrizes-pocos",
+    name: "Perfuratriz rotativa para poços",
+    summary: "Perfuratriz sobre esteiras para poços artesianos. Consulte a equipe para dimensionar o projeto.",
+    specs: "Poços artesianos · máquina rotativa",
+    image: "/images/reais-fvt/perfuratriz-pocos.webp",
+    images: ["/images/reais-fvt/perfuratriz-pocos.webp", "/images/reais-fvt/perfuratriz-pocos-lado.webp"],
+  },
+  {
+    id: "perfuratriz-hdd",
+    brand: "triton",
+    category: "horizontal-hdd",
+    name: "Perfuratriz horizontal HDD",
+    summary: "Máquina para perfuração horizontal. Converse com a equipe sobre a aplicação e o modelo adequado.",
+    specs: "Perfuração horizontal · HDD",
+    image: "/images/reais-fvt/perfuratriz-horizontal.webp",
+    coverFit: "cover",
+    images: ["/images/reais-fvt/perfuratriz-horizontal.webp", "/images/reais-fvt/perfuratriz-entrega.webp"],
+  },
+  {
+    id: "perfuratriz-mineracao",
+    brand: "triton",
+    category: "mineracao-rochas",
+    name: "Perfuratriz para mineração e desmonte",
+    summary: "Perfuratriz para mineração e desmonte de rochas. Peça orientação técnica para o seu terreno.",
+    specs: "Mineração · desmonte de rochas",
+    image: "/images/reais-fvt/perfuratriz-mineracao.webp",
+    coverFit: "cover",
+    images: ["/images/reais-fvt/perfuratriz-mineracao.webp"],
+  },
+  {
+    id: "tri600",
+    brand: "triton",
+    category: "diesel-pocos",
+    name: "Compressor TRI600A-18G2",
+    summary: "Compressor portátil de alta pressão para DTH e poços artesianos. Motor Cummins.",
+    specs: "600 cfm · 18 bar · 162 kW · 240 L",
+    image: "/images/reais-fvt/tri600-0.webp",
+    images: [
+      "/images/reais-fvt/tri600-0.webp",
+      "/images/triton-tri600-hero.webp",
+      "/images/triton-tri600-vista.webp",
+      "/images/triton-tri600-manutencao.webp",
+      "/images/triton-tri600-painel.webp",
+      "/images/reais-fvt/tri600-ficha.webp",
+    ],
+  },
+  {
+    id: "tri860",
+    brand: "triton",
+    category: "diesel-pocos",
+    name: "Compressor TRI860A-21",
+    summary: "Compressor de ar portátil a diesel, com motor Cummins B7-T3 e pressão de 21 bar.",
+    specs: "860 cfm · 21 bar · 221 kW · 340 L",
+    image: "/images/reais-fvt/tri860-0.webp",
+    images: ["/images/reais-fvt/tri860-0.webp", "/images/reais-fvt/tri860-ficha.webp"],
+  },
+  {
+    id: "csh350",
+    brand: "triton",
+    category: "diesel-pedreiras",
+    name: "Compressor CSH350A-10",
+    summary: "Portátil 350 cfm para fundações, DTH leve e obras. Consulte a equipe para confirmar a aplicação.",
+    specs: "10 m³/min · 10 bar · 93 kW · 2 t",
+    image: "/images/triton-csh350-ficha.webp",
+  },
 ];
+
+/** Quatro destaques por empresa, com fotos reais correspondentes ao item. */
+export const previewIds = ["martelos-cir", "triconicas", "hastes-flow", "superficie", "perfuratriz", "perfuratriz-hdd", "tri600", "tri860"];
+export const featuredByBrand = (brand: Brand) =>
+  previewIds.map((id) => products.find((p) => p.id === id && p.brand === brand)).filter((p): p is Product => Boolean(p));
+export const catalogLink = (product: Product) => `/${product.brand}?categoria=${encodeURIComponent(product.category)}#${product.id}`;
+
+/** Miniaturas da seção "Sobre o grupo" — 3 fotos reais por marca, ligadas ao catálogo. */
+export const brandThumbnails = {
+  flow: [
+    { src: "/images/reais-fvt/martelos-dth.webp", alt: "Martelos DTH Flow no estoque", href: "/flow?categoria=dth" },
+    { src: "/images/reais-fvt/bit-dth.webp", alt: "Bit DTH Flow", href: "/flow?categoria=dth" },
+    { src: "/images/reais-fvt/bombas-submersas.webp", alt: "Motobombas submersas", href: "/flow?categoria=bombeamento" },
+  ],
+  triton: [
+    { src: "/images/reais-fvt/perfuratriz-pocos.webp", alt: "Perfuratriz rotativa para poços", href: "/triton?categoria=perfuratrizes-pocos#perfuratriz" },
+    { src: "/images/reais-fvt/perfuratriz-horizontal.webp", alt: "Perfuratriz horizontal HDD", href: "/triton?categoria=horizontal-hdd#perfuratriz-hdd" },
+    { src: "/images/reais-fvt/perfuratriz-entrega.webp", alt: "Equipamento Triton em entrega", href: "/triton" },
+  ],
+} satisfies Record<Brand, { src: string; alt: string; href: string }[]>;
 
 export const sectors = [
   { title: "Poços artesianos", image: "/images/setor-pocos.webp" },
@@ -503,7 +624,7 @@ export const group = {
   founderRole: "Fundador e sócio-administrador",
   mission: {
     title: "Fazer projetos avançarem.",
-    text: "Entregar soluções confiáveis para perfuração, bombeamento e operações de campo, unindo portfólio técnico, orientação comercial e suporte para elevar produtividade e reduzir paradas.",
+    text: "Entregar soluções confiáveis para perfuração, bombeamento e operações de campo, unindo portfólio técnico, orientação comercial e suporte técnico pós-venda para elevar produtividade e reduzir paradas.",
   },
   vision: {
     title: "Ser referência nacional.",
@@ -518,13 +639,13 @@ export const group = {
       id: "flow",
       name: "Flow",
       to: "/flow",
-      text: "Equipamentos para poços artesianos e perfuração DTH: martelos, bits, brocas, hastes e motobombas.",
+      text: "Perfuração DTH, rotativa e horizontal, Top Hammer, sondagens e bombeamento: martelos, bits, brocas, hastes, coroas e bombas.",
     },
     {
       id: "triton",
       name: "Triton",
       to: "/triton",
-      text: "Máquinas e compressores para mineração, fundações, sondagem e operação de campo.",
+      text: "Perfuratrizes rotativas para poços, máquinas HDD e perfuratrizes para mineração e desmonte de rochas. Compressores a diesel para poços, pedreiras e construção civil; elétricos para fundações e saneamento.",
     },
   ],
 } as const;
