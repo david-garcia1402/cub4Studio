@@ -27,25 +27,24 @@ const tritonPreview = featuredByBrand("triton");
  */
 const brandMedia = {
   flow: {
-    // Imagem de IA autorizada pelo cliente — linha CIR em campo. Foto de cena: preenche o quadro (cover).
     feature: {
-      src: "/images/martelo-cir-capa.webp",
-      alt: "Martelos DTH Flow linha CIR em frente à perfuratriz",
+      src: "/images/flow-martelos-dth.webp",
+      alt: "Linha de martelos DTH e bits Flow",
       fit: "cover" as const,
       position: "object-[center_42%]",
-      width: 800,
-      height: 800,
+      width: 1200,
+      height: 1200,
     },
     thumbs: brandThumbnails.flow,
   },
   triton: {
     feature: {
-      src: "/images/triton-tri600-compressor.webp",
-      alt: "Compressor portátil Triton TRI600A-18G2",
+      src: "/images/triton-perfuratriz-pocos.webp",
+      alt: "Perfuratriz rotativa Triton para poços artesianos",
       fit: "cover" as const,
       position: "object-center",
-      width: 1216,
-      height: 840,
+      width: 1600,
+      height: 1200,
     },
     thumbs: brandThumbnails.triton,
   },
@@ -237,7 +236,7 @@ export function Home() {
               <LogoFlow className="mt-2 h-12 w-auto sm:h-14" />
               <h3 className="mt-4 font-display text-2xl leading-tight xl:text-3xl">Poços artesianos e perfuração DTH</h3>
               <p className="mt-2 text-sm leading-6 text-ink/75">
-                Martelos, bits, brocas, hastes, coroas e bombas — perfuração DTH, rotativa, horizontal, Top Hammer, sondagens e
+                Martelos, bits, brocas, hastes, coroas e bombas — perfuração DTH, rotativa, horizontal, Top Hammer, mineração e desmonte, sondagens e
                 bombeamento.
               </p>
               <ThumbStrip items={brandMedia.flow.thumbs} ring="border-navy/10" />
@@ -333,14 +332,18 @@ export function Home() {
               </a>
             </div>
           </div>
-          <div className="grid w-full gap-6 sm:grid-cols-2">
+          <div className="grid w-full gap-6 sm:grid-cols-2 xl:grid-cols-3">
             <div>
               <VideoPlayer video={VIDEOS.flowBemVindo} mode="player" />
               <p className="mt-4 text-center text-sm font-semibold text-white/85">Conheça a Flow</p>
             </div>
             <div>
-              <VideoPlayer video={VIDEOS.perfuratrizDemonstracao} mode="player" />
-              <p className="mt-4 text-center text-sm font-semibold text-white/85">Perfuratriz · demonstração real</p>
+              <VideoPlayer video={VIDEOS.marteloDth} mode="player" />
+              <p className="mt-4 text-center text-sm font-semibold text-white/85">Martelo DTH · top produto</p>
+            </div>
+            <div>
+              <VideoPlayer video={VIDEOS.hastesEstoque} mode="player" />
+              <p className="mt-4 text-center text-sm font-semibold text-white/85">Hastes de perfuração</p>
             </div>
           </div>
         </div>

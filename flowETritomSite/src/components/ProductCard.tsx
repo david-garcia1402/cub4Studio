@@ -33,12 +33,13 @@ export function ProductCard({ item, href }: Props) {
   const [open, setOpen] = useState(false);
   const current = gallery[active];
 
+  const contain = item.coverFit === "contain";
   const picture = (
     <img
       key={current}
       src={cardSrc(current)}
       alt={item.name}
-      className="h-full w-full object-cover object-center"
+      className={`h-full w-full object-center ${contain ? "object-contain" : "object-cover"}`}
       width={900}
       height={900}
       loading="lazy"

@@ -69,7 +69,7 @@ export function BrandPage({ brand }: Props) {
           </h1>
           <p className={`mt-3 max-w-xl text-base ${isFlow ? "text-ink/80" : "text-white/85"}`}>
             {isFlow
-              ? "Perfuração DTH, rotativa e horizontal, Top Hammer, sondagens e bombeamento. Filtre por categoria e peça orçamento."
+              ? "Perfuração DTH, rotativa e horizontal, Top Hammer, mineração e desmonte, sondagens e bombeamento. Filtre por categoria e peça orçamento."
               : "Perfuratrizes para poços artesianos, HDD e mineração; compressores a diesel e elétricos. Selecione a aplicação para conhecer os equipamentos."}
           </p>
         </div>

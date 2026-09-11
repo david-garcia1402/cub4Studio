@@ -19,7 +19,7 @@ function BrandCatalogPreview({ brand }: { brand: Brand }) {
               }`}
             >
               <img
-                src={item.image}
+                src={`/images/cards/${item.image.split("/").pop()}`}
                 alt={item.name}
                 className="aspect-square h-auto w-full bg-[#f7f4ee] object-cover object-center"
                 width={480}

@@ -1,6 +1,7 @@
 node_modules
 dist
 .DS_Store
+.tmp-preview
 pdf-pages
 onboarding-extract.txt
 extract-pdf.cjs
@@ -8,3 +9,5 @@ extract-pdf.mjs
 extract-pdf-rest.cjs
 process-assets.cjs
 *.zip
+public/images/carroChefeFlow
+public/images/carroChefeTriton
