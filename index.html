@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>cub4Studio — Estúdio de Criação com Inteligência Artificial</title>
   <meta name="description" content="cub4Studio é um estúdio focado em landing pages conversoras integradas com IA, criativos e vídeos/reels gerados por inteligência artificial." />
   <link rel="icon" type="image/png" sizes="192x192" href="assets/img/favicon-192.png" />
@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=7" />
+  <link rel="stylesheet" href="css/style.css?v=8" />
 </head>
 <body>
   <!-- Fundo animado -->
@@ -222,40 +222,6 @@
         <div class="carousel-dots" id="carouselDots" role="tablist" aria-label="Projetos do portfólio"></div>
       </div>
     </section>
-
-    <div class="project-modal" id="projectModal" aria-hidden="true" inert>
-      <div class="project-modal__backdrop" data-modal-close></div>
-      <div class="project-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
-        <button type="button" class="project-modal__close" data-modal-close aria-label="Fechar">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
-        <div class="project-modal__gallery">
-          <div class="project-modal__stage" id="projectModalStage"></div>
-          <button type="button" class="project-modal__nav project-modal__nav--prev" id="projectModalPrev" aria-label="Mídia anterior">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button type="button" class="project-modal__nav project-modal__nav--next" id="projectModalNext" aria-label="Próxima mídia">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <span class="project-modal__count" id="projectModalCount" hidden></span>
-          <div class="project-modal__thumbs" id="projectModalThumbs" hidden></div>
-        </div>
-        <aside class="project-modal__info">
-          <span class="badge" id="projectModalTag"></span>
-          <h3 id="projectModalTitle"></h3>
-          <p class="project-modal__lead" id="projectModalLead"></p>
-          <p class="project-modal__desc" id="projectModalDesc"></p>
-          <div class="project-modal__facts" id="projectModalFacts"></div>
-          <div class="project-modal__actions">
-            <a class="btn btn--primary" id="projectModalCta" data-whatsapp target="_blank" rel="noopener">Quero um projeto assim</a>
-            <a class="btn btn--ghost" id="projectModalLink" target="_blank" rel="noopener" hidden>
-              Visitar site
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-          </div>
-        </aside>
-      </div>
-    </div>
 
     <!-- Serviços -->
     <section class="section" id="servicos">
@@ -510,6 +476,65 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=7"></script>
+  <!-- Overlays fora do <main> para ficarem acima do header fixo -->
+  <div class="project-modal" id="projectModal" aria-hidden="true" inert>
+    <div class="project-modal__backdrop" data-modal-close></div>
+    <div class="project-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+      <button type="button" class="project-modal__close" data-modal-close aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="project-modal__gallery">
+        <div class="project-modal__stage" id="projectModalStage"></div>
+        <button type="button" class="project-modal__nav project-modal__nav--prev" id="projectModalPrev" aria-label="Mídia anterior">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="project-modal__nav project-modal__nav--next" id="projectModalNext" aria-label="Próxima mídia">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="project-modal__count" id="projectModalCount" hidden></span>
+        <div class="project-modal__thumbs" id="projectModalThumbs" hidden></div>
+      </div>
+      <aside class="project-modal__info">
+        <span class="badge" id="projectModalTag"></span>
+        <h3 id="projectModalTitle"></h3>
+        <p class="project-modal__lead" id="projectModalLead"></p>
+        <p class="project-modal__desc" id="projectModalDesc"></p>
+        <div class="project-modal__facts" id="projectModalFacts"></div>
+        <div class="project-modal__actions">
+          <a class="btn btn--primary" id="projectModalCta" data-whatsapp target="_blank" rel="noopener">Quero um projeto assim</a>
+          <a class="btn btn--ghost" id="projectModalLink" target="_blank" rel="noopener" hidden>
+            Visitar site
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Lightbox: galeria em tela cheia com swipe -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" inert>
+    <div class="lightbox__dialog" role="dialog" aria-modal="true" aria-label="Galeria do projeto em tela cheia">
+      <div class="lightbox__bar">
+        <span class="lightbox__count" id="lightboxCount"></span>
+        <button type="button" class="lightbox__close" data-lightbox-close aria-label="Fechar galeria">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="lightbox__track" id="lightboxTrack" tabindex="0" aria-live="polite"></div>
+      <button type="button" class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Imagem anterior">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Próxima imagem">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m9 5 7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="lightbox__footer">
+        <p class="lightbox__caption" id="lightboxCaption"></p>
+        <div class="lightbox__dots" id="lightboxDots" role="tablist" aria-label="Imagens da galeria"></div>
+      </div>
+      <p class="lightbox__hint" id="lightboxHint" aria-hidden="true">Arraste para o lado para ver mais</p>
+    </div>
+  </div>
+
+  <script src="js/main.js?v=8"></script>
 </body>
 </html>
