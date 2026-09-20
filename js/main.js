@@ -405,20 +405,24 @@ function initPortfolioCarousel(projectModal) {
 
   const maxScrollLeft = () => Math.max(0, viewport.scrollWidth - viewport.clientWidth);
 
-  const cardStep = () => {
-    const width = cards[0].getBoundingClientRect().width;
-    const gap = parseFloat(getComputedStyle(track).gap) || 20;
-    return width + gap;
-  };
+  // Offsets reais de cada card (o card em destaque é mais largo que os demais).
+  const cardOffset = (i) => cards[i].offsetLeft - cards[0].offsetLeft;
 
   const indexFromScroll = () => {
     const maxScroll = maxScrollLeft();
     const left = viewport.scrollLeft;
     if (maxScroll <= 1) return 0;
     if (left >= maxScroll - 4) return cards.length - 1;
-    const step = cardStep();
-    if (step <= 0) return 0;
-    return Math.min(cards.length - 1, Math.max(0, Math.round(left / step)));
+    let best = 0;
+    let bestDistance = Infinity;
+    cards.forEach((_, i) => {
+      const distance = Math.abs(cardOffset(i) - left);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = i;
+      }
+    });
+    return best;
   };
 
   const updateControls = () => {
@@ -435,7 +439,7 @@ function initPortfolioCarousel(projectModal) {
     const maxScroll = maxScrollLeft();
     const target = index >= cards.length - 1
       ? maxScroll
-      : Math.min(maxScroll, index * cardStep());
+      : Math.min(maxScroll, cardOffset(index));
 
     viewport.classList.add('is-jumping');
     viewport.scrollTo({ left: target, behavior: 'smooth' });
