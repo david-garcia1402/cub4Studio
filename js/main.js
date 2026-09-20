@@ -318,7 +318,7 @@ const PORTFOLIO_PROJECTS = {
       { src: 'assets/portfolio/grupofvt-catalogo-flow.jpg', alt: 'Catálogo Flow com filtros por categoria e busca' },
       { src: 'assets/portfolio/grupofvt-catalogo-triton.jpg', alt: 'Catálogo Triton — perfuratrizes e compressores' },
       { src: 'assets/portfolio/grupofvt-marcas.jpg', alt: 'Seção "Sobre o grupo" com as duas marcas e produtos em destaque' },
-      { src: 'assets/portfolio/grupofvt-institucional.jpg', alt: 'Página institucional do Grupo FVT com o fundador Claudio Patricio' },
+      { src: 'assets/portfolio/grupofvt-institucional.jpg', alt: 'Página institucional do Grupo FVT com o cofundador Claudio Patricio' },
       { src: 'assets/portfolio/grupofvt-setores.jpg', alt: 'Setores atendidos e vídeo institucional da Flow' },
       { src: 'assets/portfolio/grupofvt-mobile.jpg', alt: 'Versão mobile da home do grupofvt.com' }
     ]
