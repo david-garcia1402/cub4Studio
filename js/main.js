@@ -557,11 +557,15 @@ function initProjectModal() {
   const gallery = modal?.querySelector('.project-modal__gallery');
   if (!modal || !stage) return { open() {}, close() {} };
 
+  const lightbox = initLightbox();
   let media = [];
   let index = 0;
   let lastFocus = null;
   let lastOpenAt = 0;
   let ignoreCloseUntil = 0;
+  let swipe = { active: false, pointerId: null, startX: 0, startY: 0 };
+  let suppressZoomUntil = 0;
+  let swallowNextZoomClick = false;
 
   const renderFacts = (project) => {
     factsEl.innerHTML = '';
@@ -626,6 +630,32 @@ function initProjectModal() {
     });
   };
 
+  const imageMedia = () => media.filter((item) => item.type === 'image');
+
+  const openLightbox = () => {
+    const images = imageMedia();
+    if (!lightbox || !images.length) return;
+    const current = media[index];
+    const start = Math.max(0, images.indexOf(current));
+    lightbox.open(images, start, {
+      onChange: (i) => {
+        const target = media.indexOf(images[i]);
+        if (target >= 0 && target !== index) {
+          index = target;
+          render();
+        }
+      },
+      returnFocus: () => stage.querySelector('.project-modal__zoom')
+    });
+  };
+
+  const revealActiveThumb = () => {
+    const active = thumbsEl.querySelector('.project-modal__thumb.is-active');
+    if (!active || thumbsEl.hidden) return;
+    const left = active.offsetLeft - (thumbsEl.clientWidth - active.offsetWidth) / 2;
+    thumbsEl.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+  };
+
   const render = () => {
     const item = media[index];
     stage.innerHTML = '';
@@ -638,11 +668,33 @@ function initProjectModal() {
       frame.allow = 'autoplay; encrypted-media; picture-in-picture';
       frame.allowFullscreen = true;
       stage.appendChild(frame);
+      stage.classList.remove('is-zoomable');
     } else {
+      const zoom = document.createElement('button');
+      zoom.type = 'button';
+      zoom.className = 'project-modal__zoom';
+      zoom.setAttribute('aria-label', 'Ampliar imagem em tela cheia');
       const img = document.createElement('img');
       img.src = item.src;
       img.alt = item.alt || '';
-      stage.appendChild(img);
+      img.draggable = false;
+      const badge = document.createElement('span');
+      badge.className = 'project-modal__zoom-badge';
+      badge.setAttribute('aria-hidden', 'true');
+      badge.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Ampliar</span>';
+      zoom.append(img, badge);
+      zoom.addEventListener('click', (event) => {
+        // O clique disparado logo após um swipe não deve abrir o lightbox.
+        if (swallowNextZoomClick && Date.now() < suppressZoomUntil) {
+          swallowNextZoomClick = false;
+          event.preventDefault();
+          return;
+        }
+        swallowNextZoomClick = false;
+        openLightbox();
+      });
+      stage.appendChild(zoom);
+      stage.classList.add('is-zoomable');
     }
 
     const many = media.length > 1;
@@ -661,7 +713,37 @@ function initProjectModal() {
     thumbsEl.querySelectorAll('.project-modal__thumb').forEach((thumb, i) => {
       thumb.classList.toggle('is-active', i === index);
     });
+    revealActiveThumb();
   };
+
+  const step = (delta) => {
+    const nextIndex = Math.max(0, Math.min(media.length - 1, index + delta));
+    if (nextIndex === index) return;
+    index = nextIndex;
+    render();
+  };
+
+  // Swipe horizontal direto no palco (mobile): distingue arrasto de toque simples.
+  const SWIPE_THRESHOLD = 40;
+
+  stage.addEventListener('pointerdown', (event) => {
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
+    if (media.length < 2 || media[index]?.type !== 'image') return;
+    swipe = { active: true, pointerId: event.pointerId, startX: event.clientX, startY: event.clientY };
+  });
+
+  const endSwipe = (event) => {
+    if (!swipe.active || event.pointerId !== swipe.pointerId) return;
+    swipe.active = false;
+    const dx = event.clientX - swipe.startX;
+    const dy = event.clientY - swipe.startY;
+    if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy)) return;
+    swallowNextZoomClick = true;
+    suppressZoomUntil = Date.now() + 250;
+    step(dx < 0 ? 1 : -1);
+  };
+  stage.addEventListener('pointerup', endSwipe);
+  stage.addEventListener('pointercancel', () => { swipe.active = false; });
 
   const open = (projectId) => {
     const project = PORTFOLIO_PROJECTS[projectId];
@@ -713,6 +795,7 @@ function initProjectModal() {
 
   const close = () => {
     if (Date.now() < ignoreCloseUntil) return;
+    lightbox?.close({ silent: true });
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     modal.inert = true;
@@ -748,21 +831,245 @@ function initProjectModal() {
     el.addEventListener('click', close);
   });
   ctaEl?.addEventListener('click', close);
-  prevBtn.addEventListener('click', () => {
-    index = Math.max(0, index - 1);
-    render();
-  });
-  nextBtn.addEventListener('click', () => {
-    index = Math.min(media.length - 1, index + 1);
-    render();
-  });
+  prevBtn.addEventListener('click', () => step(-1));
+  nextBtn.addEventListener('click', () => step(1));
 
   document.addEventListener('keydown', (event) => {
     if (!modal.classList.contains('is-open')) return;
+    if (event.defaultPrevented || lightbox?.isOpen()) return;
     if (event.key === 'Escape') close();
-    if (event.key === 'ArrowLeft') prevBtn.click();
-    if (event.key === 'ArrowRight') nextBtn.click();
+    if (event.key === 'ArrowLeft') step(-1);
+    if (event.key === 'ArrowRight') step(1);
   });
 
   return { open, close };
+}
+
+/**
+ * Lightbox em tela cheia. A faixa usa rolagem nativa com scroll-snap, então
+ * no toque o swipe tem inércia do próprio navegador; mouse ganha arrasto,
+ * setas e teclado. O índice atual é devolvido via onChange para sincronizar
+ * com quem abriu (o modal do projeto).
+ */
+function initLightbox() {
+  const root = document.getElementById('lightbox');
+  const track = document.getElementById('lightboxTrack');
+  const countEl = document.getElementById('lightboxCount');
+  const captionEl = document.getElementById('lightboxCaption');
+  const dotsEl = document.getElementById('lightboxDots');
+  const hintEl = document.getElementById('lightboxHint');
+  const prevBtn = document.getElementById('lightboxPrev');
+  const nextBtn = document.getElementById('lightboxNext');
+  const closeBtn = root?.querySelector('.lightbox__close');
+  if (!root || !track || !prevBtn || !nextBtn) return null;
+
+  let items = [];
+  let index = 0;
+  let onChange = null;
+  let returnFocus = null;
+  let lastFocus = null;
+  let previousOverflow = '';
+  let settleTimer = 0;
+  let hintTimer = 0;
+  let clearTimer = 0;
+  let suppressClickUntil = 0;
+  let drag = { active: false, moved: false, pointerId: null, startX: 0, startScroll: 0 };
+  const DRAG_THRESHOLD = 10;
+
+  const isOpen = () => root.classList.contains('is-open');
+  const clamp = (i) => Math.max(0, Math.min(items.length - 1, i));
+  const slideWidth = () => track.clientWidth || 1;
+  const indexFromScroll = () => clamp(Math.round(track.scrollLeft / slideWidth()));
+
+  const scrollToIndex = (i, behavior) => {
+    track.scrollTo({ left: i * slideWidth(), behavior });
+  };
+
+  const update = (nextIndex, { notify = true } = {}) => {
+    const changed = nextIndex !== index;
+    index = clamp(nextIndex);
+    if (countEl) countEl.textContent = `${index + 1} / ${items.length}`;
+    if (captionEl) captionEl.textContent = items[index]?.alt || '';
+    prevBtn.disabled = index <= 0;
+    nextBtn.disabled = index >= items.length - 1;
+    dotsEl?.querySelectorAll('.lightbox__dot').forEach((dot, di) => {
+      dot.classList.toggle('is-active', di === index);
+      dot.setAttribute('aria-selected', di === index ? 'true' : 'false');
+    });
+    track.querySelectorAll('.lightbox__slide').forEach((slide, si) => {
+      slide.classList.toggle('is-active', si === index);
+    });
+    if (changed && notify && typeof onChange === 'function') onChange(index);
+  };
+
+  const goTo = (i, behavior = 'smooth') => {
+    update(i);
+    scrollToIndex(index, behavior);
+  };
+
+  const render = () => {
+    track.innerHTML = '';
+    if (dotsEl) dotsEl.innerHTML = '';
+
+    items.forEach((item, i) => {
+      const slide = document.createElement('div');
+      slide.className = 'lightbox__slide';
+      slide.setAttribute('role', 'group');
+      slide.setAttribute('aria-label', `Imagem ${i + 1} de ${items.length}`);
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.alt = item.alt || '';
+      img.draggable = false;
+      img.decoding = 'async';
+      img.loading = Math.abs(i - index) <= 1 ? 'eager' : 'lazy';
+      slide.appendChild(img);
+      track.appendChild(slide);
+
+      if (dotsEl) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'lightbox__dot';
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', `Ir para a imagem ${i + 1}`);
+        dot.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(dot);
+      }
+    });
+
+    const many = items.length > 1;
+    prevBtn.hidden = !many;
+    nextBtn.hidden = !many;
+    if (dotsEl) dotsEl.hidden = !many;
+    if (countEl) countEl.hidden = !many;
+  };
+
+  const showHint = () => {
+    if (!hintEl || items.length < 2) return;
+    const coarse = window.matchMedia?.('(pointer: coarse)').matches;
+    if (!coarse) return;
+    hintEl.classList.add('is-visible');
+    window.clearTimeout(hintTimer);
+    hintTimer = window.setTimeout(() => hintEl.classList.remove('is-visible'), 2400);
+  };
+
+  const open = (list, start = 0, options = {}) => {
+    if (!Array.isArray(list) || !list.length) return;
+    items = list;
+    onChange = options.onChange || null;
+    returnFocus = options.returnFocus || null;
+    index = Math.max(0, Math.min(items.length - 1, start));
+
+    window.clearTimeout(clearTimer);
+    render();
+
+    lastFocus = document.activeElement;
+    previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    root.inert = false;
+    root.classList.add('is-open');
+    root.setAttribute('aria-hidden', 'false');
+
+    // Posiciona sem animação depois que a faixa já tem largura calculada.
+    scrollToIndex(index, 'auto');
+    update(index, { notify: false });
+    requestAnimationFrame(() => {
+      scrollToIndex(index, 'auto');
+      update(index, { notify: false });
+    });
+
+    showHint();
+    closeBtn?.focus({ preventScroll: true });
+  };
+
+  const close = (options = {}) => {
+    if (!isOpen()) return;
+    root.classList.remove('is-open');
+    root.setAttribute('aria-hidden', 'true');
+    root.inert = true;
+    hintEl?.classList.remove('is-visible');
+    document.body.style.overflow = previousOverflow;
+
+    window.clearTimeout(clearTimer);
+    clearTimer = window.setTimeout(() => {
+      track.innerHTML = '';
+      if (dotsEl) dotsEl.innerHTML = '';
+    }, 320);
+
+    if (options.silent) return;
+    const target = (typeof returnFocus === 'function' && returnFocus()) || lastFocus;
+    if (target && typeof target.focus === 'function') target.focus({ preventScroll: true });
+  };
+
+  track.addEventListener('scroll', () => {
+    if (!isOpen() || drag.active) return;
+    window.clearTimeout(settleTimer);
+    settleTimer = window.setTimeout(() => {
+      const i = indexFromScroll();
+      if (i !== index) update(i);
+    }, 60);
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    if (isOpen()) scrollToIndex(index, 'auto');
+  });
+
+  // Arrasto com mouse (no toque a rolagem nativa já cuida do swipe).
+  track.addEventListener('pointerdown', (event) => {
+    if (event.pointerType !== 'mouse' || event.button !== 0) return;
+    drag = { active: true, moved: false, pointerId: event.pointerId, startX: event.clientX, startScroll: track.scrollLeft };
+  });
+  track.addEventListener('pointermove', (event) => {
+    if (!drag.active || event.pointerId !== drag.pointerId) return;
+    const delta = event.clientX - drag.startX;
+    if (!drag.moved && Math.abs(delta) < DRAG_THRESHOLD) return;
+    if (!drag.moved) {
+      drag.moved = true;
+      track.classList.add('is-dragging');
+      try { track.setPointerCapture(event.pointerId); } catch (err) { /* ignore */ }
+    }
+    track.scrollLeft = drag.startScroll - delta;
+  });
+  const endDrag = (event) => {
+    if (!drag.active || (event && event.pointerId !== drag.pointerId)) return;
+    const moved = drag.moved;
+    const delta = event ? event.clientX - drag.startX : 0;
+    drag.active = false;
+    track.classList.remove('is-dragging');
+    if (!moved) return;
+    suppressClickUntil = Date.now() + 350;
+    // Um arrasto curto ainda muda de slide na direção do gesto.
+    const direction = Math.abs(delta) > 40 ? (delta < 0 ? 1 : -1) : 0;
+    goTo(direction ? index + direction : indexFromScroll());
+  };
+  track.addEventListener('pointerup', endDrag);
+  track.addEventListener('pointercancel', endDrag);
+
+  // Toque fora da imagem (área escura do slide) fecha a galeria.
+  track.addEventListener('click', (event) => {
+    if (Date.now() < suppressClickUntil) return;
+    if (event.target.classList.contains('lightbox__slide')) close();
+  });
+
+  root.querySelectorAll('[data-lightbox-close]').forEach((el) => {
+    el.addEventListener('click', () => close());
+  });
+  prevBtn.addEventListener('click', () => goTo(index - 1));
+  nextBtn.addEventListener('click', () => goTo(index + 1));
+
+  document.addEventListener('keydown', (event) => {
+    if (!isOpen()) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      close();
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      goTo(index - 1);
+    } else if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      goTo(index + 1);
+    }
+  });
+
+  return { open, close, isOpen };
 }

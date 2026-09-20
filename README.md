@@ -12,11 +12,14 @@ Este repositório contém a primeira versão do site: uma página única (one-pa
 
 ```
 cub4studio/
-├── index.html          # Estrutura da página (hero, serviços, sobre, processo, portfólio, contato)
+├── .cursor/
+│   ├── rules/mobile-first.mdc              # Regra sempre ativa: toda alteração deve ser mobile-first
+│   └── skills/mobile-responsive/SKILL.md   # Skill com breakpoints, regras de toque e checklist de teste
+├── index.html          # Estrutura da página (hero, portfólio, serviços, sobre, processo, contato) + modal e lightbox
 ├── css/
 │   └── style.css       # Design system (cores, tipografia, componentes, responsividade)
 ├── js/
-│   └── main.js         # Menu mobile, animações de entrada e formulário de contato
+│   └── main.js         # Menu mobile, carrossel, modal de projeto, lightbox com swipe e formulário de contato
 ├── assets/
 │   └── img/
 │       ├── icon-transparent.png    # Ícone do mascote (fundo transparente) — usado no header e footer

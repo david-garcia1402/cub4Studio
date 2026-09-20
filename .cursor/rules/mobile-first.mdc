@@ -1,0 +1,22 @@
+---
+description: Toda alteração de UI do cub4Studio deve ser 100% responsiva e mobile-first
+globs: index.html, css/**/*.css, js/**/*.js
+alwaysApply: true
+---
+
+# Mobile-first obrigatório
+
+- Este site é acessado majoritariamente por celular (Instagram e WhatsApp). Nenhuma alteração
+  visual está pronta enquanto não funcionar em **360px de largura** com toque.
+- Antes de editar `index.html`, `css/style.css` ou `js/main.js`, leia e siga a skill
+  `.cursor/skills/mobile-responsive/SKILL.md` (breakpoints do projeto, regras de toque,
+  formulários, modais, imagens e o checklist de verificação).
+- Use os breakpoints existentes (`960px`, `760px`, `560px`) dentro dos blocos `@media` já
+  presentes no fim de `css/style.css`. Não crie arquivos CSS separados nem frameworks.
+- Carrosséis e galerias precisam de swipe (scroll-snap nativo), botões e teclado. Imagens que
+  precisam ser vistas de perto abrem no lightbox (`initLightbox()`).
+- Alturas de tela com `100dvh` (fallback `100vh`), safe areas com `env(safe-area-inset-*)`,
+  alvos de toque ≥ 44px, inputs com 16px no mobile, sem `white-space: nowrap` em botões
+  abaixo de 560px.
+- Ao alterar CSS ou JS, incremente o `?v=` das duas tags em `index.html`.
+- Sempre teste em 360, 390, 430, 768 e 1280px e confirme que não há rolagem horizontal.
