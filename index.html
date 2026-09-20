@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=6" />
+  <link rel="stylesheet" href="css/style.css?v=7" />
 </head>
 <body>
   <!-- Fundo animado -->
@@ -115,7 +115,7 @@
             <p class="section-tag">Portfólio</p>
             <h2 class="section-title">Projetos que <span class="text-gradient">mostram o estúdio</span></h2>
             <p class="section-desc">
-              Landing pages, criativos e vídeos gerados com IA — arraste o carrossel ou clique em um projeto para ver de perto.
+              Sites publicados, landing pages, criativos e vídeos gerados com IA — arraste o carrossel ou clique em um projeto para ver de perto.
             </p>
           </div>
           <div class="carousel-controls">
@@ -132,6 +132,41 @@
       <div class="carousel-shell reveal">
         <div class="carousel-viewport" id="carouselViewport">
           <div class="carousel-track" id="carouselTrack">
+            <article class="project-card project-card--featured" data-project="grupofvt">
+              <div class="project-card__media">
+                <img src="assets/portfolio/grupofvt-home.jpg" alt="Home do site grupofvt.com — painéis Flow e Triton com o emblema do Grupo FVT" />
+                <span class="project-card__tag">Site &amp; Catálogo</span>
+                <span class="project-card__live"><span class="project-card__live-dot" aria-hidden="true"></span> No ar</span>
+              </div>
+              <div class="project-card__body">
+                <p class="project-card__client">Grupo FVT · Itapema-SC</p>
+                <h3>Flow &amp; Triton</h3>
+                <p>Site institucional com catálogo de duas marcas de perfuração — máquinas, compressores e ferramentas — com orçamento direto no WhatsApp.</p>
+                <div class="project-card__actions">
+                  <button type="button" class="project-card__cta">Ver projeto <span aria-hidden="true">→</span></button>
+                  <a class="project-card__link" href="https://grupofvt.com" target="_blank" rel="noopener" aria-label="Abrir grupofvt.com em nova aba">
+                    grupofvt.com
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article class="project-card" data-project="pipocrunch">
+              <div class="project-card__media">
+                <img src="assets/portfolio/pipocrunch-home.jpg" alt="Hero do site PipoCrunch — pipocas gourmet em Jaraguá do Sul" />
+                <span class="project-card__tag">Landing Page</span>
+              </div>
+              <div class="project-card__body">
+                <p class="project-card__client">PipoCrunch · Jaraguá do Sul-SC</p>
+                <h3>PipoCrunch</h3>
+                <p>Landing page para uma marca de pipocas gourmet — cardápio, sabores e um montador de pedido que envia tudo pronto no WhatsApp.</p>
+                <div class="project-card__actions">
+                  <button type="button" class="project-card__cta">Ver projeto <span aria-hidden="true">→</span></button>
+                </div>
+              </div>
+            </article>
+
             <article class="project-card" data-project="econoradar">
               <div class="project-card__media">
                 <img src="assets/portfolio/econoradar-2.jpg" alt="Campanha visual do app EconoRadar" />
@@ -144,18 +179,6 @@
               </div>
             </article>
 
-            <article class="project-card" data-project="vertice">
-              <div class="project-card__media">
-                <img src="assets/portfolio/casa-vertice.jpg" alt="Penthouse de alto padrão para a landing page Casa Vértice" />
-                <span class="project-card__tag">Landing Page</span>
-              </div>
-              <div class="project-card__body">
-                <h3>Casa Vértice</h3>
-                <p>Landing conversora para um residencial de alto padrão. Desejo, prova social e agendamento de visitas.</p>
-                <button type="button" class="project-card__cta">Ver projeto <span aria-hidden="true">→</span></button>
-              </div>
-            </article>
-
             <article class="project-card" data-project="melbrasa">
               <div class="project-card__media">
                 <img src="assets/portfolio/mel-brasa.jpg" alt="Close cinematográfico de um steak no grill para o reel Mel &amp; Brasa" />
@@ -164,18 +187,6 @@
               <div class="project-card__body">
                 <h3>Mel &amp; Brasa</h3>
                 <p>Reel gastronômico gerado com IA — close-ups cinematográficos e gancho nos primeiros segundos.</p>
-                <button type="button" class="project-card__cta">Ver projeto <span aria-hidden="true">→</span></button>
-              </div>
-            </article>
-
-            <article class="project-card" data-project="triton">
-              <div class="project-card__media">
-                <img src="assets/portfolio/triton-1.jpg" alt="Ficha técnica do compressor Triton TRI600A" />
-                <span class="project-card__tag">Catálogo &amp; Produto</span>
-              </div>
-              <div class="project-card__body">
-                <h3>Triton Máquinas</h3>
-                <p>Fichas técnicas padronizadas para a linha de compressores — produto, specs e identidade industrial.</p>
                 <button type="button" class="project-card__cta">Ver projeto <span aria-hidden="true">→</span></button>
               </div>
             </article>
@@ -235,7 +246,13 @@
           <p class="project-modal__lead" id="projectModalLead"></p>
           <p class="project-modal__desc" id="projectModalDesc"></p>
           <div class="project-modal__facts" id="projectModalFacts"></div>
-          <a class="btn btn--primary" id="projectModalCta" data-whatsapp target="_blank" rel="noopener">Quero um projeto assim</a>
+          <div class="project-modal__actions">
+            <a class="btn btn--primary" id="projectModalCta" data-whatsapp target="_blank" rel="noopener">Quero um projeto assim</a>
+            <a class="btn btn--ghost" id="projectModalLink" target="_blank" rel="noopener" hidden>
+              Visitar site
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
         </aside>
       </div>
     </div>
@@ -493,6 +510,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=6"></script>
+  <script src="js/main.js?v=7"></script>
 </body>
 </html>

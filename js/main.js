@@ -303,6 +303,42 @@ function initMarquee() {
 }
 
 const PORTFOLIO_PROJECTS = {
+  grupofvt: {
+    title: 'Grupo FVT — Flow & Triton',
+    tag: 'Site & Catálogo',
+    client: 'Grupo FVT · Itapema-SC',
+    lead: 'Site institucional e catálogo de duas marcas de equipamentos para perfuração, publicado em grupofvt.com.',
+    description: 'Um só site para o grupo e suas duas marcas: Flow (martelos, bits, hastes, brocas e bombas) e Triton (perfuratrizes e compressores). Hero dividido por marca, catálogo com filtros e busca, vídeos do equipamento em operação, avaliações do Google e orçamento pré-preenchido no WhatsApp — responsivo e otimizado para SEO local.',
+    deliverables: ['Site institucional', 'Catálogo com filtros', 'Vídeos & Google Reviews', 'WhatsApp integrado'],
+    tools: 'React + Vite, Tailwind CSS, React Router e Cloudflare',
+    url: 'https://grupofvt.com',
+    urlLabel: 'Visitar grupofvt.com',
+    images: [
+      { src: 'assets/portfolio/grupofvt-home.jpg', alt: 'Home do grupofvt.com — painéis Flow e Triton com o emblema do Grupo FVT' },
+      { src: 'assets/portfolio/grupofvt-catalogo-flow.jpg', alt: 'Catálogo Flow com filtros por categoria e busca' },
+      { src: 'assets/portfolio/grupofvt-catalogo-triton.jpg', alt: 'Catálogo Triton — perfuratrizes e compressores' },
+      { src: 'assets/portfolio/grupofvt-marcas.jpg', alt: 'Seção "Sobre o grupo" com as duas marcas e produtos em destaque' },
+      { src: 'assets/portfolio/grupofvt-institucional.jpg', alt: 'Página institucional do Grupo FVT com o cofundador Claudio Patricio' },
+      { src: 'assets/portfolio/grupofvt-setores.jpg', alt: 'Setores atendidos e vídeo institucional da Flow' },
+      { src: 'assets/portfolio/grupofvt-mobile.jpg', alt: 'Versão mobile da home do grupofvt.com' }
+    ]
+  },
+  pipocrunch: {
+    title: 'PipoCrunch',
+    tag: 'Landing Page',
+    client: 'PipoCrunch · Jaraguá do Sul-SC',
+    lead: 'Landing page para uma marca de pipocas gourmet — do cardápio ao pedido pronto no WhatsApp.',
+    description: 'Identidade quente (bordô, dourado e creme) com tipografia editorial, cardápio por linha (gourmet, recheadas e petiscos), sabores da casa e uma seção de eventos. O destaque é o montador de pedido: o cliente escolhe linha, sabor e tamanho, vê o total e envia tudo formatado direto no WhatsApp da marca.',
+    deliverables: ['Landing page', 'Cardápio & sabores', 'Montador de pedido', 'Integração com WhatsApp'],
+    tools: 'Next.js, Tailwind CSS e Cloudflare Workers',
+    images: [
+      { src: 'assets/portfolio/pipocrunch-home.jpg', alt: 'Hero do site PipoCrunch com logo e chamada "Sinta o CRUNCH de verdade"' },
+      { src: 'assets/portfolio/pipocrunch-cardapio.jpg', alt: 'Cardápio PipoCrunch — pipocas gourmet, recheadas e petiscos' },
+      { src: 'assets/portfolio/pipocrunch-sabores.jpg', alt: 'Seção de sabores da casa' },
+      { src: 'assets/portfolio/pipocrunch-pedido.jpg', alt: 'Montador de pedido com resumo e envio no WhatsApp' },
+      { src: 'assets/portfolio/pipocrunch-mobile.jpg', alt: 'Versão mobile do site PipoCrunch' }
+    ]
+  },
   econoradar: {
     title: 'EconoRadar',
     tag: 'Criativos com IA',
@@ -316,17 +352,6 @@ const PORTFOLIO_PROJECTS = {
       { src: 'assets/portfolio/econoradar-3.jpg', alt: 'Peça de campanha EconoRadar — você no meio da informação' }
     ]
   },
-  vertice: {
-    title: 'Casa Vértice',
-    tag: 'Landing Page',
-    lead: 'Landing conversora para um residencial de alto padrão.',
-    description: 'Hero cinematográfico, prova social e um fluxo curto até o agendamento de visita. Visual de penthouse ao entardecer, paleta quente e copy pensada para desejo — não para catálogo imobiliário.',
-    deliverables: ['Landing page', 'Copy de conversão', 'Visual cinematográfico'],
-    tools: 'Direção de arte, IA generativa e front-end',
-    images: [
-      { src: 'assets/portfolio/casa-vertice.jpg', alt: 'Visual da landing page Casa Vértice' }
-    ]
-  },
   melbrasa: {
     title: 'Mel & Brasa',
     tag: 'Reel / Vídeo IA',
@@ -336,19 +361,6 @@ const PORTFOLIO_PROJECTS = {
     tools: 'IA de vídeo, edição e direção criativa',
     images: [
       { src: 'assets/portfolio/mel-brasa.jpg', alt: 'Frame do reel Mel & Brasa' }
-    ]
-  },
-  triton: {
-    title: 'Triton Máquinas',
-    tag: 'Catálogo & Produto',
-    lead: 'Fichas técnicas padronizadas para a linha de compressores.',
-    description: 'Foto de produto, especificações e identidade industrial em um sistema visual único. Três modelos, mesma linguagem — para o comercial vender com clareza e a marca parecer uma linha, não peças soltas.',
-    deliverables: ['Fichas técnicas', 'Padronização visual', 'Fotos de produto'],
-    tools: 'IA de produto, Photoshop e identidade visual',
-    images: [
-      { src: 'assets/portfolio/triton-1.jpg', alt: 'Ficha técnica Triton TRI600A' },
-      { src: 'assets/portfolio/triton-2.jpg', alt: 'Ficha técnica Triton TRI860A' },
-      { src: 'assets/portfolio/triton-3.jpg', alt: 'Ficha técnica Triton TRI1100A' }
     ]
   },
   nectar: {
@@ -393,20 +405,24 @@ function initPortfolioCarousel(projectModal) {
 
   const maxScrollLeft = () => Math.max(0, viewport.scrollWidth - viewport.clientWidth);
 
-  const cardStep = () => {
-    const width = cards[0].getBoundingClientRect().width;
-    const gap = parseFloat(getComputedStyle(track).gap) || 20;
-    return width + gap;
-  };
+  // Offsets reais de cada card (o card em destaque é mais largo que os demais).
+  const cardOffset = (i) => cards[i].offsetLeft - cards[0].offsetLeft;
 
   const indexFromScroll = () => {
     const maxScroll = maxScrollLeft();
     const left = viewport.scrollLeft;
     if (maxScroll <= 1) return 0;
     if (left >= maxScroll - 4) return cards.length - 1;
-    const step = cardStep();
-    if (step <= 0) return 0;
-    return Math.min(cards.length - 1, Math.max(0, Math.round(left / step)));
+    let best = 0;
+    let bestDistance = Infinity;
+    cards.forEach((_, i) => {
+      const distance = Math.abs(cardOffset(i) - left);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        best = i;
+      }
+    });
+    return best;
   };
 
   const updateControls = () => {
@@ -423,7 +439,7 @@ function initPortfolioCarousel(projectModal) {
     const maxScroll = maxScrollLeft();
     const target = index >= cards.length - 1
       ? maxScroll
-      : Math.min(maxScroll, index * cardStep());
+      : Math.min(maxScroll, cardOffset(index));
 
     viewport.classList.add('is-jumping');
     viewport.scrollTo({ left: target, behavior: 'smooth' });
@@ -472,7 +488,7 @@ function initPortfolioCarousel(projectModal) {
     if (event.pointerType === 'mouse' && event.button !== 0) return;
     if (event.target.closest('.carousel-btn, .carousel-dot')) return;
     drag.moved = false;
-    if (event.target.closest('.project-card__cta')) return;
+    if (event.target.closest('.project-card__cta, .project-card__link')) return;
     drag.active = true;
     drag.pointerId = event.pointerId;
     drag.startX = event.clientX;
@@ -509,6 +525,7 @@ function initPortfolioCarousel(projectModal) {
   viewport.addEventListener('pointerup', (event) => {
     const wasMoved = endDrag(event);
     if (wasMoved || !projectModal) return;
+    if (event.target.closest('.project-card__link')) return;
     const card = event.target.closest('.project-card[data-project]');
     if (card) projectModal.open(card.dataset.project);
   });
@@ -534,6 +551,7 @@ function initProjectModal() {
   const thumbsEl = document.getElementById('projectModalThumbs');
   const countEl = document.getElementById('projectModalCount');
   const ctaEl = document.getElementById('projectModalCta');
+  const linkEl = document.getElementById('projectModalLink');
   const prevBtn = document.getElementById('projectModalPrev');
   const nextBtn = document.getElementById('projectModalNext');
   const gallery = modal?.querySelector('.project-modal__gallery');
@@ -547,6 +565,16 @@ function initProjectModal() {
 
   const renderFacts = (project) => {
     factsEl.innerHTML = '';
+    if (project.client) {
+      const fact = document.createElement('div');
+      fact.className = 'project-modal__fact';
+      const label = document.createElement('span');
+      label.textContent = 'Cliente';
+      const text = document.createElement('p');
+      text.textContent = project.client;
+      fact.append(label, text);
+      factsEl.appendChild(fact);
+    }
     if (project.deliverables?.length) {
       const fact = document.createElement('div');
       fact.className = 'project-modal__fact';
@@ -664,6 +692,17 @@ function initProjectModal() {
       ctaEl.href = whatsappHref(service);
     }
 
+    if (linkEl) {
+      if (project.url) {
+        linkEl.href = project.url;
+        linkEl.hidden = false;
+        linkEl.firstChild.textContent = `${project.urlLabel || 'Visitar site'} `;
+      } else {
+        linkEl.hidden = true;
+        linkEl.removeAttribute('href');
+      }
+    }
+
     modal.inert = false;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
@@ -685,12 +724,19 @@ function initProjectModal() {
   document.querySelectorAll('.project-card[data-project]').forEach((card) => {
     card.setAttribute('tabindex', '0');
     const openFromCard = () => open(card.dataset.project);
-    card.addEventListener('click', openFromCard);
+    card.addEventListener('click', (event) => {
+      if (event.target.closest('.project-card__link')) return;
+      openFromCard();
+    });
     card.querySelector('.project-card__cta')?.addEventListener('click', (event) => {
       event.stopPropagation();
       openFromCard();
     });
+    card.querySelector('.project-card__link')?.addEventListener('click', (event) => {
+      event.stopPropagation();
+    });
     card.addEventListener('keydown', (event) => {
+      if (event.target.closest('.project-card__link')) return;
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         openFromCard();
