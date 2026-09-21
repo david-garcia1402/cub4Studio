@@ -955,9 +955,10 @@ body.nav-open {
     z-index: 50;
     flex-direction: column;
     align-items: stretch;
-    justify-content: flex-end;
-    gap: 0.25rem;
-    padding: calc(var(--header-h) + env(safe-area-inset-top, 0px)) 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    justify-content: flex-start;
+    gap: 0.35rem;
+    overflow-y: auto;
+    padding: calc(var(--header-h) + 1.4rem + env(safe-area-inset-top, 0px)) 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
     background: rgba(12, 11, 9, 0.97);
     transform: translateY(-102%);
     visibility: hidden;
