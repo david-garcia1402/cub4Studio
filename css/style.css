@@ -1882,6 +1882,108 @@ body:has(.project-modal.is-open) .whatsapp-float {
 .creative--fit { --glow: rgba(255, 80, 120, 0.24); }
 .creative--conta { --glow: rgba(79, 124, 255, 0.24); }
 
+/* Campanhas: “Site para [NICHO]” — padrão de anúncio, pouca informação */
+.creative--ad {
+  align-items: center;
+  text-align: center;
+  gap: 0;
+  padding: 6.4cqw 7cqw 5.6cqw;
+  --glow: rgba(232, 88, 63, 0.42);
+  --glow-2: rgba(255, 148, 120, 0.16);
+}
+.creative--ad::before {
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.55), transparent 60%);
+}
+.ad-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.6cqw;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 3.2cqw;
+  letter-spacing: -0.01em;
+  color: #fff;
+}
+.ad-brand img { width: 6.2cqw; height: 6.2cqw; object-fit: contain; }
+.ad-brand b { color: var(--coral); font-weight: 700; }
+.ad-kicker {
+  margin: 7cqw 0 0;
+  font-size: 3.2cqw;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--coral-light);
+}
+.ad-niche {
+  margin: 1.4cqw 0 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 10.4cqw;
+  line-height: 0.94;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.ad-stage {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3.2cqw;
+  width: 100%;
+  min-height: 0;
+  margin-top: 2cqw;
+}
+.ad-mascot {
+  width: 36cqw;
+  height: 36cqw;
+  object-fit: contain;
+  filter: drop-shadow(0 2.4cqw 6cqw rgba(232, 88, 63, 0.5));
+}
+.ad-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.4cqw;
+}
+.ad-tiles span {
+  padding: 1.2cqw 2.8cqw;
+  border-radius: 999px;
+  border: 0.16cqw solid rgba(255, 255, 255, 0.14);
+  background: rgba(26, 17, 41, 0.7);
+  font-size: 2.1cqw;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #d8d0e4;
+}
+.ad-cta {
+  width: 100%;
+  margin: 2cqw 0 0;
+  padding: 3.1cqw 4cqw;
+  border-radius: 999px;
+  background: var(--gradient);
+  color: #1c0d06;
+  font-weight: 800;
+  font-size: 2.9cqw;
+  line-height: 1.15;
+  box-shadow: 0 1.4cqw 4cqw rgba(232, 88, 63, 0.4);
+}
+.ad-cta span { margin-left: 0.6cqw; }
+
+.creative-frame[data-format="feed"] .creative--ad { padding: 5.6cqw 6.4cqw 5cqw; }
+.creative-frame[data-format="feed"] .ad-kicker { margin-top: 4.4cqw; font-size: 2.8cqw; }
+.creative-frame[data-format="feed"] .ad-niche { font-size: 8.2cqw; }
+.creative-frame[data-format="feed"] .ad-mascot { width: 28cqw; height: 28cqw; }
+.creative-frame[data-format="feed"] .ad-tiles span { font-size: 1.85cqw; padding: 1cqw 2.2cqw; }
+.creative-frame[data-format="feed"] .ad-cta { font-size: 2.5cqw; padding: 2.5cqw 3.2cqw; }
+
+.creative-frame[data-format="stories"] .creative--ad { padding-top: 22cqw; padding-bottom: 30cqw; }
+.creative-frame[data-format="stories"] .ad-kicker { margin-top: 8cqw; }
+.creative-frame[data-format="stories"] .ad-niche { font-size: 11cqw; }
+.creative-frame[data-format="stories"] .ad-mascot { width: 40cqw; height: 40cqw; }
+
 /* Mockups */
 .mk-browser {
   position: absolute;
