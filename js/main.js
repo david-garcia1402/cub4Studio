@@ -331,8 +331,8 @@ const PORTFOLIO_PROJECTS = {
     description: 'Identidade em vinho, dourado e creme, com a foto real da Gabrieli no hero. O catálogo apresenta cada técnica — Volume Brasileiro, Fox Eyes, Egípcio 5D e outras — em um carrossel com as fotos dos procedimentos. A página ainda mostra o studio no Centro, depoimentos de clientes, dúvidas frequentes e o convite para agendar, já com a mensagem pronta no WhatsApp.',
     deliverables: ['Site institucional', 'Catálogo de cílios', 'Studio & depoimentos', 'Agendamento no WhatsApp'],
     tools: 'React, Vite, Tailwind CSS e Cloudflare',
-    url: 'https://gabilazzbeauty.com.br',
-    urlLabel: 'Visitar gabilazzbeauty.com.br',
+    url: 'https://gabilazzbeauty.com',
+    urlLabel: 'Visitar gabilazzbeauty.com',
     images: [
       { src: 'assets/portfolio/gabilazz-home.jpg', alt: 'Hero do site Gabrieli Lazzarotto com a chamada "Realçando a beleza que já existe em você"' },
       { src: 'assets/portfolio/gabilazz-catalogo.jpg', alt: 'Catálogo de extensão de cílios — Volume Brasileiro, Egípcio 5D e Fox Eyes' },
@@ -364,10 +364,12 @@ const PORTFOLIO_PROJECTS = {
   econoradar: {
     title: 'EconoRadar',
     tag: 'Criativos com IA',
-    lead: 'Campanha de lançamento para um app de inteligência financeira.',
+    lead: 'Campanha de lançamento para o app de inteligência financeira em econoradar.app.',
     description: 'Direção de arte em dark mode, mockups de produto e peças para redes. A ideia era transformar ruído de mercado em um radar único: indicadores, notícias e ativos com clareza visual — pronto para anúncio e perfil.',
     deliverables: ['Peças de campanha', 'Mockups de app', 'Direção de arte'],
     tools: 'IA generativa, Photoshop e direção de arte',
+    url: 'https://econoradar.app',
+    urlLabel: 'Visitar econoradar.app',
     images: [
       { src: 'assets/portfolio/econoradar-2.jpg', alt: 'Peça principal da campanha EconoRadar' },
       { src: 'assets/portfolio/econoradar-1.jpg', alt: 'Mockup do app EconoRadar com cards flutuantes' },
