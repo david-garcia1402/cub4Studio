@@ -720,6 +720,8 @@ main, header, footer { position: relative; z-index: 1; }
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  max-width: 100%;
+  min-height: 32px;
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-muted);
@@ -727,6 +729,7 @@ main, header, footer { position: relative; z-index: 1; }
   padding: 6px 10px;
   border: 1px solid var(--border);
   border-radius: 999px;
+  overflow-wrap: anywhere;
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 .project-card__link svg { width: 14px; height: 14px; }

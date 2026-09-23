@@ -323,6 +323,26 @@ const PORTFOLIO_PROJECTS = {
       { src: 'assets/portfolio/grupofvt-mobile.jpg', alt: 'Versão mobile da home do grupofvt.com' }
     ]
   },
+  gabilazz: {
+    title: 'Gabrieli Lazzarotto',
+    tag: 'Site & Catálogo',
+    client: 'Gabilazz Beauty · Jaraguá do Sul-SC',
+    lead: 'Site da lash designer Gabrieli Lazzarotto — catálogo de cílios, studio e agendamento no WhatsApp.',
+    description: 'Identidade em vinho, dourado e creme, com a foto real da Gabrieli no hero. O catálogo apresenta cada técnica — Volume Brasileiro, Fox Eyes, Egípcio 5D e outras — em um carrossel com as fotos dos procedimentos. A página ainda mostra o studio no Centro, depoimentos de clientes, dúvidas frequentes e o convite para agendar, já com a mensagem pronta no WhatsApp.',
+    deliverables: ['Site institucional', 'Catálogo de cílios', 'Studio & depoimentos', 'Agendamento no WhatsApp'],
+    tools: 'React, Vite, Tailwind CSS e Cloudflare',
+    url: 'https://gabilazzbeauty.com.br',
+    urlLabel: 'Visitar gabilazzbeauty.com.br',
+    images: [
+      { src: 'assets/portfolio/gabilazz-home.jpg', alt: 'Hero do site Gabrieli Lazzarotto com a chamada "Realçando a beleza que já existe em você"' },
+      { src: 'assets/portfolio/gabilazz-catalogo.jpg', alt: 'Catálogo de extensão de cílios — Volume Brasileiro, Egípcio 5D e Fox Eyes' },
+      { src: 'assets/portfolio/gabilazz-sobre.jpg', alt: 'Seção sobre a Gabrieli, com retrato e valores do atendimento' },
+      { src: 'assets/portfolio/gabilazz-studio.jpg', alt: 'Studio no Centro de Jaraguá do Sul, com endereço e formas de pagamento' },
+      { src: 'assets/portfolio/gabilazz-depoimentos.jpg', alt: 'Depoimentos de clientes e nota 5,0 no Google' },
+      { src: 'assets/portfolio/gabilazz-contato.jpg', alt: 'Chamada final para agendar o horário no WhatsApp' },
+      { src: 'assets/portfolio/gabilazz-mobile.jpg', alt: 'Versão mobile do site Gabrieli Lazzarotto' }
+    ]
+  },
   pipocrunch: {
     title: 'PipoCrunch',
     tag: 'Landing Page',
@@ -331,6 +351,8 @@ const PORTFOLIO_PROJECTS = {
     description: 'Identidade quente (bordô, dourado e creme) com tipografia editorial, cardápio por linha (gourmet, recheadas e petiscos), sabores da casa e uma seção de eventos. O destaque é o montador de pedido: o cliente escolhe linha, sabor e tamanho, vê o total e envia tudo formatado direto no WhatsApp da marca.',
     deliverables: ['Landing page', 'Cardápio & sabores', 'Montador de pedido', 'Integração com WhatsApp'],
     tools: 'Next.js, Tailwind CSS e Cloudflare Workers',
+    url: 'https://pipocrunch.com',
+    urlLabel: 'Visitar pipocrunch.com',
     images: [
       { src: 'assets/portfolio/pipocrunch-home.jpg', alt: 'Hero do site PipoCrunch com logo e chamada "Sinta o CRUNCH de verdade"' },
       { src: 'assets/portfolio/pipocrunch-cardapio.jpg', alt: 'Cardápio PipoCrunch — pipocas gourmet, recheadas e petiscos' },
