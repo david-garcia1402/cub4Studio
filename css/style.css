@@ -1350,7 +1350,7 @@ body:has(.lightbox.is-open) .whatsapp-float {
   border-bottom: 1px solid var(--border);
 }
 .cta-banner-inner { text-align: center; max-width: 640px; margin: 0 auto; }
-.cta-banner h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); color: var(--text); }
+.cta-banner h2 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); color: var(--text); margin-bottom: 32px; }
 .cta-banner p { font-size: 1.05rem; margin-bottom: 32px; }
 
 /* ---------- Contact ---------- */
