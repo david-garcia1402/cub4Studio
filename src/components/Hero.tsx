@@ -23,7 +23,7 @@ export function Hero() {
             <a href="#contato" className="btn btn--primary">
               Quero minha empresa na internet!
             </a>
-            <a className="btn btn--ghost" href={whatsappHref("Landing Page Conversora")} target="_blank" rel="noopener">
+            <a className="btn btn--ghost" href={whatsappHref({ kind: "orcamento" })} target="_blank" rel="noopener">
               <WhatsAppIcon />
               Orçamento no WhatsApp
             </a>

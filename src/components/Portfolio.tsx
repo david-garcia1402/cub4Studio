@@ -363,7 +363,7 @@ function ProjectModal({ project, onClose }: { project: PortfolioProject; onClose
               </div>
             </div>
             <div className="project-modal__actions">
-              <a className="btn btn--primary" href={whatsappHref(project.tag)} target="_blank" rel="noopener" onClick={() => trackLead("whatsapp", project.tag)}>
+              <a className="btn btn--primary" href={whatsappHref({ kind: "projeto", title: project.title, tag: project.tag })} target="_blank" rel="noopener" onClick={() => trackLead("whatsapp", project.title)}>
                 Quero um projeto assim
               </a>
               {project.url ? (
