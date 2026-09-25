@@ -59,7 +59,7 @@ export function whatsappMessage(intent: WhatsAppIntent = { kind: "contato" }) {
     const tag = clean(intent.tag);
     return lines(
       `Oi! Vi o projeto "${title}" no portfólio do cub4Studio e quero um trabalho parecido.`,
-      tag ? `Referência: ${tag}.` : "",
+      tag ? `Referência: ${tag}.` : false,
       "",
       "Meu nome:",
       "Meu negócio:",
@@ -83,8 +83,9 @@ export function whatsappMessage(intent: WhatsAppIntent = { kind: "contato" }) {
     ].filter(Boolean);
     return lines(
       intro,
-      email ? `E-mail: ${email}` : "",
-      project ? `Sobre o projeto: ${project}` : "",
+      email || project || prompts.length ? "" : false,
+      email ? `E-mail: ${email}` : false,
+      project ? `Sobre o projeto: ${project}` : false,
       prompts.length ? "" : false,
       ...prompts,
     );
