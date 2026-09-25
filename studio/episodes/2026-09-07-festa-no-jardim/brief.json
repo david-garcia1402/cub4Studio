@@ -1,0 +1,31 @@
+{
+  "episode_id": "001",
+  "slug": "festa-no-jardim",
+  "title_options": [
+    "Festa no jardim",
+    "Pipoca no girassol",
+    "Dança do jardim"
+  ],
+  "hashtags": ["viladopulo", "pipocaenino", "festanojardim", "shortsinfantil", "3d"],
+  "duration_sec": 24,
+  "hook_0_3s": "Pipoca aparece entre dois girassóis e já bate o pé no primeiro acorde.",
+  "beats": [
+    { "t": "0-3s", "visual": "Close 3/4 de Pipoca entre pétalas, cachecol voando", "music": "ukulele + palma" },
+    { "t": "3-12s", "visual": "Plano médio: Pipoca dança na fileira de girassóis", "music": "verso: Pipoca no jardim" },
+    { "t": "12-21s", "visual": "Nino entra em círculo e os dois pulam juntos", "music": "refrão Vila do Pulo" },
+    { "t": "21-24s", "visual": "Os dois no meio do girassol, freeze sorridente", "music": "último pulo" }
+  ],
+  "payoff": "Pipoca segura Nino no peito, os dois congelam no meio do jardim.",
+  "camera": "Close no hook, médio na fileira de girassóis, push-in no freeze. 9:16.",
+  "motion_prompt": "Same reference 3D golden marmoset with coral scarf dances between sunflowers, tiny green parakeet with blue beret flies a small circle and lands on his shoulder, they hop together, gentle camera push-in, locked faces, golden hour, no people, no text.",
+  "song_brief": {
+    "style": "kids dance, bright ukulele, handclaps, xylophone, PT-BR, 30s",
+    "bpm": 102,
+    "lyrics_pt": "Girassol, girassol, Pipoca pulou! / Nino veio também / Pulo, pulo, Vila do Pulo!"
+  },
+  "scene": "jardim",
+  "outfit": "canonico",
+  "characters": ["pipoca", "nino"],
+  "made_for_kids": true,
+  "language": "pt-BR"
+}

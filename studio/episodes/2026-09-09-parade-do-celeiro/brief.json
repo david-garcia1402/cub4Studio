@@ -1,0 +1,31 @@
+{
+  "episode_id": "003",
+  "slug": "parade-do-celeiro",
+  "title_options": [
+    "Parada do celeiro",
+    "Festa no celeiro",
+    "Pipoca na porta"
+  ],
+  "hashtags": ["viladopulo", "pipocaenino", "celeiro", "shortsinfantil", "3d"],
+  "duration_sec": 24,
+  "hook_0_3s": "Portas creme do celeiro coral se abrem e Pipoca já marcha no beat.",
+  "beats": [
+    { "t": "0-3s", "visual": "Porta abre, Pipoca de frente, cachecol ao vento", "music": "caixa suave + ukulele" },
+    { "t": "3-12s", "visual": "Marcha fofa até o pátio, feno ao fundo", "music": "verso da parada" },
+    { "t": "12-21s", "visual": "Nino voa em zigue-zague como confete vivo", "music": "refrão" },
+    { "t": "21-24s", "visual": "Os dois na rampa do celeiro, pose de parada", "music": "baque final" }
+  ],
+  "payoff": "Pipoca e Nino na rampa, peito estufado brincalhão, sem militarismo.",
+  "camera": "Frente da porta no hook, tracking curto na marcha, plano baixo no payoff.",
+  "motion_prompt": "Same reference 3D marmoset marches a cute kids parade out of a coral toy barn, tiny green parakeet zigzags like confetti, they freeze in a happy pose on the ramp, locked faces, golden hour, no people, no flags of real countries.",
+  "song_brief": {
+    "style": "kids parade, toy drums, ukulele, PT-BR, gentle not military",
+    "bpm": 104,
+    "lyrics_pt": "Abre o celeiro, vem o sol / Pipoca passa, Nino voa / Pulo, pulo, Vila do Pulo!"
+  },
+  "scene": "celeiro",
+  "outfit": "canonico",
+  "characters": ["pipoca", "nino"],
+  "made_for_kids": true,
+  "language": "pt-BR"
+}

@@ -1,0 +1,51 @@
+{
+  "name": "Vila do Pulo — radar semanal",
+  "meta": {
+    "description": "Toda segunda 9h: lê analytics/radar-input.json, roda pipeline/radar.py, cria card Notion. Não baixa vídeo alheio."
+  },
+  "nodes": [
+    {
+      "id": "cron",
+      "name": "Segunda 9h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "parameters": {
+        "rule": { "interval": [{ "field": "cronExpression", "expression": "0 9 * * 1" }] }
+      }
+    },
+    {
+      "id": "exec",
+      "name": "Roda radar.py",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [240, 0],
+      "parameters": {
+        "command": "python3 /workspace/studio/pipeline/radar.py /workspace/studio/analytics/radar-input.json -o /workspace/studio/analytics/last-radar.json"
+      }
+    },
+    {
+      "id": "notion",
+      "name": "Card radar",
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [480, 0],
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "create",
+        "databaseId": "={{$env.NOTION_DATABASE_ID}}",
+        "title": "Radar semanal",
+        "propertiesUi": {
+          "propertyValues": [
+            { "key": "Status|select", "selectValue": "Ideia" }
+          ]
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Segunda 9h": { "main": [[{ "node": "Roda radar.py", "type": "main", "index": 0 }]] },
+    "Roda radar.py": { "main": [[{ "node": "Card radar", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

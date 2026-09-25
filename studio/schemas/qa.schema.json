@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VilaDoPuloQA",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["episode_id", "reviewer", "watched_full", "passed", "checks", "decided_at"],
+  "properties": {
+    "episode_id": { "type": "string" },
+    "reviewer": { "type": "string", "minLength": 2 },
+    "watched_full": { "type": "boolean" },
+    "passed": { "type": "boolean" },
+    "decided_at": { "type": "string" },
+    "notes": { "type": "string" },
+    "checks": {
+      "type": "object",
+      "required": [
+        "same_character",
+        "no_human",
+        "no_third_party_ip",
+        "no_scare",
+        "honest_title",
+        "original_music",
+        "arc_clear",
+        "face_stable"
+      ],
+      "properties": {
+        "same_character": { "type": "boolean" },
+        "no_human": { "type": "boolean" },
+        "no_third_party_ip": { "type": "boolean" },
+        "no_scare": { "type": "boolean" },
+        "honest_title": { "type": "boolean" },
+        "original_music": { "type": "boolean" },
+        "arc_clear": { "type": "boolean" },
+        "face_stable": { "type": "boolean" }
+      }
+    }
+  }
+}

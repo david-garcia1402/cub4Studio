@@ -1,0 +1,31 @@
+{
+  "episode_id": "005",
+  "slug": "boa-noite-vila",
+  "title_options": [
+    "Boa noite, Vila",
+    "Pipoca dorme?",
+    "Dança da tarde"
+  ],
+  "hashtags": ["viladopulo", "pipocaenino", "boanoite", "shortsinfantil", "3d"],
+  "duration_sec": 28,
+  "hook_0_3s": "Varanda dourada, Pipoca acena e faz um passo lento no primeiro acorde.",
+  "beats": [
+    { "t": "0-3s", "visual": "Close do aceno, lanternas de papel ao fundo", "music": "ukulele mais lento" },
+    { "t": "3-12s", "visual": "Passo de dança suave na varanda, céu pêssego", "music": "verso boa noite" },
+    { "t": "12-22s", "visual": "Nino pousa e os dois embalam um no outro", "music": "refrão baixo" },
+    { "t": "22-28s", "visual": "Freeze: os dois sentados, olhos quase fechados, sorriso", "music": "fade quente" }
+  ],
+  "payoff": "Pipoca e Nino sentados na varanda, luz quente, sem escuridão, sem medo de dormir.",
+  "camera": "Close do aceno, médio da varanda, push-in muito lento no freeze. Sem noite preta.",
+  "motion_prompt": "Same reference 3D marmoset does a slow happy sway on a warm porch at golden hour, tiny green parakeet lands and they cuddle, lanterns glow, never dark, locked faces, gentle push-in, no people, no night-horror.",
+  "song_brief": {
+    "style": "kids lullaby-dance, soft ukulele, warm pads, PT-BR, still cheerful",
+    "bpm": 88,
+    "lyrics_pt": "Boa noite, Vila do Pulo / Pipoca abraça, Nino cola / Pulo baixinho, até amanhã!"
+  },
+  "scene": "varanda",
+  "outfit": "canonico",
+  "characters": ["pipoca", "nino"],
+  "made_for_kids": true,
+  "language": "pt-BR"
+}

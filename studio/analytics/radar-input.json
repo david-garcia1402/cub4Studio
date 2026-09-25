@@ -1,0 +1,19 @@
+{
+  "channels": [
+    {
+      "handle": "@Duck_Ai_Stuio",
+      "titles": [
+        "Cute Baby Dancing with Ducks",
+        "Magical Dancing Ducks and Adorable Boy in a Dreamy 3D Animation",
+        "Cute Ducklings Dancing in a Sunny Spring Garden",
+        "Joyful Dance Party with a Smiling Boy and Two Ducks",
+        "running tractor A Sunny Farm Adventure with Cheerful Ducks"
+      ]
+    }
+  ],
+  "keep_or_kill": [
+    { "format": "festa-jardim", "retention_pct": 0, "decision": "watch" },
+    { "format": "pulo-lagoa", "retention_pct": 0, "decision": "watch" },
+    { "format": "parada-celeiro", "retention_pct": 0, "decision": "watch" }
+  ]
+}

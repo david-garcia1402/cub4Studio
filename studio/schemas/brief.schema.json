@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cub4studio.local/studio/schemas/brief.schema.json",
+  "title": "VilaDoPuloBrief",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "episode_id",
+    "slug",
+    "title_options",
+    "hashtags",
+    "duration_sec",
+    "hook_0_3s",
+    "beats",
+    "payoff",
+    "camera",
+    "motion_prompt",
+    "song_brief",
+    "scene",
+    "outfit",
+    "characters",
+    "made_for_kids",
+    "language"
+  ],
+  "properties": {
+    "episode_id": { "type": "string", "pattern": "^[0-9]{3}$" },
+    "slug": { "type": "string", "pattern": "^[a-z0-9-]{3,48}$" },
+    "title_options": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 5,
+      "items": { "type": "string", "minLength": 4, "maxLength": 70 }
+    },
+    "hashtags": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 5,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+$" }
+    },
+    "duration_sec": { "type": "integer", "minimum": 15, "maximum": 40 },
+    "hook_0_3s": { "type": "string", "minLength": 12 },
+    "beats": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["t", "visual", "music"],
+        "properties": {
+          "t": { "type": "string", "pattern": "^[0-9]{1,2}-[0-9]{1,2}s$" },
+          "visual": { "type": "string", "minLength": 8 },
+          "music": { "type": "string", "minLength": 4 }
+        }
+      }
+    },
+    "payoff": { "type": "string", "minLength": 8 },
+    "camera": { "type": "string", "minLength": 8 },
+    "motion_prompt": { "type": "string", "minLength": 24 },
+    "song_brief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["style", "bpm", "lyrics_pt"],
+      "properties": {
+        "style": { "type": "string" },
+        "bpm": { "type": "integer", "minimum": 80, "maximum": 130 },
+        "lyrics_pt": { "type": "string", "minLength": 12 }
+      }
+    },
+    "scene": {
+      "type": "string",
+      "enum": ["jardim", "celeiro", "lagoa", "varanda", "trilha-frutas"]
+    },
+    "outfit": {
+      "type": "string",
+      "enum": ["canonico", "festa", "boa-noite"]
+    },
+    "characters": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "items": { "type": "string", "enum": ["pipoca", "nino"] }
+    },
+    "made_for_kids": { "type": "boolean", "const": true },
+    "language": { "type": "string", "const": "pt-BR" }
+  }
+}

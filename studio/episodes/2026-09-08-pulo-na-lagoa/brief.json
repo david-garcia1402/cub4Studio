@@ -1,0 +1,31 @@
+{
+  "episode_id": "002",
+  "slug": "pulo-na-lagoa",
+  "title_options": [
+    "Pulo na lagoa",
+    "Pipoca na pedra",
+    "Nino na água"
+  ],
+  "hashtags": ["viladopulo", "pipocaenino", "lagoa", "shortsinfantil", "3d"],
+  "duration_sec": 24,
+  "hook_0_3s": "Pipoca em uma pedra rasa da lagoa, já pulando no lugar sem cair na água.",
+  "beats": [
+    { "t": "0-3s", "visual": "Close dos pés de Pipoca na pedra + splash minúsculo", "music": "xilofone em gota" },
+    { "t": "3-12s", "visual": "Pipoca pula de pedra em pedra rasa, água no tornozelo", "music": "verso do pulo" },
+    { "t": "12-21s", "visual": "Nino voa rente à água e os dois fazem um pulo seco", "music": "refrão" },
+    { "t": "21-24s", "visual": "Os dois numa pedra, gotas congeladas no ar", "music": "último acorde" }
+  ],
+  "payoff": "Pipoca e Nino numa pedra, splash congelado, sorriso largo. Água nunca passa do tornozelo.",
+  "camera": "Hook nos pés, médio da lagoa rasa, orbit lento no payoff. Sem câmera dentro d'água.",
+  "motion_prompt": "Same reference 3D marmoset hops on shallow pond stones, tiny splashes only at the ankles, green parakeet skims above the water and they jump together, gentle orbit, locked faces, turquoise toy pond, no drowning, no people.",
+  "song_brief": {
+    "style": "kids dance, soft splash SFX, ukulele, PT-BR",
+    "bpm": 98,
+    "lyrics_pt": "Pulo na pedra, pulo na lagoa / Nino voa, Pipoca soa / Pulo, pulo, Vila do Pulo!"
+  },
+  "scene": "lagoa",
+  "outfit": "canonico",
+  "characters": ["pipoca", "nino"],
+  "made_for_kids": true,
+  "language": "pt-BR"
+}
