@@ -53,8 +53,9 @@ export function Portfolio() {
     };
 
     let drag = { active: false, moved: false, startX: 0, startScroll: 0, pointerId: -1 };
+    let suppressClickUntil = 0;
     const onDown = (event: PointerEvent) => {
-      if (event.pointerType === "mouse" && event.button !== 0) return;
+      if (event.pointerType !== "mouse" || event.button !== 0) return;
       const target = event.target as HTMLElement;
       if (target.closest(".project-card__link, .project-card__cta")) return;
       drag = { active: true, moved: false, startX: event.clientX, startScroll: viewport.scrollLeft, pointerId: event.pointerId };
@@ -73,7 +74,15 @@ export function Portfolio() {
       const moved = drag.moved;
       drag.active = false;
       viewport.classList.remove("is-dragging");
-      if (moved) goTo(indexFromScroll());
+      if (moved) {
+        suppressClickUntil = Date.now() + 400;
+        goTo(indexFromScroll());
+      }
+    };
+    const onClick = (event: Event) => {
+      if (Date.now() > suppressClickUntil) return;
+      event.preventDefault();
+      event.stopPropagation();
     };
 
     viewport.addEventListener("scroll", onScroll, { passive: true });
@@ -81,12 +90,14 @@ export function Portfolio() {
     viewport.addEventListener("pointermove", onMove);
     viewport.addEventListener("pointerup", onUp);
     viewport.addEventListener("pointercancel", onUp);
+    viewport.addEventListener("click", onClick, true);
     return () => {
       viewport.removeEventListener("scroll", onScroll);
       viewport.removeEventListener("pointerdown", onDown);
       viewport.removeEventListener("pointermove", onMove);
       viewport.removeEventListener("pointerup", onUp);
       viewport.removeEventListener("pointercancel", onUp);
+      viewport.removeEventListener("click", onClick, true);
     };
   }, []);
 
@@ -207,6 +218,8 @@ function ProjectModal({ project, onClose }: { project: PortfolioProject; onClose
   const [mediaIndex, setMediaIndex] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
   const closeBtn = useRef<HTMLButtonElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const swallowZoom = useRef(false);
 
   const media: Media[] = project.video
     ? [{ type: "video", src: project.video, alt: project.title }]
@@ -234,6 +247,39 @@ function ProjectModal({ project, onClose }: { project: PortfolioProject; onClose
     return () => document.removeEventListener("keydown", onKey);
   }, [project, lightbox, media.length, onClose]);
 
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage || media.length < 2 || current?.type !== "image") return;
+    let swipe = { active: false, pointerId: -1, startX: 0, startY: 0 };
+    const onDown = (event: PointerEvent) => {
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+      swipe = { active: true, pointerId: event.pointerId, startX: event.clientX, startY: event.clientY };
+    };
+    const onUp = (event: PointerEvent) => {
+      if (!swipe.active || event.pointerId !== swipe.pointerId) return;
+      swipe.active = false;
+      const dx = event.clientX - swipe.startX;
+      const dy = event.clientY - swipe.startY;
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+      swallowZoom.current = true;
+      window.setTimeout(() => {
+        swallowZoom.current = false;
+      }, 250);
+      setMediaIndex((value) => Math.max(0, Math.min(media.length - 1, value + (dx < 0 ? 1 : -1))));
+    };
+    const onCancel = () => {
+      swipe.active = false;
+    };
+    stage.addEventListener("pointerdown", onDown);
+    stage.addEventListener("pointerup", onUp);
+    stage.addEventListener("pointercancel", onCancel);
+    return () => {
+      stage.removeEventListener("pointerdown", onDown);
+      stage.removeEventListener("pointerup", onUp);
+      stage.removeEventListener("pointercancel", onCancel);
+    };
+  }, [current?.type, media.length]);
+
   if (!current) return null;
 
   return (
@@ -245,11 +291,19 @@ function ProjectModal({ project, onClose }: { project: PortfolioProject; onClose
             <CloseIcon />
           </button>
           <div className={`project-modal__gallery${images.length > 1 && !project.video ? " has-thumbs" : ""}`}>
-            <div className={`project-modal__stage${current.type === "image" ? " is-zoomable" : ""}`}>
+            <div ref={stageRef} className={`project-modal__stage${current.type === "image" ? " is-zoomable" : ""}`}>
               {current.type === "video" ? (
                 <iframe src={current.src} title={current.alt} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen />
               ) : (
-                <button type="button" className="project-modal__zoom" aria-label="Ampliar imagem em tela cheia" onClick={() => setLightbox(images.findIndex((item) => item.src === current.src))}>
+                <button
+                  type="button"
+                  className="project-modal__zoom"
+                  aria-label="Ampliar imagem em tela cheia"
+                  onClick={() => {
+                    if (swallowZoom.current) return;
+                    setLightbox(images.findIndex((item) => item.src === current.src));
+                  }}
+                >
                   <img src={current.src} alt={current.alt} draggable={false} />
                   <span className="project-modal__zoom-badge" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none">
@@ -344,6 +398,13 @@ function Lightbox({
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(start);
+  const [hint, setHint] = useState(() => Boolean(window.matchMedia?.("(pointer: coarse)").matches && images.length > 1));
+  const indexRef = useRef(start);
+  const programmatic = useRef(false);
+
+  useEffect(() => {
+    indexRef.current = index;
+  }, [index]);
 
   useEffect(() => {
     const previous = document.body.style.overflow;
@@ -351,9 +412,14 @@ function Lightbox({
     const track = trackRef.current;
     const jump = () => {
       if (!track) return;
-      track.scrollTo({ left: index * track.clientWidth, behavior: "auto" });
+      programmatic.current = true;
+      track.scrollTo({ left: indexRef.current * track.clientWidth, behavior: "auto" });
+      window.setTimeout(() => {
+        programmatic.current = false;
+      }, 80);
     };
     jump();
+    const hintTimer = window.setTimeout(() => setHint(false), 2400);
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
       if (event.key === "ArrowLeft") setIndex((value) => Math.max(0, value - 1));
@@ -365,15 +431,76 @@ function Lightbox({
       document.body.style.overflow = previous;
       document.removeEventListener("keydown", onKey);
       window.removeEventListener("resize", jump);
+      window.clearTimeout(hintTimer);
     };
-  }, [images.length, index, onClose]);
+  }, [images.length, onClose]);
 
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
+    programmatic.current = true;
     track.scrollTo({ left: index * (track.clientWidth || 1), behavior: "smooth" });
+    const timer = window.setTimeout(() => {
+      programmatic.current = false;
+    }, 420);
     onChange(index);
+    return () => window.clearTimeout(timer);
   }, [index, onChange]);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    let settle = 0;
+    const onScroll = () => {
+      if (programmatic.current) return;
+      window.clearTimeout(settle);
+      settle = window.setTimeout(() => {
+        const next = Math.max(0, Math.min(images.length - 1, Math.round(track.scrollLeft / (track.clientWidth || 1))));
+        setIndex((value) => (value === next ? value : next));
+      }, 60);
+    };
+    let drag = { active: false, moved: false, pointerId: -1, startX: 0, startScroll: 0 };
+    const onDown = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" || event.button !== 0) return;
+      drag = { active: true, moved: false, pointerId: event.pointerId, startX: event.clientX, startScroll: track.scrollLeft };
+    };
+    const onMove = (event: PointerEvent) => {
+      if (!drag.active || event.pointerId !== drag.pointerId) return;
+      const delta = event.clientX - drag.startX;
+      if (!drag.moved && Math.abs(delta) < 10) return;
+      drag.moved = true;
+      track.classList.add("is-dragging");
+      programmatic.current = true;
+      track.scrollLeft = drag.startScroll - delta;
+    };
+    const onUp = (event: PointerEvent) => {
+      if (!drag.active || event.pointerId !== drag.pointerId) return;
+      const moved = drag.moved;
+      const delta = event.clientX - drag.startX;
+      drag.active = false;
+      track.classList.remove("is-dragging");
+      programmatic.current = false;
+      if (!moved) return;
+      const direction = Math.abs(delta) > 40 ? (delta < 0 ? 1 : -1) : 0;
+      const next = direction
+        ? Math.max(0, Math.min(images.length - 1, indexRef.current + direction))
+        : Math.max(0, Math.min(images.length - 1, Math.round(track.scrollLeft / (track.clientWidth || 1))));
+      setIndex(next);
+    };
+    track.addEventListener("scroll", onScroll, { passive: true });
+    track.addEventListener("pointerdown", onDown);
+    track.addEventListener("pointermove", onMove);
+    track.addEventListener("pointerup", onUp);
+    track.addEventListener("pointercancel", onUp);
+    return () => {
+      window.clearTimeout(settle);
+      track.removeEventListener("scroll", onScroll);
+      track.removeEventListener("pointerdown", onDown);
+      track.removeEventListener("pointermove", onMove);
+      track.removeEventListener("pointerup", onUp);
+      track.removeEventListener("pointercancel", onUp);
+    };
+  }, [images.length]);
 
   return (
     <div className="lightbox is-open" aria-hidden="false">
@@ -388,7 +515,15 @@ function Lightbox({
         </div>
         <div className="lightbox__track" ref={trackRef} tabIndex={0} aria-live="polite">
           {images.map((image, i) => (
-            <div key={image.src} className={`lightbox__slide${i === index ? " is-active" : ""}`} role="group" aria-label={`Imagem ${i + 1} de ${images.length}`}>
+            <div
+              key={image.src}
+              className={`lightbox__slide${i === index ? " is-active" : ""}`}
+              role="group"
+              aria-label={`Imagem ${i + 1} de ${images.length}`}
+              onClick={(event) => {
+                if (event.target === event.currentTarget) onClose();
+              }}
+            >
               <img src={image.src} alt={image.alt} draggable={false} />
             </div>
           ))}
@@ -403,8 +538,26 @@ function Lightbox({
             </button>
           </>
         ) : null}
+        <p className={`lightbox__hint${hint ? " is-visible" : ""}`} aria-hidden="true">
+          Arraste para o lado para ver mais
+        </p>
         <div className="lightbox__footer">
           <p className="lightbox__caption">{images[index]?.alt}</p>
+          {images.length > 1 ? (
+            <div className="lightbox__dots" role="tablist" aria-label="Imagens do projeto">
+              {images.map((image, i) => (
+                <button
+                  key={image.src}
+                  type="button"
+                  className={`lightbox__dot${i === index ? " is-active" : ""}`}
+                  role="tab"
+                  aria-selected={i === index}
+                  aria-label={`Ir para a imagem ${i + 1}`}
+                  onClick={() => setIndex(i)}
+                />
+              ))}
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
