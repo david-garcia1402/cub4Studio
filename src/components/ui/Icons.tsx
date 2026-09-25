@@ -1,3 +1,5 @@
+import type { MouseEvent } from "react";
+
 export function WhatsAppIcon({ size = 18 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -43,8 +45,19 @@ export function CloseIcon() {
 }
 
 export function Brand({ href = "#topo" }: { href?: string }) {
+  function goToTop(event: MouseEvent<HTMLAnchorElement>) {
+    if (href !== "#topo") return;
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+    if (window.location.hash !== "#topo") {
+      history.pushState(null, "", "#topo");
+    }
+  }
+
   return (
-    <a href={href} className="brand" aria-label="cub4Studio - início">
+    <a href={href} className="brand" aria-label="cub4Studio - início" onClick={goToTop}>
       <img src="/img/icon-transparent.png" alt="" className="brand-icon" />
       <span className="brand-wordmark">
         cub<span className="brand-accent">4</span>Studio
