@@ -1,0 +1,20 @@
+{
+  "name": "cub4studio",
+  "version": "1.0.0",
+  "description": "cub4Studio - Estúdio de Criação com Inteligência Artificial",
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 8080",
+    "build": "echo 'Static site - no build required'"
+  },
+  "keywords": [
+    "landing-page",
+    "ai",
+    "studio"
+  ],
+  "author": "cub4Studio",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
