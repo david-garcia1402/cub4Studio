@@ -12,6 +12,9 @@ function orcamentoEnviado() {
 
 export function Contact() {
   const [service, setService] = useState<string>(serviceOptions[0]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [project, setProject] = useState("");
   const [note, setNote] = useState<ReactNode>(() =>
     orcamentoEnviado() ? "Orçamento enviado! Vamos responder em breve no e-mail informado." : "",
   );
@@ -45,7 +48,7 @@ export function Contact() {
     setTone("");
 
     const mailtoHref = `mailto:${site.email}?subject=${encodeURIComponent(`Orçamento cub4Studio — ${servico || "Contato"}`)}&body=${encodeURIComponent(`Nome: ${nome}\nE-mail: ${email}\nServiço: ${servico}\n\n${projeto}`)}`;
-    const zap = whatsappHref(servico);
+    const zap = whatsappHref({ kind: "servico", service: servico, name: nome, email, project: projeto });
     const showError = () => {
       setTone("error");
       setNote(
@@ -88,6 +91,9 @@ export function Contact() {
 
       if (success) {
         form.reset();
+        setName("");
+        setEmail("");
+        setProject("");
         setService(serviceOptions[0]);
         trackLead("form", servico);
         setTone("success");
@@ -128,7 +134,7 @@ export function Contact() {
           <h2 className="section-title">Vamos criar juntos?</h2>
           <p className="section-desc">Pelo formulário ou direto no WhatsApp — o zap é o caminho mais rápido para o orçamento.</p>
           <div className="contact-info">
-            <a className="contact-info-item" href={whatsappHref(service)} target="_blank" rel="noopener">
+            <a className="contact-info-item" href={whatsappHref({ kind: "servico", service, name, email, project })} target="_blank" rel="noopener">
               <WhatsAppIcon size={20} />
               {site.whatsappDisplay}
             </a>
@@ -150,11 +156,11 @@ export function Contact() {
             <input type="text" name="_honey" className="form-honeypot" tabIndex={-1} autoComplete="off" aria-hidden="true" />
             <div className="form-row">
               <label htmlFor="nome">Nome</label>
-              <input type="text" id="nome" name="Nome" placeholder="Seu nome" required autoComplete="name" />
+              <input type="text" id="nome" name="Nome" placeholder="Seu nome" required autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} />
             </div>
             <div className="form-row">
               <label htmlFor="email">E-mail</label>
-              <input type="email" id="email" name="email" placeholder="voce@email.com" required autoComplete="email" />
+              <input type="email" id="email" name="email" placeholder="voce@email.com" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} />
             </div>
             <div className="form-row">
               <label htmlFor="servico">Serviço de interesse</label>
@@ -168,12 +174,12 @@ export function Contact() {
             </div>
             <div className="form-row">
               <label htmlFor="mensagem">Conte sobre seu projeto</label>
-              <textarea id="mensagem" name="Projeto" rows={4} placeholder="Descreva sua ideia, marca e objetivo..." required />
+              <textarea id="mensagem" name="Projeto" rows={4} placeholder="Descreva sua ideia, marca e objetivo..." required value={project} onChange={(event) => setProject(event.target.value)} />
             </div>
             <button type="submit" className="btn btn--primary btn--block" disabled={busy}>
               {busy ? "Enviando orçamento..." : "Solicitar orçamento"}
             </button>
-            <a className="btn btn--ghost btn--block" href={whatsappHref(service)} target="_blank" rel="noopener" onClick={() => trackLead("whatsapp", service)}>
+            <a className="btn btn--ghost btn--block" href={whatsappHref({ kind: "servico", service, name, email, project })} target="_blank" rel="noopener" onClick={() => trackLead("whatsapp", service)}>
               <WhatsAppIcon />
               Prefiro falar no WhatsApp
             </a>

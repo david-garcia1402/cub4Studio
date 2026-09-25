@@ -18,7 +18,7 @@ export function Footer() {
           ))}
         </nav>
         <div className="footer-socials">
-          <a className="footer-social" href={whatsappHref()} target="_blank" rel="noopener" aria-label="WhatsApp do cub4Studio">
+          <a className="footer-social" href={whatsappHref({ kind: "contato" })} target="_blank" rel="noopener" aria-label="WhatsApp do cub4Studio">
             <WhatsAppIcon size={22} />
           </a>
           <a href={site.instagram} target="_blank" rel="noopener" className="footer-social" aria-label="Instagram do cub4Studio">
