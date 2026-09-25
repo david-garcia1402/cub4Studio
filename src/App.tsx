@@ -4,6 +4,7 @@ import { Contact } from "./components/Contact";
 import { Cta } from "./components/Cta";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
+import { WhatsAppFloat } from "./components/WhatsAppFloat";
 import { Hero } from "./components/Hero";
 import { Marquee } from "./components/Marquee";
 import { Portfolio } from "./components/Portfolio";
@@ -33,6 +34,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <WhatsAppFloat />
     </>
   );
 }
