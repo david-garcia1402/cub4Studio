@@ -2,13 +2,32 @@
   "name": "cub4studio",
   "private": true,
   "version": "1.0.0",
-  "description": "Site institucional estático do cub4Studio. O index.html é o mesmo publicado na Vercel.",
+  "description": "Site institucional do cub4Studio — landing pages, criativos e vídeos com IA.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "dev": "serve . -l 8080",
-    "start": "serve . -l 8080",
-    "preview": "serve . -l 8080"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview --host",
+    "deploy:workers": "npm run build && npx wrangler deploy"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
-    "serve": "^14.2.5"
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "wrangler": "^4.136.3"
   }
 }

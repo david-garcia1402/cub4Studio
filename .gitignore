@@ -1,7 +1,8 @@
 .DS_Store
 node_modules/
+dist/
+dist-ssr/
 *.log
 .env
-dist/
-out/
-.next/
+*.local
+.wrangler/
