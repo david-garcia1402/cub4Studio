@@ -1507,6 +1507,333 @@ body:has(.project-modal.is-open) .whatsapp-float {
   transform: translateY(0);
 }
 
+/* ---------- Campanha (protótipo de anúncio 9:16) ---------- */
+
+.campaign {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px 16px calc(24px + env(safe-area-inset-bottom, 0px));
+  background:
+    radial-gradient(520px 320px at 50% 0%, rgba(232, 88, 63, 0.18), transparent 70%),
+    var(--bg);
+}
+
+.campaign-note {
+  max-width: 420px;
+  margin: 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.campaign-phone {
+  width: min(420px, 100%);
+  height: min(860px, calc(100dvh - 120px));
+  aspect-ratio: 9 / 16;
+  background: #09060f;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  position: relative;
+}
+
+.campaign-story {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 14px 0;
+  background:
+    radial-gradient(280px 220px at 50% 18%, rgba(232, 88, 63, 0.22), transparent 70%),
+    linear-gradient(180deg, #140b1c 0%, #09060f 42%, #09060f 100%);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    radial-gradient(280px 220px at 50% 18%, rgba(232, 88, 63, 0.22), transparent 70%),
+    linear-gradient(180deg, #140b1c 0%, #09060f 42%, #09060f 100%);
+  background-size: 28px 28px, 28px 28px, auto, auto;
+}
+
+.campaign-bars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+.campaign-bars span {
+  flex: 1;
+  height: 3px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.campaign-bars span.is-on { background: #fff; }
+
+.campaign-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.campaign-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+.campaign-brand img { width: 34px; height: 34px; }
+.campaign-brand span {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+.campaign-brand span span { color: var(--coral); }
+.campaign-count {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+}
+
+.campaign-copy { margin-bottom: 8px; }
+.campaign-kicker {
+  margin: 0 0 2px;
+  color: var(--coral-light);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: clamp(0.78rem, 2.4vw, 0.92rem);
+}
+.campaign-copy h1 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.85rem, 9vw, 2.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.campaign-rowhead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 2px;
+}
+.campaign-rowhead p {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--coral-light);
+  font-weight: 700;
+}
+.campaign-rownav { display: flex; gap: 6px; }
+.campaign-rownav button,
+.campaign-switch button {
+  width: 44px;
+  height: 32px;
+  min-height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.campaign-rownav button svg { width: 16px; height: 16px; }
+.campaign-rownav button:active { background: rgba(255, 255, 255, 0.1); }
+
+.campaign-scroller {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 2px;
+  padding: 8px 2px 4px;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+  scrollbar-width: none;
+}
+.campaign-scroller::-webkit-scrollbar { display: none; }
+
+.campaign-browser {
+  flex: 0 0 78%;
+  scroll-snap-align: start;
+  background: #120c1c;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+.campaign-browser__bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 8px;
+  background: #1c1428;
+}
+.campaign-browser__bar span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+}
+.campaign-browser__bar span:first-child { background: #e8583f; }
+.campaign-browser__bar small {
+  margin-left: 6px;
+  color: var(--text-dim);
+  font-size: 0.68rem;
+}
+.campaign-browser img {
+  width: 100%;
+  height: clamp(84px, 14dvh, 132px);
+  object-fit: cover;
+  object-position: top;
+}
+.campaign-browser p {
+  margin: 0;
+  padding: 7px 10px 8px;
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.campaign-sites,
+.campaign-photos { min-height: 0; }
+.campaign-photos { margin-top: 4px; }
+.campaign-scroller--photos { padding-bottom: 2px; }
+.campaign-scroller--photos figure {
+  flex: 0 0 34%;
+  margin: 0;
+  scroll-snap-align: start;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.campaign-scroller--photos img {
+  width: 100%;
+  height: clamp(64px, 9.5dvh, 92px);
+  object-fit: cover;
+  object-position: center;
+}
+
+.campaign-foot {
+  margin-top: auto;
+  padding-top: 8px;
+  flex-shrink: 0;
+}
+.campaign-chips {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+}
+.campaign-chips li {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.campaign-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: var(--gradient);
+  color: #1c0d06;
+  font-weight: 800;
+  font-size: 0.95rem;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(232, 88, 63, 0.35);
+  -webkit-tap-highlight-color: transparent;
+}
+.campaign-caption {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+.campaign-dots {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+.campaign-dots button {
+  width: 44px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.campaign-dots button::before {
+  content: "";
+  display: block;
+  width: 18px;
+  height: 4px;
+  margin: 0 auto;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.22);
+}
+.campaign-dots button[aria-selected="true"]::before {
+  background: var(--coral-light);
+  width: 26px;
+}
+
+/* Faixa que o Instagram cobre com o botão do anúncio. O CTA fica acima dela. */
+.campaign-unsafe {
+  flex: 0 0 auto;
+  height: clamp(88px, 13dvh, 120px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+}
+.campaign-unsafe span {
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.28);
+}
+
+.campaign-switch {
+  display: flex;
+  gap: 8px;
+}
+.campaign-switch button {
+  width: auto;
+  height: 44px;
+  padding: 0 16px;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+.campaign-switch button:disabled { opacity: 0.35; cursor: default; }
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 960px) {
@@ -1669,4 +1996,20 @@ body:has(.project-modal.is-open) .whatsapp-float {
   .lightbox__nav--next { right: 8px; }
   .lightbox__count { font-size: 0.72rem; }
   .lightbox__caption { font-size: 0.8rem; }
+
+  .campaign { padding: 0; min-height: 100dvh; }
+  .campaign-note,
+  .campaign-switch { display: none; }
+  .campaign-phone {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+  }
+  .campaign-cta { white-space: normal; }
+  .campaign-scroller--photos figure { flex-basis: 30%; }
+  .campaign-story { padding-top: calc(10px + env(safe-area-inset-top, 0px)); }
 }

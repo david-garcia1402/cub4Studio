@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { About } from "./components/About";
+import { Campaign } from "./components/Campaign";
 import { Contact } from "./components/Contact";
 import { Cta } from "./components/Cta";
 import { Footer } from "./components/Footer";
@@ -11,10 +12,26 @@ import { Process } from "./components/Process";
 import { Services } from "./components/Services";
 import { initAnalytics } from "./lib/analytics";
 
+function isCampaignView() {
+  const { hash, pathname, search } = window.location;
+  return hash === "#campanha" || pathname.replace(/\/$/, "").endsWith("/campanha") || new URLSearchParams(search).has("campanha");
+}
+
 export default function App() {
+  const [campaign, setCampaign] = useState(isCampaignView);
+
   useEffect(() => {
     initAnalytics();
+    const sync = () => setCampaign(isCampaignView());
+    window.addEventListener("hashchange", sync);
+    window.addEventListener("popstate", sync);
+    return () => {
+      window.removeEventListener("hashchange", sync);
+      window.removeEventListener("popstate", sync);
+    };
   }, []);
+
+  if (campaign) return <Campaign />;
 
   return (
     <>
