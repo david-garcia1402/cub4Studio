@@ -30,7 +30,7 @@ src/
 public/           # favicon, logo e prints do portfólio
 ```
 
-O portfólio publicado hoje: Grupo FVT, Gabrieli Lazzarotto, PipoCrunch, EconoRadar, Mel & Brasa, Néctar Atelier e The Lake Nyos Mystery. Para incluir um projeto, edite `src/data/portfolio.ts` e coloque as imagens em `public/portfolio/`.
+O portfólio publicado hoje: Grupo FVT, Gabrieli Lazzarotto, PipoCrunch, Guacamole Cocina Mexicana, The Raven, EconoRadar, Mel & Brasa, Néctar Atelier e The Lake Nyos Mystery. Para incluir um projeto, edite `src/data/portfolio.ts` e coloque as imagens em `public/portfolio/`.
 
 ## Contato
 

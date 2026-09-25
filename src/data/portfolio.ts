@@ -106,6 +106,42 @@ export const projects: PortfolioProject[] = [
     ],
   },
   {
+    id: "guacamole",
+    title: "Guacamole Cocina Mexicana",
+    cardTitle: "Guacamole Cocina",
+    tag: "Site & Reservas",
+    client: "Guacamole Cocina Mexicana · Petrópolis, Porto Alegre-RS",
+    summary: "Site do restaurante mexicano em Petrópolis — rodízio, cardápio e reserva direto no WhatsApp.",
+    lead: "Site de conversão do restaurante mexicano — rodízio, cardápio e reserva no WhatsApp.",
+    description:
+      "Página pensada para a unidade de Petrópolis: hero com a identidade da casa, destaques de rodízio e happy hour, cardápio de tacos, burritos e quesadillas, e o caminho curto até a reserva. O visitante sai com mesa marcada ou pedido a caminho, sem formulário no meio.",
+    deliverables: ["Site institucional", "Cardápio", "Reservas no WhatsApp", "Localização"],
+    tools: "Next.js, React e Tailwind CSS",
+    images: [
+      { src: "/portfolio/guacamole-home.jpg", alt: "Hero do Guacamole Cocina Mexicana" },
+      { src: "/portfolio/guacamole-mobile.jpg", alt: "Versão mobile do site Guacamole Cocina Mexicana" },
+    ],
+  },
+  {
+    id: "raven",
+    title: "The Raven",
+    cardTitle: "The Raven",
+    tag: "Site & Reservas",
+    client: "The Raven · Cidade Baixa, Porto Alegre-RS",
+    summary: "Site do restaurante mediterrâneo na Cidade Baixa — cardápio, galeria, avaliações e reserva de mesa.",
+    lead: "Site do restaurante de alta gastronomia mediterrânea, com cardápio, galeria e reserva.",
+    description:
+      "Identidade escura com dourado, tipografia editorial e a atmosfera do mezanino na Cidade Baixa. A página reúne cardápio, galeria, avaliações do Google e um pedido de reserva que abre direto no WhatsApp — no desktop e no celular.",
+    deliverables: ["Site institucional", "Cardápio", "Galeria", "Reserva no WhatsApp"],
+    tools: "Next.js, React e Tailwind CSS",
+    images: [
+      { src: "/portfolio/raven-home.jpg", alt: "Hero do The Raven na Cidade Baixa" },
+      { src: "/portfolio/raven-cardapio.jpg", alt: "Cardápio do The Raven" },
+      { src: "/portfolio/raven-galeria.jpg", alt: "Galeria do The Raven" },
+      { src: "/portfolio/raven-mobile.jpg", alt: "Versão mobile do site The Raven" },
+    ],
+  },
+  {
     id: "econoradar",
     title: "EconoRadar",
     cardTitle: "EconoRadar",
