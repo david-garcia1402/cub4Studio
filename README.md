@@ -20,6 +20,13 @@ cub4studio/
 │   └── style.css       # Design system (cores, tipografia, componentes, responsividade)
 ├── js/
 │   └── main.js         # Menu mobile, carrossel, modal de projeto, lightbox com swipe e formulário de contato
+├── package.json        # npm estático: serve o index.html (o mesmo publicado na Vercel)
+├── vercel.json         # publica a raiz estática, sem build
+├── gabilazzSite/       # fonte de gabilazzbeauty.com (Vite + React, estático)
+├── pipocrunchSite/     # fonte de pipocrunch.com (Next.js com export estático)
+├── flowETritomSite/    # fonte de grupofvt.com (Vite + React, estático)
+├── guacamoleSite/      # preview Guacamole Cocina Mexicana
+├── ravenSite/          # preview The Raven
 ├── assets/
 │   └── img/
 │       ├── icon-transparent.png    # Ícone do mascote (fundo transparente) — usado no header e footer
@@ -32,15 +39,17 @@ cub4studio/
 └── README.md
 ```
 
-Sem dependências, sem build step: HTML, CSS e JavaScript puros. Basta abrir `index.html` no navegador ou publicar em qualquer serviço de hospedagem estática (Vercel, Netlify, GitHub Pages, Cloudflare Pages etc.).
+O site do estúdio continua estático: o `index.html` da raiz é o arquivo publicado na Vercel. O `package.json` só sobe um servidor local, sem transformar a página em app React.
 
 ## Como visualizar localmente
 
 ```bash
-cd cub4studio
-python3 -m http.server 8080
+npm install
+npm run dev
 # depois acesse http://localhost:8080
 ```
+
+Os sites de cliente importados usam o mesmo contrato de scripts (`dev`, `build`, `preview`): Gabilazz e Flow & Triton em Vite, PipoCrunch em Next.js com `output: "export"`.
 
 ## Identidade visual
 

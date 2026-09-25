@@ -1,0 +1,14 @@
+{
+  "name": "cub4studio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Site institucional estático do cub4Studio. O index.html é o mesmo publicado na Vercel.",
+  "scripts": {
+    "dev": "serve . -l 8080",
+    "start": "serve . -l 8080",
+    "preview": "serve . -l 8080"
+  },
+  "devDependencies": {
+    "serve": "^14.2.5"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Gabrieli Lazzarotto · Lash Designer",
+  "short_name": "Gabilazz Beauty",
+  "description": "Extensão de cílios personalizada em Jaraguá do Sul - SC.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbf7f3",
+  "theme_color": "#4a0f19",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
