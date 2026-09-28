@@ -44,7 +44,7 @@ export function CloseIcon() {
   );
 }
 
-export function Brand({ href = "#topo" }: { href?: string }) {
+export function Brand({ href = "#topo", label = "cub4Studio - início" }: { href?: string; label?: string }) {
   function goToTop(event: MouseEvent<HTMLAnchorElement>) {
     if (href !== "#topo") return;
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -57,7 +57,7 @@ export function Brand({ href = "#topo" }: { href?: string }) {
   }
 
   return (
-    <a href={href} className="brand" aria-label="cub4Studio - início" onClick={goToTop}>
+    <a href={href} className="brand" aria-label={label} onClick={goToTop}>
       <img src="/img/icon-transparent.png" alt="" className="brand-icon" />
       <span className="brand-wordmark">
         cub<span className="brand-accent">4</span>Studio

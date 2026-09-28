@@ -8,14 +8,14 @@ type Fbq = {
   version: string;
 };
 
-type AnalyticsWindow = Window & {
+export type AnalyticsWindow = Window & {
   dataLayer?: unknown[];
   gtag?: (...args: unknown[]) => void;
   fbq?: Fbq;
   _fbq?: Fbq;
 };
 
-export function initAnalytics() {
+export function initAnalytics({ metaPixel = site.metaPixel as string } = {}) {
   const w = window as AnalyticsWindow;
 
   if (site.ga4 && !w.gtag) {
@@ -31,7 +31,7 @@ export function initAnalytics() {
     w.gtag("config", site.ga4);
   }
 
-  if (!site.metaPixel || w.fbq) return;
+  if (!metaPixel || w.fbq) return;
 
   const fbq = function pixel(this: Fbq, ...args: unknown[]) {
     const api = pixel as Fbq;
@@ -47,6 +47,6 @@ export function initAnalytics() {
   script.async = true;
   script.src = "https://connect.facebook.net/en_US/fbevents.js";
   document.head.appendChild(script);
-  fbq("init", site.metaPixel);
+  fbq("init", metaPixel);
   fbq("track", "PageView");
 }
