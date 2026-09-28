@@ -50,6 +50,7 @@ export type SalesContent = {
     note: string;
     coverAlt: string;
     badge: string;
+    peek: string;
   };
   facts: { value: string; label: string }[];
   tracks: { tag: string; title: string; desc: string; note: string; items: Track[] };
@@ -111,7 +112,7 @@ export const ptBr: SalesContent = {
     eyebrow: "Guia prático em PDF · Edição 1.0",
     title: "Quer criar sites e materiais com IA para oferecer a clientes?",
     lead:
-      "O AI to Business é um guia em PDF que mostra como transformar o que você já consegue fazer com IA, como sites, criativos, vídeos e automações, em um serviço com escopo definido, preço de teste e uma demonstração para apresentar.",
+      "O AI to Business é um guia em PDF que mostra como transformar sites, criativos, vídeos e automações feitos com IA em um serviço com escopo, preço de teste e uma demonstração para apresentar.",
     bullets: [
       "Escolha uma entre 10 trilhas de serviço ou produto, com critério de pontuação.",
       "Monte uma oferta de uma página: entregáveis, prazo, revisões, exclusões e preço.",
@@ -121,6 +122,7 @@ export const ptBr: SalesContent = {
     note: "Você será direcionado ao checkout da Kiwify.",
     coverAlt: "Capa do guia AI to Business, edição em português do Brasil, da cub4Studio",
     badge: "PDF · 105 páginas · PT-BR",
+    peek: "Edição 1.0 · toque na capa para ver páginas reais",
   },
   facts: [
     { value: "105", label: "páginas em PDF" },
@@ -248,6 +250,7 @@ export const ptBr: SalesContent = {
       "Não é preciso programar nas trilhas iniciantes (sites, criativos e copy) se você usar um construtor visual. Com gerador de código por IA, é preciso ler e ajustar HTML simples.",
       "As trilhas intermediárias pedem mais ferramentas conectadas, testes e atenção a custos por uso.",
       "Nas trilhas avançadas (agentes, skills, software house e micro-SaaS), colocar em produção pede conhecimento técnico real ou um parceiro especializado.",
+      "O plano de 14 dias considera de 1 a 3 horas por dia.",
     ],
     notForTitle: "Não é para você se",
     notFor: [
@@ -351,7 +354,7 @@ export const en: SalesContent = {
     eyebrow: "Practical PDF guide · Edition 1.0",
     title: "Want to turn AI skills into services you can offer clients?",
     lead:
-      "AI to Business is a PDF guide that shows you how to turn what you can already make with AI, like websites, creative assets, videos, and automations, into a clearly scoped service with a test price and a demo you can show.",
+      "AI to Business is a PDF guide that shows you how to turn AI-made websites, creative assets, videos, and automations into a clearly scoped service with a test price and a demo you can show.",
     bullets: [
       "Pick one of 10 service or product tracks using a simple scoring method.",
       "Build a one-page offer: deliverables, timeline, revisions, exclusions, and price.",
@@ -361,6 +364,7 @@ export const en: SalesContent = {
     note: "You'll complete your purchase on Hotmart.",
     coverAlt: "Cover of the AI to Business guide, American English edition, by cub4Studio",
     badge: "PDF · 104 pages · EN-US",
+    peek: "Edition 1.0 · tap the cover to see real pages",
   },
   facts: [
     { value: "104", label: "PDF pages" },
@@ -488,6 +492,7 @@ export const en: SalesContent = {
       "No coding needed for the beginner tracks (websites, creative, and copy) if you use a visual builder. With an AI code generator, you'll need to read and tweak basic HTML.",
       "Intermediate tracks involve more connected tools, more testing, and attention to usage-based costs.",
       "For the advanced tracks (agents, skills, dev shop, and micro-SaaS), running in production takes real technical knowledge or a specialist partner.",
+      "The 14-day plan assumes 1 to 3 hours a day.",
     ],
     notForTitle: "It's not for you if",
     notFor: [

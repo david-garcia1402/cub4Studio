@@ -32,6 +32,17 @@ public/           # favicon, logo e prints do portfólio
 
 O portfólio publicado hoje: Grupo FVT, Gabrieli Lazzarotto, PipoCrunch, Guacamole Cocina Mexicana, The Raven, EconoRadar, Mel & Brasa, Néctar Atelier e The Lake Nyos Mystery. Para incluir um projeto, edite `src/data/portfolio.ts` e coloque as imagens em `public/portfolio/`.
 
+## Página de vendas — AI to Business
+
+Duas páginas fora da navegação do site (acesso só pela URL, com `noindex`):
+
+- `/pt-br/ai-to-business/` → checkout Kiwify (BRL)
+- `/en/ai-to-business/` → checkout Hotmart (USD)
+
+Cada rota é uma entrada do build (`pt-br/ai-to-business/index.html` e `en/ai-to-business/index.html`, registradas em `vite.config.ts`) e renderiza `src/sales/`. Checkouts, preços, moedas, pixels, suporte e garantia ficam em `src/sales/config.ts`; os textos dos dois idiomas, em `src/sales/content.ts`. Os CTAs repassam ao checkout só os parâmetros de atribuição aceitos por cada plataforma (`src`, `sck`, `utm_*` e, na Kiwify, `s1`–`s3`); dados pessoais da URL nunca são repassados.
+
+As prévias em `public/ai-to-business/` são páginas avulsas exportadas do PDF (página inteira para o lightbox e um recorte legível para os cards). O PDF completo não deve entrar em `public/` nem no repositório.
+
 ## Contato
 
 Orçamentos vão para `cub4studio@gmail.com` via FormSubmit. O WhatsApp `(47) 99994-0399` é o CTA principal. GA4 e Meta Pixel ficam opcionais em `src/data/site.ts` (`ga4` e `metaPixel`). A hospedagem do site é Cloudflare Workers.

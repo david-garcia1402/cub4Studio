@@ -12,7 +12,11 @@ export function buildCheckoutUrl(base: string, allowed: readonly string[], searc
   return url.toString();
 }
 
+let viewTracked = false;
+
 export function initSalesTracking(content: SalesContent) {
+  if (viewTracked) return;
+  viewTracked = true;
   initAnalytics({ metaPixel: content.pixelId });
   const w = window as AnalyticsWindow;
   const item = { item_id: `ai-to-business-${content.locale}`, item_name: content.offer.title, price: content.price };

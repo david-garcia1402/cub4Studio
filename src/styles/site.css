@@ -1516,6 +1516,8 @@ body:has(.project-modal.is-open) .whatsapp-float {
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 
+.sales-page { --text-dim: #9d92b0; }
+
 .sp-skip {
   position: absolute;
   top: 8px;
@@ -1623,6 +1625,22 @@ a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06
 }
 
 .sp-hero__visual { position: relative; display: flex; justify-content: center; }
+.sp-peek { display: none; }
+.sp-peek__cover {
+  flex: 0 0 auto;
+  width: 76px;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 6px;
+  cursor: zoom-in;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  -webkit-tap-highlight-color: transparent;
+}
+.sp-peek__cover img { width: 100%; height: auto; aspect-ratio: 480 / 723; border-radius: 6px; }
+.sp-peek__text { margin: 0; display: flex; flex-direction: column; gap: 4px; font-size: 0.86rem; line-height: 1.4; }
+.sp-peek__text strong { color: var(--text); font-size: 0.92rem; }
+
 .sp-cover {
   display: block;
   width: min(100%, 400px);
@@ -1960,7 +1978,9 @@ a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06
   margin: 0 auto;
   object-fit: initial;
 }
-.lightbox.is-zoomed .lightbox__hint { display: none; }
+.lightbox.is-zoomed .lightbox__hint,
+.lightbox.is-zoomed .lightbox__footer { display: none; }
+.lightbox.is-zoomed .lightbox__slide.is-active { padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
 
 /* ---------- Responsive ---------- */
 
@@ -1983,7 +2003,17 @@ a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06
   /* Página de vendas */
   .sp-hero__grid { grid-template-columns: 1fr; gap: 40px; }
   .sp-hero__copy { max-width: 680px; }
-  .sp-cover { width: min(100%, 300px); }
+  .sp-hero__visual { display: none; }
+  .sp-peek {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 0 24px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03);
+  }
   .sp-receive,
   .sp-audience { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sp-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -2172,14 +2202,15 @@ a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06
 
   /* Página de vendas */
   .sp-hero { padding: 36px 0 44px; }
-  .sp-hero .eyebrow { font-size: 0.74rem; margin-bottom: 16px; }
+  .sp-hero .eyebrow { display: none; }
+  .sp-peek__cover { width: 64px; }
+  .sp-peek { margin-bottom: 20px; }
   .sp-hero h1 { font-size: clamp(1.85rem, 8.2vw, 2.3rem); margin-bottom: 16px; }
   .sp-lead { font-size: 1rem; margin-bottom: 20px; }
   .sp-bullets { margin-bottom: 26px; }
   .sp-bullets li { font-size: 0.95rem; }
   .sp-hero__cta { align-items: stretch; }
   .sp-cta { width: 100%; white-space: normal; }
-  .sp-cover { width: min(72%, 260px); }
   .sp-facts__value { font-size: 1.3rem; }
   .sp-receive li,
   .sp-audience li,

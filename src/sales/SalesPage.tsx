@@ -140,6 +140,15 @@ export function SalesPage({ content }: { content: SalesContent }) {
               </p>
               <h1>{content.hero.title}</h1>
               <p className="sp-lead">{content.hero.lead}</p>
+              <div className="sp-peek">
+                <button type="button" className="sp-peek__cover" onClick={() => setLightbox(0)} aria-label={`${content.inside.open}: ${content.hero.coverAlt}`}>
+                  <img src={`${content.assets}/${content.cover}-480.webp`} width={480} height={723} alt="" decoding="async" />
+                </button>
+                <p className="sp-peek__text">
+                  <strong>{content.hero.badge}</strong>
+                  <span>{content.hero.peek}</span>
+                </p>
+              </div>
               <ul className="sp-bullets">
                 {content.hero.bullets.map((bullet) => (
                   <li key={bullet}>
