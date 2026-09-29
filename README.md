@@ -34,7 +34,7 @@ O portfólio publicado hoje: Grupo FVT, Gabrieli Lazzarotto, PipoCrunch, Guacamo
 
 ## Página de vendas — AI to Business
 
-Duas páginas fora da navegação do site (acesso só pela URL, com `noindex`):
+A edição em português entra no menu do site (aba **AI to Business** → `/pt-br/ai-to-business/`). A edição em inglês continua só pela URL. As duas páginas seguem com `noindex`:
 
 - `/pt-br/ai-to-business/` → checkout Kiwify (BRL)
 - `/en/ai-to-business/` → checkout Hotmart (USD)
