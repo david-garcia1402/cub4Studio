@@ -2,6 +2,8 @@ import type { LightboxLabels } from "../components/ui/Lightbox";
 import {
   CHECKOUT_BR_URL,
   CHECKOUT_EN_URL,
+  COMPARE_AT_PRICE_BR,
+  COMPARE_AT_PRICE_EN,
   GUARANTEE_TERMS_BR,
   GUARANTEE_TERMS_EN,
   META_PIXEL_ID_BR,
@@ -34,6 +36,7 @@ export type SalesContent = {
   price: number;
   currency: string;
   priceLabel: string;
+  compareAtLabel: string;
   guarantee: string;
   pixelId: string;
   assets: string;
@@ -56,17 +59,8 @@ export type SalesContent = {
   tracks: { tag: string; title: string; desc: string; note: string; items: Track[] };
   inside: { tag: string; title: string; desc: string; open: string; prev: string; next: string; fictional: string; items: Preview[] };
   receive: { tag: string; title: string; desc: string; items: { title: string; text: string }[]; rights: string; notIncluded: string };
-  audience: {
-    tag: string;
-    title: string;
-    desc: string;
-    items: { title: string; text: string }[];
-    prereqTitle: string;
-    prereq: string[];
-    notForTitle: string;
-    notFor: string[];
-  };
-  steps: { tag: string; title: string; desc: string; items: { title: string; text: string; ref: string }[]; disclaimer: string };
+  promo: { label: string; from: string; to: string; endsIn: string; units: [string, string, string]; cta: string };
+  tools: { label: string; items: { name: string; logo: string }[]; disclaimer: string };
   offer: { tag: string; title: string; name: string; includes: string[]; priceCaption: string; cta: string; note: string; taxes: string };
   faq: { tag: string; title: string; items: Faq[] };
   closing: { title: string; text: string; cta: string };
@@ -88,6 +82,14 @@ function formatPrice(value: number, currency: string, locale: string) {
 
 const priceBr = formatPrice(PRODUCT_PRICE_BR, PRODUCT_CURRENCY_BR, "pt-BR");
 const priceEn = formatPrice(PRODUCT_PRICE_EN, PRODUCT_CURRENCY_EN, "en-US");
+const compareAtBr = COMPARE_AT_PRICE_BR > PRODUCT_PRICE_BR ? formatPrice(COMPARE_AT_PRICE_BR, PRODUCT_CURRENCY_BR, "pt-BR") : "";
+const compareAtEn = COMPARE_AT_PRICE_EN > PRODUCT_PRICE_EN ? formatPrice(COMPARE_AT_PRICE_EN, PRODUCT_CURRENCY_EN, "en-US") : "";
+
+const toolLogos = [
+  { name: "ChatGPT", logo: "/ai-to-business/logos/chatgpt.svg" },
+  { name: "Cursor", logo: "/ai-to-business/logos/cursor.svg" },
+  { name: "Claude", logo: "/ai-to-business/logos/claude.svg" },
+];
 
 export const ptBr: SalesContent = {
   locale: "pt-br",
@@ -101,6 +103,7 @@ export const ptBr: SalesContent = {
   price: PRODUCT_PRICE_BR,
   currency: PRODUCT_CURRENCY_BR,
   priceLabel: priceBr,
+  compareAtLabel: compareAtBr,
   guarantee: GUARANTEE_TERMS_BR,
   pixelId: META_PIXEL_ID_BR,
   assets: "/ai-to-business/pt-br",
@@ -233,42 +236,18 @@ export const ptBr: SalesContent = {
     rights: "Uso pessoal do comprador: você pode copiar e adaptar prompts, modelos e checklists no seu trabalho e no de clientes. Não é permitido revender ou redistribuir o PDF.",
     notIncluded: "Não inclui aulas em vídeo, mentoria, software, licenças ou créditos de ferramentas de IA, nem serviço feito para você.",
   },
-  audience: {
-    tag: "Para quem é",
-    title: "Para quem quer sair da ferramenta e chegar a uma oferta",
-    desc: "O guia indica uma trilha de leitura para cada ponto de partida.",
-    items: [
-      { title: "Iniciante sem portfólio", text: "Começa pelos fundamentos e pela trilha de sites ou de criativos." },
-      { title: "Freelancer de design, social media ou vídeo", text: "Criativos, vídeos e copy, com oferta, preço e prospecção." },
-      { title: "Perfil técnico ou curioso por no-code", text: "Automações e agentes, e depois skills e templates." },
-      { title: "Desenvolvedor", text: "Software house com IA e micro-SaaS." },
-      { title: "Quem vende produtos ou atende lojas", text: "Ecommerce, inteligência de negócios e criativos de produto." },
-      { title: "Quem quer um produto digital próprio", text: "Skills, templates e micro-SaaS." },
-    ],
-    prereqTitle: "Pré-requisitos",
-    prereq: [
-      "Não é preciso programar nas trilhas iniciantes (sites, criativos e copy) se você usar um construtor visual. Com gerador de código por IA, é preciso ler e ajustar HTML simples.",
-      "As trilhas intermediárias pedem mais ferramentas conectadas, testes e atenção a custos por uso.",
-      "Nas trilhas avançadas (agentes, skills, software house e micro-SaaS), colocar em produção pede conhecimento técnico real ou um parceiro especializado.",
-      "O plano de 14 dias considera de 1 a 3 horas por dia.",
-    ],
-    notForTitle: "Não é para você se",
-    notFor: [
-      "Você procura renda garantida ou fórmula pronta.",
-      "Você quer um curso em vídeo, mentoria ou alguém que faça o trabalho por você.",
-    ],
+  promo: {
+    label: "Oferta por tempo limitado",
+    from: "de",
+    to: "por",
+    endsIn: "Termina em",
+    units: ["h", "min", "s"],
+    cta: "Garantir",
   },
-  steps: {
-    tag: "Como aplicar",
-    title: "Uma sequência simples, do guia para a prática",
-    desc: "A ordem recomendada pelo próprio guia: leia os fundamentos, escolha uma trilha e só depois vá para oferta e execução.",
-    items: [
-      { title: "Escolher uma oportunidade", text: "Compare as dez trilhas e pontue com a matriz de escolha para ficar com uma só.", ref: "Capítulos A e B" },
-      { title: "Estudar a trilha escolhida", text: "Ferramentas por função, passo a passo, responsabilidades e checklist de qualidade.", ref: "Capítulos C a L" },
-      { title: "Produzir uma demonstração", text: "Um projeto conceitual, identificado como tal, para mostrar o seu trabalho.", ref: "Capítulo N, dias 5 a 7" },
-      { title: "Montar a oferta e a prospecção", text: "Preço de teste pela calculadora, oferta de uma página e roteiros de abordagem e follow-up.", ref: "Capítulos M e N" },
-    ],
-    disclaimer: "Nada disso garante venda ou clientes. O guia ajuda a evitar erros comuns: escopo aberto, preço sem conta, entrega sem revisão e prospecção que parece spam.",
+  tools: {
+    label: "Na prática com ferramentas como",
+    items: toolLogos,
+    disclaimer: "ChatGPT, Cursor e Claude são marcas de seus respectivos titulares e aparecem apenas como exemplos de ferramentas. O guia não tem vínculo com essas empresas.",
   },
   offer: {
     tag: "Oferta",
@@ -343,6 +322,7 @@ export const en: SalesContent = {
   price: PRODUCT_PRICE_EN,
   currency: PRODUCT_CURRENCY_EN,
   priceLabel: priceEn ? `${priceEn} ${PRODUCT_CURRENCY_EN}` : "",
+  compareAtLabel: compareAtEn ? `${compareAtEn} ${PRODUCT_CURRENCY_EN}` : "",
   guarantee: GUARANTEE_TERMS_EN,
   pixelId: META_PIXEL_ID_EN,
   assets: "/ai-to-business/en",
@@ -475,42 +455,18 @@ export const en: SalesContent = {
     rights: "For the buyer's personal use: you may copy and adapt the prompts, templates, and checklists for your own work and your clients' work. You may not resell or redistribute the PDF.",
     notIncluded: "Not included: video lessons, coaching, software, AI tool licenses or credits, or done-for-you services.",
   },
-  audience: {
-    tag: "Who it's for",
-    title: "For people ready to go from tool to offer",
-    desc: "The guide suggests a reading track for each starting point.",
-    items: [
-      { title: "Beginners with no portfolio", text: "Start with the foundations and the websites or creative track." },
-      { title: "Designers, social media managers, and video editors", text: "Creative, video, and copy tracks, then offer, pricing, and outreach." },
-      { title: "Technical folks and no-code fans", text: "Automations and agents, then skills and templates." },
-      { title: "Developers", text: "The AI-assisted dev shop and micro-SaaS tracks." },
-      { title: "People who sell products or serve online stores", text: "Ecommerce, business intelligence, and product creative." },
-      { title: "People building their own digital product", text: "Skills, templates, and micro-SaaS." },
-    ],
-    prereqTitle: "Prerequisites",
-    prereq: [
-      "No coding needed for the beginner tracks (websites, creative, and copy) if you use a visual builder. With an AI code generator, you'll need to read and tweak basic HTML.",
-      "Intermediate tracks involve more connected tools, more testing, and attention to usage-based costs.",
-      "For the advanced tracks (agents, skills, dev shop, and micro-SaaS), running in production takes real technical knowledge or a specialist partner.",
-      "The 14-day plan assumes 1 to 3 hours a day.",
-    ],
-    notForTitle: "It's not for you if",
-    notFor: [
-      "You're looking for guaranteed income or a push-button formula.",
-      "You want a video course, coaching, or someone to do the work for you.",
-    ],
+  promo: {
+    label: "Limited-time offer",
+    from: "was",
+    to: "now",
+    endsIn: "Ends in",
+    units: ["h", "m", "s"],
+    cta: "Get it",
   },
-  steps: {
-    tag: "How to use it",
-    title: "A simple path from reading to doing",
-    desc: "The order the guide recommends: read the foundations, pick one track, and only then move on to the offer and execution.",
-    items: [
-      { title: "Pick one opportunity", text: "Compare the ten tracks and score them with the choice matrix so you commit to one.", ref: "Chapters A and B" },
-      { title: "Study your track", text: "Tools by function, step-by-step process, responsibilities, and a quality checklist.", ref: "Chapters C–L" },
-      { title: "Build a concept demo", text: "A project clearly labeled as a concept, so you can show your work honestly.", ref: "Chapter N, days 5–7" },
-      { title: "Package the offer and start outreach", text: "A test price from the calculator, a one-page offer, and first-contact and follow-up scripts.", ref: "Chapters M and N" },
-    ],
-    disclaimer: "None of this guarantees a sale or clients. The guide helps you avoid common mistakes: open-ended scope, prices without math, delivery without review, and outreach that reads like spam.",
+  tools: {
+    label: "Hands-on with tools like",
+    items: toolLogos,
+    disclaimer: "ChatGPT, Cursor, and Claude are trademarks of their respective owners and are shown only as example tools. The guide isn't affiliated with these companies.",
   },
   offer: {
     tag: "The offer",

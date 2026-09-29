@@ -1516,6 +1516,9 @@ body:has(.project-modal.is-open) .whatsapp-float {
 /* ---------- Página de vendas: AI to Business (/pt-br|en/ai-to-business/) ---------- */
 
 @media (prefers-reduced-motion: reduce) {
+  .sp-promo__pulse { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 
@@ -1565,6 +1568,93 @@ body:has(.project-modal.is-open) .whatsapp-float {
 }
 a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06); }
 .sp-lang__item.is-current { background: rgba(232, 88, 63, 0.16); color: var(--coral-light); }
+
+html:has(.sp-promo) { scroll-padding-top: calc(var(--header-h) + var(--promo-h) + 12px); }
+.sales-page { --promo-h: 46px; }
+.sp-promo { background: var(--gradient); color: #1c0d06; }
+.sp-promo__inner {
+  min-height: var(--promo-h);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 18px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.sp-promo__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+.sp-promo__pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1c0d06;
+  animation: sp-pulse 1.4s ease-in-out infinite;
+}
+@keyframes sp-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.7); }
+}
+.sp-promo__price s { opacity: 0.7; text-decoration-thickness: 2px; }
+.sp-promo__price strong { font-weight: 800; font-size: 1.02rem; }
+.sp-promo__timer { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+.sp-promo__clock { display: inline-flex; gap: 4px; font-variant-numeric: tabular-nums; }
+.sp-promo__unit {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  background: #1c0d06;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.sp-promo__unit b { font-size: 0.92rem; font-weight: 800; }
+.sp-promo__cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1.5px solid #1c0d06;
+  font-weight: 800;
+  font-size: 0.82rem;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.sp-promo__inner:hover .sp-promo__cta { background: #1c0d06; color: #fff; }
+.sales-page .sp-promo__inner:focus-visible { outline-color: #1c0d06; outline-offset: -3px; }
+.sp-was { margin-right: 6px; color: var(--text-dim); }
+
+.sp-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 0 0 28px; }
+.sp-tools__label { font-size: 0.82rem; font-weight: 600; color: var(--text-dim); }
+.sp-tools__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.sp-tools__list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 14px 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.sp-tools__list img { width: 20px; height: 20px; }
 
 .sp-hero { padding: 72px 0 64px; }
 .sp-hero__grid {
@@ -1828,37 +1918,6 @@ a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06
   font-size: 0.9rem;
 }
 
-.sp-audience {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-.sp-audience li { padding: 20px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); }
-.sp-audience h3 { font-size: 1.05rem; color: var(--text); margin-bottom: 6px; }
-.sp-audience p { margin: 0; font-size: 0.92rem; }
-.sp-prereq { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; margin-top: 20px; }
-.sp-prereq > div { padding: 22px; border: 1px solid var(--border); border-radius: var(--radius-md); background: rgba(255, 255, 255, 0.02); }
-.sp-prereq h3 { font-size: 1.05rem; color: var(--text); margin-bottom: 10px; }
-.sp-prereq ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; color: var(--text-muted); font-size: 0.92rem; line-height: 1.55; }
-
-.sp-steps {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-.sp-steps li { position: relative; padding: 22px 20px; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); display: flex; flex-direction: column; }
-.sp-steps__num { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; line-height: 1; margin-bottom: 14px; color: var(--coral-light); }
-.sp-steps h3 { font-size: 1.08rem; color: var(--text); margin-bottom: 8px; }
-.sp-steps p { font-size: 0.92rem; margin-bottom: 14px; }
-.sp-steps__ref { margin-top: auto; font-size: 0.78rem; font-weight: 600; color: var(--text-dim); }
-.sp-disclaimer { margin: 20px 0 0; max-width: 760px; font-size: 0.9rem; color: var(--text-dim); }
-
 .sp-offer {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
@@ -1882,6 +1941,8 @@ a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06
 .sp-offer__cover { width: 132px; height: auto; aspect-ratio: 480 / 723; border-radius: 8px; box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45); }
 .sp-price { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .sp-price__caption { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+.sp-price__was { margin-top: 4px; font-size: 0.95rem; color: var(--text-dim); }
+.sp-price__was s { text-decoration-color: var(--coral-light); text-decoration-thickness: 2px; }
 .sp-price__value { font-family: var(--font-display); font-size: 2.6rem; font-weight: 700; color: var(--text); line-height: 1.1; }
 .sp-price__taxes { font-size: 0.85rem; color: var(--text-dim); }
 .sp-offer__card .sp-cta { width: 100%; }
@@ -2017,12 +2078,8 @@ a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06
     border-radius: var(--radius-md);
     background: rgba(255, 255, 255, 0.03);
   }
-  .sp-receive,
-  .sp-audience { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .sp-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sp-receive { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sp-offer { grid-template-columns: 1fr; gap: 32px; }
-  .sp-prereq { grid-template-columns: 1fr; }
-
   /* Seis itens no menu não cabem ao lado da logo e do CTA. */
   .nav {
     position: absolute;
@@ -2238,11 +2295,7 @@ a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06
   .sp-hero__cta { align-items: stretch; }
   .sp-cta { width: 100%; white-space: normal; }
   .sp-facts__value { font-size: 1.3rem; }
-  .sp-receive li,
-  .sp-audience li,
-  .sp-steps li { padding: 18px; }
-  .sp-audience,
-  .sp-steps { grid-template-columns: 1fr; }
+  .sp-receive li { padding: 18px; }
   .sp-page { flex-basis: 86%; }
   .sp-page figcaption { padding: 14px 16px 18px; }
   .sp-lang__item { min-width: 44px; padding: 0 10px; }
@@ -2251,4 +2304,16 @@ a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06
   .sp-closing { padding: 64px 0; }
   .sp-faq summary { font-size: 0.98rem; padding: 18px 40px 18px 0; }
   .sp-footer__links { flex-direction: column; gap: 0; }
+  .sales-page { --promo-h: 58px; }
+  .sp-promo__inner { gap: 4px 12px; padding-top: 7px; padding-bottom: 7px; }
+  .sp-promo__label { font-size: 0.7rem; letter-spacing: 0.03em; gap: 6px; }
+  .sp-promo__timer { order: 1; }
+  .sp-promo__price { order: 2; font-size: 0.86rem; }
+  .sp-promo__cta { order: 3; min-height: 28px; padding: 0 10px; font-size: 0.76rem; }
+  .sp-promo__ends { display: none; }
+  .sp-promo__unit { padding: 2px 5px; }
+  .sp-promo__unit b { font-size: 0.84rem; }
+  .sp-tools { gap: 8px; margin-bottom: 22px; }
+  .sp-tools__label { width: 100%; }
+  .sp-tools__list li { font-size: 0.85rem; padding: 0 12px 0 9px; }
 }
