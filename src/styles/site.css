@@ -2233,7 +2233,8 @@ html:has(.sp-promo) { scroll-padding-top: calc(var(--header-h) + var(--promo-h) 
   }
   .sp-sticky.is-visible { transform: none; visibility: visible; }
   .sp-sticky__btn { width: 100%; min-height: 50px; justify-content: space-between; white-space: normal; text-align: left; }
-  .sp-sticky__price { font-weight: 800; }
+  .sp-sticky__price { font-weight: 800; text-align: right; }
+  .sp-sticky__was { margin-right: 6px; font-weight: 600; opacity: 0.7; }
   body:has(.lightbox.is-open) .sp-sticky { display: none; }
 }
 

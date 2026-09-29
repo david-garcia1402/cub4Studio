@@ -523,7 +523,12 @@ export function SalesPage({ content }: { content: SalesContent }) {
         <div className={`sp-sticky${stickyVisible ? " is-visible" : ""}`} aria-hidden={!stickyVisible} inert={!stickyVisible}>
           <a className="btn btn--primary sp-sticky__btn" href={checkoutHref} rel="noopener" tabIndex={stickyVisible ? 0 : -1} onClick={() => trackCheckoutClick(content, "sticky")}>
             <span>{content.sticky}</span>
-            {content.priceLabel ? <span className="sp-sticky__price">{content.priceLabel}</span> : null}
+            {content.priceLabel ? (
+              <span className="sp-sticky__price">
+                {content.compareAtLabel ? <s className="sp-sticky__was">{content.compareAtLabel}</s> : null}
+                {content.priceLabel}
+              </span>
+            ) : null}
           </a>
         </div>
       ) : null}
