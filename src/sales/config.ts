@@ -16,6 +16,15 @@ export const PRODUCT_PRICE_EN = 9.99;
 export const PRODUCT_CURRENCY_BR = "BRL";
 export const PRODUCT_CURRENCY_EN = "USD";
 
+/*
+ * Faixa promocional no topo. Preço "de" 0 = a faixa mostra só o preço atual, sem valor riscado.
+ * PROMO_ENDS_AT vazio = o cronômetro conta até a meia-noite local e reinicia a cada dia.
+ * Com data ISO (ex.: "2026-10-15T23:59:59-03:00"), a faixa some quando o prazo acaba.
+ */
+export const COMPARE_AT_PRICE_BR = 129.99;
+export const COMPARE_AT_PRICE_EN = 0;
+export const PROMO_ENDS_AT = "";
+
 /* IDs públicos do Meta Pixel. Vazio = pixel não carrega. Use o mesmo ID configurado na Kiwify/Hotmart. */
 export const META_PIXEL_ID_BR = "";
 export const META_PIXEL_ID_EN = "";
