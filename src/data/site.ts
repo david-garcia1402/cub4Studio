@@ -12,6 +12,7 @@ export const site = {
 export const navLinks = [
   { href: "#portfolio", label: "Portfólio" },
   { href: "#servicos", label: "Serviços" },
+  { href: "/pt-br/ai-to-business/", label: "AI to Business" },
   { href: "#sobre", label: "Sobre" },
   { href: "#processo", label: "Como trabalhamos" },
   { href: "#contato", label: "Contato" },
