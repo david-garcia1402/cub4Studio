@@ -27,7 +27,7 @@ export const projects = {
     title: "Gancho 'usa IA só pra conversar?' + montador de pedido + guia",
     timeline: [
       { type: "hook", dur: 1.9, text: "Você usa IA|só pra *conversar*?", emoji: "🤔", bg: "pipoca" },
-      { type: "hook", dur: 1.8, text: "Dá pra *ganhar|dinheiro* com ela.", emoji: "💰", bg: "pipoca", bgFrom: 30 },
+      { type: "hook", dur: 1.8, text: "Dá pra *ganhar dinheiro*|com ela.", emoji: "💰", bg: "pipoca", bgFrom: 30 },
       { type: "phone", clip: "pipoca", tag: "SITE REAL NO AR", domain: "pipocrunch.com" },
       { type: "hook", dur: 1.9, text: "Todo negócio|precisa de *um site*.", sub: "Quem sabe fazer com IA, sai na frente.", bg: "guiaCurto" },
       { type: "phone", clip: "guiaCurto", tag: "O GUIA", domain: "cub4studio.com" },

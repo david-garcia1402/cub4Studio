@@ -48,9 +48,9 @@ export const clips = {
       await a.scroll("#pedido", 1.3, { offset: 150 });
       await a.tap("text=Recheadas", { lead: 0.35 });
       await a.wait(0.35);
-      await a.tap("text=Pistache", { lead: 0.35 });
+      await a.tap("text=Creme de Pistache", { lead: 0.35 });
       await a.wait(0.35);
-      await a.tap("text=220 g", { lead: 0.35 });
+      await a.tap("text=500 ml", { lead: 0.35 });
       await a.wait(0.6);
       a.caption("...e envia pronto|no *WhatsApp*.");
       await a.scroll("text=Enviar no WhatsApp", 1.1, { offset: -520 });
@@ -92,7 +92,7 @@ export const clips = {
       await a.wait(0.8);
       await a.scroll("#pedido", 1.5, { offset: 150 });
       await a.tap("text=Recheadas", { lead: 0.3 });
-      await a.tap("text=Pistache", { lead: 0.3 });
+      await a.tap("text=Creme de Pistache", { lead: 0.3 });
       await a.wait(0.6);
     },
   },
