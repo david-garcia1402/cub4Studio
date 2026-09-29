@@ -3,7 +3,7 @@ import { site } from "../data/site";
 import { Brand, Chevron, InstagramIcon } from "../components/ui/Icons";
 import { Lightbox, type LightboxImage } from "../components/ui/Lightbox";
 import { Reveal } from "../components/ui/Reveal";
-import { SUPPORT_CONTACT } from "./config";
+import { PROMO_ENDS_AT, SUPPORT_CONTACT } from "./config";
 import type { SalesContent } from "./content";
 import { buildCheckoutUrl, initSalesTracking, trackCheckoutClick } from "./tracking";
 
@@ -24,6 +24,70 @@ function CheckoutCta({ content, href, position, label, size = "lg" }: CtaProps) 
         →
       </span>
     </a>
+  );
+}
+
+function nextDeadline() {
+  if (PROMO_ENDS_AT) {
+    const fixed = Date.parse(PROMO_ENDS_AT);
+    return Number.isNaN(fixed) ? 0 : fixed;
+  }
+  const midnight = new Date();
+  midnight.setHours(24, 0, 0, 0);
+  return midnight.getTime();
+}
+
+function useCountdown() {
+  const [deadline, setDeadline] = useState(nextDeadline);
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      const current = Date.now();
+      setNow(current);
+      if (!PROMO_ENDS_AT && current >= deadline) setDeadline(nextDeadline());
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [deadline]);
+  return Math.max(0, deadline - now);
+}
+
+function PromoBar({ content, href }: { content: SalesContent; href: string }) {
+  const remaining = useCountdown();
+  if (!href || !content.priceLabel || remaining <= 0) return null;
+  const { promo } = content;
+  const total = Math.floor(remaining / 1000);
+  const parts = [Math.floor(total / 3600), Math.floor((total % 3600) / 60), total % 60];
+  return (
+    <div className="sp-promo">
+      <a className="container sp-promo__inner" href={href} rel="noopener" data-position="promo" onClick={() => trackCheckoutClick(content, "promo")}>
+        <span className="sp-promo__label">
+          <span className="sp-promo__pulse" aria-hidden="true" />
+          {promo.label}
+        </span>
+        <span className="sp-promo__price">
+          {content.compareAtLabel ? (
+            <>
+              {promo.from} <s>{content.compareAtLabel}</s>{" "}
+            </>
+          ) : null}
+          {promo.to} <strong>{content.priceLabel}</strong>
+        </span>
+        <span className="sp-promo__timer" role="timer" aria-live="off">
+          <span className="sp-promo__ends">{promo.endsIn}</span>
+          <span className="sp-promo__clock">
+            {parts.map((value, i) => (
+              <span key={promo.units[i]} className="sp-promo__unit">
+                <b>{String(value).padStart(2, "0")}</b>
+                {promo.units[i]}
+              </span>
+            ))}
+          </span>
+        </span>
+        <span className="sp-promo__cta" aria-hidden="true">
+          {promo.cta} →
+        </span>
+      </a>
+    </div>
   );
 }
 
@@ -118,6 +182,7 @@ export function SalesPage({ content }: { content: SalesContent }) {
       <div className="bg-grid" aria-hidden="true" />
       <div id="topo" />
       <header className="site-header sp-header">
+        <PromoBar content={content} href={checkoutHref} />
         <div className="container header-inner">
           <Brand label={content.locale === "en" ? "cub4Studio - back to top" : "cub4Studio - voltar ao topo"} />
           <nav className="sp-lang" aria-label={content.switcherLabel}>
@@ -140,6 +205,17 @@ export function SalesPage({ content }: { content: SalesContent }) {
               </p>
               <h1>{content.hero.title}</h1>
               <p className="sp-lead">{content.hero.lead}</p>
+              <div className="sp-tools">
+                <span className="sp-tools__label">{content.tools.label}</span>
+                <ul className="sp-tools__list">
+                  {content.tools.items.map((tool) => (
+                    <li key={tool.name}>
+                      <img src={tool.logo} width={20} height={20} alt="" decoding="async" />
+                      <span>{tool.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
               <div className="sp-peek">
                 <button type="button" className="sp-peek__cover" onClick={() => setLightbox(0)} aria-label={`${content.inside.open}: ${content.hero.coverAlt}`}>
                   <img src={`${content.assets}/${content.cover}-480.webp`} width={480} height={723} alt="" decoding="async" />
@@ -161,6 +237,7 @@ export function SalesPage({ content }: { content: SalesContent }) {
                 <CheckoutCta content={content} href={checkoutHref} position="hero" label={content.hero.cta} />
                 {checkoutHref ? (
                   <p className="sp-cta-note">
+                    {content.priceLabel && content.compareAtLabel ? <s className="sp-was">{content.compareAtLabel}</s> : null}
                     {content.priceLabel ? <strong>{content.priceLabel}</strong> : null}
                     {content.priceLabel && content.offer.taxes ? ` ${content.offer.taxes}` : null}
                     {content.priceLabel ? " · " : null}
@@ -322,69 +399,6 @@ export function SalesPage({ content }: { content: SalesContent }) {
           </div>
         </section>
 
-        <section className="section section--alt sp-section" aria-labelledby="sp-audience">
-          <div className="container">
-            <Reveal>
-              <p className="section-tag">{content.audience.tag}</p>
-              <h2 className="section-title" id="sp-audience">
-                {content.audience.title}
-              </h2>
-              <p className="section-desc">{content.audience.desc}</p>
-            </Reveal>
-            <ul className="sp-audience">
-              {content.audience.items.map((item) => (
-                <li key={item.title}>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                </li>
-              ))}
-            </ul>
-            <div className="sp-prereq">
-              <div>
-                <h3>{content.audience.prereqTitle}</h3>
-                <ul>
-                  {content.audience.prereq.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <h3>{content.audience.notForTitle}</h3>
-                <ul>
-                  {content.audience.notFor.map((line) => (
-                    <li key={line}>{line}</li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section sp-section" aria-labelledby="sp-steps">
-          <div className="container">
-            <Reveal>
-              <p className="section-tag">{content.steps.tag}</p>
-              <h2 className="section-title" id="sp-steps">
-                {content.steps.title}
-              </h2>
-              <p className="section-desc">{content.steps.desc}</p>
-            </Reveal>
-            <ol className="sp-steps">
-              {content.steps.items.map((step, i) => (
-                <li key={step.title}>
-                  <span className="sp-steps__num" aria-hidden="true">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <h3>{step.title}</h3>
-                  <p>{step.text}</p>
-                  <span className="sp-steps__ref">{step.ref}</span>
-                </li>
-              ))}
-            </ol>
-            <p className="sp-disclaimer">{content.steps.disclaimer}</p>
-          </div>
-        </section>
-
         <section className="section section--alt sp-section" id="oferta" aria-labelledby="sp-offer" ref={offerRef}>
           <div className="container">
             <div className="sp-offer">
@@ -416,6 +430,11 @@ export function SalesPage({ content }: { content: SalesContent }) {
                 {content.priceLabel ? (
                   <div className="sp-price">
                     <span className="sp-price__caption">{content.offer.priceCaption}</span>
+                    {content.compareAtLabel ? (
+                      <span className="sp-price__was">
+                        {content.promo.from} <s>{content.compareAtLabel}</s>
+                      </span>
+                    ) : null}
                     <span className="sp-price__value">{content.priceLabel}</span>
                     {content.offer.taxes ? <span className="sp-price__taxes">{content.offer.taxes}</span> : null}
                   </div>
@@ -481,6 +500,7 @@ export function SalesPage({ content }: { content: SalesContent }) {
               </p>
             ) : null}
             <p>{content.footer.legal}</p>
+            <p>{content.tools.disclaimer}</p>
             <ul className="sp-footer__links">
               {content.footer.links.map((link) => (
                 <li key={link.href}>
@@ -503,7 +523,12 @@ export function SalesPage({ content }: { content: SalesContent }) {
         <div className={`sp-sticky${stickyVisible ? " is-visible" : ""}`} aria-hidden={!stickyVisible} inert={!stickyVisible}>
           <a className="btn btn--primary sp-sticky__btn" href={checkoutHref} rel="noopener" tabIndex={stickyVisible ? 0 : -1} onClick={() => trackCheckoutClick(content, "sticky")}>
             <span>{content.sticky}</span>
-            {content.priceLabel ? <span className="sp-sticky__price">{content.priceLabel}</span> : null}
+            {content.priceLabel ? (
+              <span className="sp-sticky__price">
+                {content.compareAtLabel ? <s className="sp-sticky__was">{content.compareAtLabel}</s> : null}
+                {content.priceLabel}
+              </span>
+            ) : null}
           </a>
         </div>
       ) : null}
