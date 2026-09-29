@@ -1570,7 +1570,7 @@ a.sp-lang__item:hover { color: var(--text); background: rgba(255, 255, 255, 0.06
 .sp-lang__item.is-current { background: rgba(232, 88, 63, 0.16); color: var(--coral-light); }
 
 html:has(.sp-promo) { scroll-padding-top: calc(var(--header-h) + var(--promo-h) + 12px); }
-.sales-page { --promo-h: 46px; }
+:root { --promo-h: 46px; }
 .sp-promo { background: var(--gradient); color: #1c0d06; }
 .sp-promo__inner {
   min-height: var(--promo-h);
@@ -2068,6 +2068,7 @@ html:has(.sp-promo) { scroll-padding-top: calc(var(--header-h) + var(--promo-h) 
   .sp-hero__grid { grid-template-columns: 1fr; gap: 40px; }
   .sp-hero__copy { max-width: 680px; }
   .sp-hero__visual { display: none; }
+  .sp-promo__cta { display: none; }
   .sp-peek {
     display: flex;
     align-items: center;
@@ -2304,12 +2305,11 @@ html:has(.sp-promo) { scroll-padding-top: calc(var(--header-h) + var(--promo-h) 
   .sp-closing { padding: 64px 0; }
   .sp-faq summary { font-size: 0.98rem; padding: 18px 40px 18px 0; }
   .sp-footer__links { flex-direction: column; gap: 0; }
-  .sales-page { --promo-h: 58px; }
+  :root { --promo-h: 60px; }
   .sp-promo__inner { gap: 4px 12px; padding-top: 7px; padding-bottom: 7px; }
   .sp-promo__label { font-size: 0.7rem; letter-spacing: 0.03em; gap: 6px; }
   .sp-promo__timer { order: 1; }
   .sp-promo__price { order: 2; font-size: 0.86rem; }
-  .sp-promo__cta { order: 3; min-height: 28px; padding: 0 10px; font-size: 0.76rem; }
   .sp-promo__ends { display: none; }
   .sp-promo__unit { padding: 2px 5px; }
   .sp-promo__unit b { font-size: 0.84rem; }
