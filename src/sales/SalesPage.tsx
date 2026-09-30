@@ -172,6 +172,7 @@ export function SalesPage({ content }: { content: SalesContent }) {
   const closeLightbox = useCallback(() => setLightbox(null), []);
   const total = content.inside.items.length;
   const switcherHref = `${content.alternateUrl}${search}`;
+  const homeLabel = content.locale === "en" ? "cub4Studio - home" : "cub4Studio - início";
 
   return (
     <>
@@ -180,11 +181,10 @@ export function SalesPage({ content }: { content: SalesContent }) {
       </a>
       <div className="bg-glow bg-glow--one sp-glow" aria-hidden="true" />
       <div className="bg-grid" aria-hidden="true" />
-      <div id="topo" />
       <header className="site-header sp-header">
         <PromoBar content={content} href={checkoutHref} />
         <div className="container header-inner">
-          <Brand label={content.locale === "en" ? "cub4Studio - back to top" : "cub4Studio - voltar ao topo"} />
+          <Brand href="/" label={homeLabel} />
           <nav className="sp-lang" aria-label={content.switcherLabel}>
             <span className="sp-lang__item is-current" aria-current="page" lang={content.htmlLang}>
               {content.locale === "en" ? "EN" : "PT-BR"}
@@ -482,7 +482,7 @@ export function SalesPage({ content }: { content: SalesContent }) {
       <footer className="site-footer sp-footer">
         <div className="container sp-footer__inner">
           <div className="sp-footer__brand">
-            <Brand label={content.locale === "en" ? "cub4Studio - back to top" : "cub4Studio - voltar ao topo"} />
+            <Brand href="/" label={homeLabel} />
             <p>
               {content.footer.developed} ·{" "}
               <a href={site.instagram} target="_blank" rel="noopener" className="sp-footer__ig">
