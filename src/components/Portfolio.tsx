@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { projects, projectById, type PortfolioProject } from "../data/portfolio";
 import { trackLead, whatsappHref } from "../lib/whatsapp";
 import { Chevron, CloseIcon, ExternalIcon } from "./ui/Icons";
@@ -283,7 +284,8 @@ function ProjectModal({ project, onClose }: { project: PortfolioProject; onClose
 
   if (!current) return null;
 
-  return (
+  // O header (z-index: 50) fica acima do <main>. Sem o portal, o navbar cobre o topo do preview.
+  return createPortal(
     <>
       <div className="project-modal is-open" aria-hidden="false">
         <div className="project-modal__backdrop" onClick={onClose} />
@@ -382,6 +384,7 @@ function ProjectModal({ project, onClose }: { project: PortfolioProject; onClose
       {lightbox !== null ? (
         <Lightbox images={images} start={lightbox} onClose={() => setLightbox(null)} onChange={(i) => setMediaIndex(i)} />
       ) : null}
-    </>
+    </>,
+    document.body,
   );
 }
