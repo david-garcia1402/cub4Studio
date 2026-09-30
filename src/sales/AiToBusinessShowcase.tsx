@@ -42,10 +42,16 @@ export function AiToBusinessShowcase({ locale }: ShowcaseProps) {
   const scroll = (direction: number) => {
     const track = trackRef.current;
     if (!track) return;
-    const card = track.querySelector<HTMLElement>(".sp-practice-card");
-    const distance = card ? card.offsetWidth + 18 : Math.min(track.clientWidth * 0.86, 430);
+    const cards = Array.from(track.querySelectorAll<HTMLElement>(".sp-practice-card"));
+    if (!cards.length) return;
+    const current = cards.reduce((best, card, index) => {
+      const distance = Math.abs(card.offsetLeft - track.scrollLeft - track.clientLeft);
+      return distance < best.distance ? { index, distance } : best;
+    }, { index: 0, distance: Number.POSITIVE_INFINITY });
+    const nextIndex = Math.max(0, Math.min(cards.length - 1, current.index + direction));
+    const target = cards[nextIndex];
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    track.scrollBy({ left: distance * direction, behavior: reduce ? "auto" : "smooth" });
+    track.scrollTo({ left: target.offsetLeft - track.offsetLeft, behavior: reduce ? "auto" : "smooth" });
   };
 
   return (
