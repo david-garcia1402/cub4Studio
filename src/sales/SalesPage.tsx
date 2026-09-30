@@ -3,7 +3,7 @@ import { site } from "../data/site";
 import { Brand, Chevron, InstagramIcon } from "../components/ui/Icons";
 import { Lightbox, type LightboxImage } from "../components/ui/Lightbox";
 import { Reveal } from "../components/ui/Reveal";
-import { PROMO_ENDS_AT, SUPPORT_CONTACT } from "./config";
+import { PROMO_ENDS_AT, SUPPORT_CONTACT } from "./config";\nimport { AiToBusinessShowcase } from "./AiToBusinessShowcase";
 import type { SalesContent } from "./content";
 import { buildCheckoutUrl, initSalesTracking, trackCheckoutClick } from "./tracking";
 
@@ -264,7 +264,7 @@ export function SalesPage({ content }: { content: SalesContent }) {
           </div>
         </section>
 
-        <div className="sp-facts">
+        <AiToBusinessShowcase locale={content.locale} />\n\n        <div className="sp-facts">
           <ul className="container sp-facts__list">
             {content.facts.map((fact) => (
               <li key={fact.label}>
