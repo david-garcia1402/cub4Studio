@@ -173,6 +173,8 @@ main, header, footer { position: relative; z-index: 1; }
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
 }
 .brand-icon { height: 38px; width: 38px; object-fit: contain; }
 .brand-wordmark {
