@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { projects, type PortfolioProject } from "../data/portfolio";
 
 const showcaseIds = ["grupofvt", "gabilazz", "pipocrunch", "guacamole", "raven"] as const;
@@ -13,6 +13,7 @@ type ShowcaseProps = {
 
 export function AiToBusinessShowcase({ locale }: ShowcaseProps) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(0);
   const isPt = locale === "pt-br";
 
   const copy = isPt
@@ -26,6 +27,8 @@ export function AiToBusinessShowcase({ locale }: ShowcaseProps) {
         concept: "Projeto de portfólio",
         visit: "Visitar projeto",
         deliverables: "Entregas",
+        carousel: "Carrossel de projetos",
+        goTo: (position: number) => `Ir para o projeto ${position}`,
       }
     : {
         tag: "AI TO BUSINESS IN PRACTICE",
@@ -37,21 +40,51 @@ export function AiToBusinessShowcase({ locale }: ShowcaseProps) {
         concept: "Portfolio project",
         visit: "Visit project",
         deliverables: "Deliverables",
+        carousel: "Project carousel",
+        goTo: (position: number) => `Go to project ${position}`,
       };
 
-  const scroll = (direction: number) => {
+  const cardsOf = (track: HTMLElement) => Array.from(track.querySelectorAll<HTMLElement>(".sp-practice-card"));
+
+  const indexFromScroll = (track: HTMLElement) => {
+    const cards = cardsOf(track);
+    if (!cards.length) return 0;
+    const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+    if (maxScroll <= 1) return 0;
+    if (track.scrollLeft >= maxScroll - 4) return cards.length - 1;
+    return cards.reduce(
+      (best, card, i) => {
+        const distance = Math.abs(card.offsetLeft - cards[0].offsetLeft - track.scrollLeft);
+        return distance < best.distance ? { i, distance } : best;
+      },
+      { i: 0, distance: Number.POSITIVE_INFINITY },
+    ).i;
+  };
+
+  useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    const cards = Array.from(track.querySelectorAll<HTMLElement>(".sp-practice-card"));
+    const onScroll = () => setIndex(indexFromScroll(track));
+    track.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      track.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  const goTo = (nextIndex: number) => {
+    const track = trackRef.current;
+    if (!track) return;
+    const cards = cardsOf(track);
     if (!cards.length) return;
-    const current = cards.reduce((best, card, index) => {
-      const distance = Math.abs(card.offsetLeft - track.scrollLeft - track.clientLeft);
-      return distance < best.distance ? { index, distance } : best;
-    }, { index: 0, distance: Number.POSITIVE_INFINITY });
-    const nextIndex = Math.max(0, Math.min(cards.length - 1, current.index + direction));
-    const target = cards[nextIndex];
+    const next = Math.max(0, Math.min(cards.length - 1, nextIndex));
+    const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+    const offset = cards[next].offsetLeft - cards[0].offsetLeft;
+    const target = next >= cards.length - 1 ? maxScroll : Math.min(maxScroll, offset);
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    track.scrollTo({ left: target.offsetLeft - track.offsetLeft, behavior: reduce ? "auto" : "smooth" });
+    track.scrollTo({ left: target, behavior: reduce ? "auto" : "smooth" });
+    setIndex(next);
   };
 
   return (
@@ -66,10 +99,22 @@ export function AiToBusinessShowcase({ locale }: ShowcaseProps) {
             <p className="section-desc">{copy.desc}</p>
           </div>
           <div className="sp-practice__controls" aria-label={copy.tag}>
-            <button type="button" className="carousel-btn" aria-label={copy.prev} onClick={() => scroll(-1)}>
+            <button
+              type="button"
+              className="carousel-btn"
+              aria-label={copy.prev}
+              disabled={index <= 0}
+              onClick={() => goTo(index - 1)}
+            >
               <span aria-hidden="true">←</span>
             </button>
-            <button type="button" className="carousel-btn" aria-label={copy.next} onClick={() => scroll(1)}>
+            <button
+              type="button"
+              className="carousel-btn"
+              aria-label={copy.next}
+              disabled={index >= showcaseProjects.length - 1}
+              onClick={() => goTo(index + 1)}
+            >
               <span aria-hidden="true">→</span>
             </button>
           </div>
@@ -77,7 +122,7 @@ export function AiToBusinessShowcase({ locale }: ShowcaseProps) {
       </div>
 
       <div className="sp-practice__viewport">
-        <div className="sp-practice__track" ref={trackRef}>
+        <div className="sp-practice__track" ref={trackRef} tabIndex={0} role="group" aria-label={copy.carousel}>
           {showcaseProjects.map((project) => {
             const live = Boolean(project.live && project.url);
             const card = (
@@ -136,6 +181,20 @@ export function AiToBusinessShowcase({ locale }: ShowcaseProps) {
             );
           })}
         </div>
+      </div>
+
+      <div className="sp-practice__dots" role="tablist" aria-label={copy.carousel}>
+        {showcaseProjects.map((project, i) => (
+          <button
+            key={project.id}
+            type="button"
+            className={`carousel-dot${i === index ? " is-active" : ""}`}
+            role="tab"
+            aria-selected={i === index}
+            aria-label={copy.goTo(i + 1)}
+            onClick={() => goTo(i)}
+          />
+        ))}
       </div>
     </section>
   );
