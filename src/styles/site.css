@@ -2380,6 +2380,20 @@ html:has(.sp-promo) { scroll-padding-top: calc(var(--header-h) + var(--promo-h) 
   display: none;
 }
 
+.sp-practice__track:focus-visible {
+  outline: 2px solid var(--coral-light);
+  outline-offset: -4px;
+  border-radius: 22px;
+}
+
+.sp-practice__dots {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
 .sp-practice-card {
   display: flex;
   flex-direction: column;
@@ -2552,6 +2566,15 @@ a.sp-practice-card:hover .sp-practice-card__visual img {
     display: none;
   }
 
+  .sp-practice__dots {
+    display: flex;
+  }
+
+  .sp-practice__dots .carousel-dot {
+    width: 34px;
+    height: 34px;
+  }
+
   .sp-practice__viewport {
     overflow: hidden;
   }
@@ -2559,12 +2582,13 @@ a.sp-practice-card:hover .sp-practice-card__visual img {
   .sp-practice__track {
     gap: 14px;
     scroll-padding-inline: 20px;
-    padding: 2px 20px 18px;
+    padding: 2px 20px 14px;
   }
 
+  /* A sobra de 14px deixa aparecer a borda do próximo card (o % é do conteúdo da trilha). */
   .sp-practice-card {
-    flex: 0 0 calc(100vw - 54px);
-    width: calc(100vw - 54px);
+    flex: 0 0 calc(100% - 14px);
+    width: auto;
     max-width: 390px;
     min-width: 0;
     scroll-snap-align: start;
@@ -2629,8 +2653,6 @@ a.sp-practice-card:hover .sp-practice-card__visual img {
   }
 
   .sp-practice-card {
-    flex-basis: calc(100vw - 48px);
-    width: calc(100vw - 48px);
     border-radius: 18px;
   }
 
@@ -2668,11 +2690,6 @@ a.sp-practice-card:hover .sp-practice-card__visual img {
     padding-left: 16px;
     padding-right: 16px;
     scroll-padding-inline: 16px;
-  }
-
-  .sp-practice-card {
-    flex-basis: calc(100vw - 42px);
-    width: calc(100vw - 42px);
   }
 
   .sp-practice-card__body {
