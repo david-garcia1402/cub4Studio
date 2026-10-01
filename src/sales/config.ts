@@ -26,7 +26,7 @@ export const COMPARE_AT_PRICE_EN = 0;
 export const PROMO_ENDS_AT = "";
 
 /* IDs públicos do Meta Pixel. Vazio = pixel não carrega. Use o mesmo ID configurado na Kiwify/Hotmart. */
-export const META_PIXEL_ID_BR = "";
+export const META_PIXEL_ID_BR = "1653975569638320";
 export const META_PIXEL_ID_EN = "";
 
 export const SUPPORT_CONTACT = "cub4studio@gmail.com";
