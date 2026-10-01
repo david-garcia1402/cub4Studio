@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<style>
+  @font-face { font-family: "Inter"; font-weight: 400 900; src: local("Inter"); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: #07040a; }
+  body { font-family: "Inter", "Noto Color Emoji", sans-serif; color: #fff; -webkit-font-smoothing: antialiased; }
+  #stage { position: absolute; inset: 0; overflow: hidden; }
+
+  .bg { position: absolute; inset: 0; background: #0a0509; }
+  .bg-fx { position: absolute; inset: 0; }
+  .hlbox .hl, .hl .hl { color: inherit; }
+  .glow { position: absolute; border-radius: 50%; filter: blur(60px); will-change: transform; }
+  .glow.a { width: 1100px; height: 1100px; background: radial-gradient(circle, rgba(226, 30, 44, 0.62), rgba(226, 30, 44, 0) 68%); }
+  .glow.b { width: 1000px; height: 1000px; background: radial-gradient(circle, rgba(180, 18, 40, 0.5), rgba(180, 18, 40, 0) 68%); }
+  .grid { position: absolute; inset: 0; opacity: 0.55;
+    background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 54px 54px; }
+  .vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, transparent 40%, rgba(0,0,0,0.65) 100%); }
+
+  #hookBg { position: absolute; inset: -60px; background-size: cover; background-position: center top; filter: blur(26px) saturate(1.2); opacity: 0; transform: scale(1.1); }
+  #hookShade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,3,6,0.66), rgba(8,3,6,0.8)); opacity: 0; }
+
+  .brand { position: absolute; top: 118px; left: 60px; display: flex; align-items: center; gap: 14px; font-weight: 800; font-size: 36px; letter-spacing: -0.5px; }
+  .brand img { width: 58px; height: 58px; }
+  .brand b { color: #ff2b3b; }
+
+  .hook { position: absolute; left: 70px; right: 70px; top: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding-bottom: 260px; }
+  .hook .kicker { font-size: 34px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #ffb3b8; margin-bottom: 34px; padding: 14px 28px; border: 2px solid rgba(255, 60, 75, 0.55); border-radius: 999px; background: rgba(255, 43, 59, 0.12); }
+  .hook .lines { font-weight: 900; font-size: 104px; line-height: 1.04; letter-spacing: -3px; text-shadow: 0 6px 40px rgba(0,0,0,0.55); }
+  .hook .lines.md { font-size: 88px; letter-spacing: -2.4px; }
+  .hook .lines.sm { font-size: 74px; letter-spacing: -1.8px; }
+  .hook .w { display: inline-block; will-change: transform, opacity; }
+  .hl { color: #ff2b3b; }
+  .hlbox { color: #fff; background: #e81e2e; padding: 0 18px 6px; border-radius: 18px; margin: 0 4px; box-shadow: 0 10px 40px rgba(232, 30, 46, 0.45); }
+  .hook .sub { margin-top: 38px; font-size: 44px; font-weight: 600; color: rgba(255,255,255,0.86); line-height: 1.3; }
+  .hook .emoji { margin-top: 36px; font-size: 120px; line-height: 1; font-family: "Noto Color Emoji"; }
+
+  #phoneLayer { position: absolute; inset: 0; }
+  .live { position: absolute; top: 212px; left: 0; right: 0; display: flex; justify-content: center; }
+  .live span { display: inline-flex; align-items: center; gap: 14px; padding: 12px 26px; border-radius: 999px; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.16); font-size: 28px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.92); }
+  .live i { width: 16px; height: 16px; border-radius: 50%; background: #22e06b; box-shadow: 0 0 0 0 rgba(34,224,107,0.6); }
+  .live em { font-style: normal; font-weight: 600; letter-spacing: 0; color: rgba(255,255,255,0.7); }
+  .capShade { position: absolute; top: 0; left: 0; right: 0; height: 640px; background: linear-gradient(180deg, rgba(6,2,5,0.62) 0%, rgba(6,2,5,0.4) 60%, rgba(6,2,5,0) 100%); }
+  .cap { position: absolute; top: 288px; left: 60px; right: 60px; text-align: center; font-weight: 900; font-size: 78px; line-height: 1.06; letter-spacing: -2px; text-shadow: 0 6px 30px rgba(0,0,0,0.6); }
+  .cap .l { display: block; }
+
+  .phone { position: absolute; left: 50%; width: 652px; margin-left: -326px; top: 520px; padding: 16px; border-radius: 86px; background: linear-gradient(145deg, #2a2a30, #0d0d10 40%, #1c1c22); box-shadow: 0 0 0 2px rgba(255,255,255,0.1), 0 40px 120px rgba(0,0,0,0.7), 0 0 140px rgba(226,30,44,0.25); transform-origin: 50% 0; will-change: transform; }
+  .screen { position: relative; width: 620px; height: 1208px; border-radius: 70px; overflow: hidden; background: #000; }
+  .screen img.f { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .screen img.f.b { opacity: 0; }
+  .island { position: absolute; top: 18px; left: 50%; width: 170px; height: 46px; margin-left: -85px; border-radius: 30px; background: #000; z-index: 5; }
+  .taps { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+  .tap { position: absolute; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 50%; background: rgba(255,255,255,0.5); border: 4px solid rgba(255,255,255,0.95); box-shadow: 0 6px 24px rgba(0,0,0,0.35); }
+  .ring { position: absolute; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 50%; border: 5px solid rgba(255,255,255,0.9); }
+
+  .cta { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 70px 300px; }
+  .cta .t1 { font-weight: 900; font-size: 96px; line-height: 1.04; letter-spacing: -2.6px; }
+  .cta .t2 { margin-top: 44px; font-size: 52px; font-weight: 700; line-height: 1.5; }
+  .pill { display: inline-block; background: #fff; color: #111; padding: 6px 30px 10px; border-radius: 22px; font-weight: 800; margin: 0 6px; box-shadow: 0 10px 40px rgba(255,255,255,0.25); }
+  .cta .price { margin-top: 40px; display: inline-flex; align-items: baseline; gap: 18px; padding: 18px 36px; border-radius: 26px; background: rgba(255,43,59,0.14); border: 2px solid rgba(255,43,59,0.5); font-size: 40px; font-weight: 700; color: rgba(255,255,255,0.9); }
+  .cta .price b { font-size: 64px; font-weight: 900; color: #fff; letter-spacing: -1px; }
+  .cta .hand { margin-top: 40px; font-size: 130px; font-family: "Noto Color Emoji"; line-height: 1; }
+  .cta .url { position: absolute; bottom: 470px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; font-size: 30px; color: rgba(255,255,255,0.7); font-weight: 600; }
+  .cta .url .brand { position: static; font-size: 40px; }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="bg"></div>
+  <div id="hookBg"></div><div id="hookShade"></div>
+  <div class="bg-fx"><div class="glow a"></div><div class="glow b"></div><div class="grid"></div></div>
+  <div class="vignette"></div>
+  <div id="layers"></div>
+  <div id="flash"></div>
+</div>
+<script>
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, k) => a + (b - a) * k;
+const easeOut = (k) => 1 - Math.pow(1 - clamp(k), 3);
+const easeInOut = (k) => { k = clamp(k); return k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; };
+const easeBack = (k) => { k = clamp(k); const c1 = 1.5, c3 = c1 + 1; return 1 + c3 * Math.pow(k - 1, 3) + c1 * Math.pow(k - 1, 2); };
+const el = (html) => { const d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstElementChild; };
+
+// "*palavra*" = vermelho, "[palavra]" = caixa vermelha, "|" = quebra de linha.
+function markup(text) {
+  return text.split("|").map((line) => {
+    const words = [];
+    const re = /\*([^*]+)\*(\S*)|\[([^\]]+)\](\S*)|(\S+)/g;
+    let m;
+    while ((m = re.exec(line))) {
+      if (m[1]) {
+        const parts = m[1].split(" ");
+        parts.forEach((w, i) => words.push(`<span class="w"><span class="hl">${w}</span>${i === parts.length - 1 ? m[2] : ""}</span>`));
+      } else if (m[3]) words.push(`<span class="w"><span class="hlbox">${m[3]}</span>${m[4]}</span>`);
+      else words.push(`<span class="w">${m[5]}</span>`);
+    }
+    return words.join(" ");
+  });
+}
+
+let SPEC, scenes = [];
+const layers = document.getElementById("layers");
+const brandHtml = (logo) => `<div class="brand"><img src="${logo}"/><span>cub<b>4</b>Studio</span></div>`;
+
+function build(spec) {
+  SPEC = spec;
+  let t = 0;
+  for (const sc of spec.timeline) {
+    const s = { ...sc, start: t };
+    if (sc.type === "hook") {
+      const lines = markup(sc.text);
+      const size = sc.size || (lines.length > 3 ? "sm" : lines.length > 2 && sc.text.length > 44 ? "md" : "");
+      s.node = el(`<div class="hook">
+        ${sc.kicker ? `<div class="kicker">${sc.kicker}</div>` : ""}
+        <div class="lines ${size}">${lines.join("<br/>")}</div>
+        ${sc.sub ? `<div class="sub">${sc.sub}</div>` : ""}
+        ${sc.emoji ? `<div class="emoji">${sc.emoji}</div>` : ""}</div>`);
+      s.words = [...s.node.querySelectorAll(".w, .kicker, .sub, .emoji")];
+    } else if (sc.type === "phone") {
+      const meta = spec.clips[sc.clip];
+      s.meta = meta;
+      const from = sc.from || 0, to = sc.to || meta.frames;
+      s.dur = (to - from) / 30;
+      s.from = from;
+      s.node = el(`<div id="phoneLayer">
+        <div class="capShade"></div>
+        ${brandHtml(spec.logo)}
+        <div class="live"><span><i></i>${sc.tag || "SITE REAL NO AR"}${sc.domain ? ` <em>· ${sc.domain}</em>` : ""}</span></div>
+        <div class="cap"></div>
+        <div class="phone"><div class="screen"><img class="f a"/><img class="f b"/><div class="island"></div><div class="taps"></div></div></div>
+      </div>`);
+      s.cap = s.node.querySelector(".cap");
+      s.phone = s.node.querySelector(".phone");
+      s.imgs = [...s.node.querySelectorAll("img.f")];
+      s.taps = s.node.querySelector(".taps");
+      s.dot = s.node.querySelector(".live i");
+      s.cues = meta.cues.filter((c) => c.f >= from && c.f < to || (c.type !== "sfx" && c.f < from));
+    } else if (sc.type === "cta") {
+      s.node = el(`<div class="cta">
+        <div class="t1">${markup(sc.title).join("<br/>")}</div>
+        <div class="t2">${sc.line}</div>
+        ${sc.price ? `<div class="price">${sc.price}</div>` : ""}
+        <div class="hand">👇</div>
+        <div class="url">${brandHtml(spec.logo)}<span>${sc.url || ""}</span></div>
+      </div>`);
+      s.parts = [s.node.querySelector(".t1"), s.node.querySelector(".t2"), s.node.querySelector(".price"), s.node.querySelector(".hand"), s.node.querySelector(".url")].filter(Boolean);
+    }
+    t += s.dur;
+    s.end = t;
+    s.node.style.display = "none";
+    layers.appendChild(s.node);
+    scenes.push(s);
+  }
+  scenes.forEach((s, i) => { s.prev = scenes[i - 1]; s.next = scenes[i + 1]; });
+  return t;
+}
+
+function frameUrl(clip, f) {
+  return `${SPEC.clipsDir}/${clip}/${String(Math.max(1, Math.min(SPEC.clips[clip].frames, f + 1))).padStart(5, "0")}.jpg`;
+}
+
+async function setImg(img, src) {
+  if (img.dataset.src === src) return;
+  img.dataset.src = src;
+  img.src = src;
+  try { await img.decode(); } catch {}
+}
+
+function renderBg(t) {
+  const a = document.querySelector(".glow.a"), b = document.querySelector(".glow.b");
+  a.style.transform = `translate(${420 + Math.sin(t * 0.5) * 60}px, ${-420 + Math.cos(t * 0.4) * 50}px)`;
+  b.style.transform = `translate(${-520 + Math.cos(t * 0.35) * 70}px, ${1250 + Math.sin(t * 0.45) * 60}px)`;
+}
+
+async function renderHook(s, lt, t) {
+  const pending = [];
+  const bgClip = s.bg;
+  const hookBg = document.getElementById("hookBg"), shade = document.getElementById("hookShade");
+  if (bgClip) {
+    const f = Math.floor((s.bgFrom || 0) + lt * 30);
+    const url = frameUrl(bgClip, f);
+    if (hookBg.dataset.src !== url) {
+      hookBg.dataset.src = url;
+      const im = new Image(); im.src = url; pending.push(im.decode().catch(() => {}));
+      hookBg.style.backgroundImage = `url("${url}")`;
+    }
+    hookBg.style.opacity = 0.9; shade.style.opacity = 1;
+  }
+  // A primeira cena já nasce legível: o frame 0 vira a capa do Reels.
+  const first = s.start === 0;
+  const stagger = first ? 0 : s.stagger ?? 0.075;
+  s.words.forEach((w, i) => {
+    const k = first ? 1 : (lt - 0.05 - i * stagger) / 0.28;
+    const e = easeBack(k);
+    const isEmoji = w.classList.contains("emoji");
+    const bob = isEmoji && k >= 1 ? Math.sin((lt - i * stagger) * 7) * 12 : 0;
+    w.style.opacity = clamp(k * 1.6);
+    w.style.transform = `translateY(${lerp(50, 0, e) + bob}px) scale(${lerp(0.6, 1, e)})`;
+  });
+  const out = clamp((lt - (s.dur - 0.16)) / 0.16);
+  const punch = 1 + 0.06 * (1 - easeOut(lt / 0.35));
+  s.node.style.opacity = 1 - out;
+  s.node.style.transform = `scale(${punch * (1 + out * 0.08)})`;
+  await Promise.all(pending);
+}
+
+function cueAt(s, f, type) {
+  let last = null;
+  for (const c of s.cues) if (c.type === type && c.f <= f) last = c;
+  return last;
+}
+
+async function renderPhone(s, lt) {
+  const f = s.from + Math.floor(lt * 30 + 1e-6);
+  const prevPhone = s.prev && s.prev.type === "phone";
+  const nextPhone = s.next && s.next.type === "phone";
+
+  const enter = prevPhone ? 1 : easeBack(lt / 0.55);
+  const exit = nextPhone ? 0 : easeInOut((lt - (s.dur - 0.32)) / 0.32);
+  const z = cueAt(s, f, "zoom");
+  let scale = 1, shiftY = 0;
+  if (z) {
+    const prevZ = s.cues.filter((c) => c.type === "zoom" && c.f < z.f).pop();
+    const from = prevZ ? prevZ.value : { scale: 1, focus: 0.5 };
+    const k = easeInOut((f - z.f) / 18);
+    scale = lerp(from.scale, z.value.scale, k);
+    const focus = lerp(from.focus, z.value.focus, k);
+    shiftY = -(scale - 1) * 1240 * focus;
+  }
+  s.phone.style.transform = `translateY(${lerp(1300, 0, enter) + exit * 1300 + shiftY}px) scale(${scale})`;
+
+  const [a] = s.imgs;
+  await setImg(a, frameUrl(s.clip, f));
+  if (prevPhone && lt < 0.25) {
+    s.phone.querySelector(".screen").style.opacity = 1;
+    document.getElementById("flash").style.opacity = 0.22 * (1 - lt / 0.25);
+  }
+
+  const cap = cueAt(s, f, "caption");
+  const capText = cap ? cap.value : s.caption || "";
+  if (s.cap.dataset.text !== capText) {
+    s.cap.dataset.text = capText;
+    s.cap.innerHTML = markup(capText).map((l) => `<span class="l">${l}</span>`).join("");
+  }
+  const capAge = cap && cap.f >= s.from ? (f - cap.f) / 30 : lt;
+  const ck = easeOut(capAge / 0.3);
+  s.cap.style.opacity = ck * (1 - exit);
+  s.cap.style.transform = `translateY(${lerp(34, 0, ck)}px)`;
+  const liveIn = prevPhone ? 1 : easeOut(lt / 0.4);
+  s.node.querySelector(".live").style.opacity = liveIn * (1 - exit);
+  s.node.querySelector(".brand").style.opacity = liveIn * (1 - exit);
+  const pulse = (lt * 1.2) % 1;
+  s.dot.style.boxShadow = `0 0 0 ${pulse * 14}px rgba(34,224,107,${0.55 * (1 - pulse)})`;
+
+  const sx = 620 / s.meta.viewport.width;
+  let html = "";
+  for (const tp of s.meta.taps) {
+    const age = (f - tp.f) / 30;
+    if (tp.swipe) {
+      if (age < 0 || age > tp.dur + 0.25) continue;
+      const k = easeInOut(age / tp.dur);
+      const x = (tp.x - k * 180) * sx, y = tp.y * sx;
+      const op = clamp(age / 0.1) * (1 - clamp((age - tp.dur) / 0.25));
+      html += `<div class="tap" style="left:${x}px;top:${y}px;opacity:${op}"></div>`;
+      continue;
+    }
+    if (age < 0 || age > 0.75) continue;
+    const press = age < 0.12 ? lerp(1.25, 0.85, age / 0.12) : lerp(0.85, 1, clamp((age - 0.12) / 0.15));
+    const op = 1 - clamp((age - 0.45) / 0.3);
+    const ring = clamp((age - 0.1) / 0.5);
+    html += `<div class="tap" style="left:${tp.x * sx}px;top:${tp.y * sx}px;opacity:${op};transform:scale(${press})"></div>`;
+    if (age > 0.1) html += `<div class="ring" style="left:${tp.x * sx}px;top:${tp.y * sx}px;opacity:${1 - ring};transform:scale(${1 + ring * 1.6})"></div>`;
+  }
+  s.taps.innerHTML = html;
+}
+
+function renderCta(s, lt) {
+  s.parts.forEach((p, i) => {
+    const k = easeBack((lt - 0.08 - i * 0.12) / 0.4);
+    p.style.opacity = clamp(k * 1.5);
+    let extra = "";
+    if (p.classList.contains("hand") && k >= 1) extra = ` translateY(${Math.abs(Math.sin(lt * 5)) * 30}px)`;
+    if (p.classList.contains("t2") && lt > 1) extra = ` scale(${1 + Math.max(0, Math.sin((lt - 1) * 4)) * 0.03})`;
+    p.style.transform = `translateY(${lerp(60, 0, k)}px) scale(${lerp(0.85, 1, k)})${extra}`;
+  });
+}
+
+window.setup = (spec) => build(spec);
+window.renderFrame = async (t) => {
+  renderBg(t);
+  document.getElementById("flash").style.opacity = 0;
+  const hookBg = document.getElementById("hookBg"), shade = document.getElementById("hookShade");
+  hookBg.style.opacity = 0; shade.style.opacity = 0;
+  const active = scenes.find((s) => t >= s.start && t < s.end) || scenes[scenes.length - 1];
+  for (const s of scenes) s.node.style.display = s === active ? "" : "none";
+  const lt = t - active.start;
+  if (active.type === "hook") await renderHook(active, lt, t);
+  else if (active.type === "phone") await renderPhone(active, lt);
+  else if (active.type === "cta") renderCta(active, lt);
+  if (lt < 0.1 && active.prev && active.prev.type !== active.type) document.getElementById("flash").style.opacity = 0.18 * (1 - lt / 0.1);
+};
+</script>
+</body>
+</html>
