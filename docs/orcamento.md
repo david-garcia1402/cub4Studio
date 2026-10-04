@@ -4,7 +4,7 @@ Página estática publicada pelo build existente: Vite copia `public/orcamento/`
 
 ## Fluxo
 
-Anúncio → formulário → envio confirmado pelo FormSubmit → confirmação na própria página → WhatsApp opcional. Nome, empresa, contato, segmento, decisão de compra, presença atual, projeto, prazo e investimento são enviados ao mesmo e-mail utilizado pelo formulário institucional: cub4studio@gmail.com. UTMs são preservadas no pedido, sem repassar parâmetros arbitrários nem dados pessoais da URL.
+Anúncio → formulário → envio confirmado pelo FormSubmit → confirmação na própria página → WhatsApp opcional. Nome, WhatsApp, Instagram ou Facebook do empreendimento, segmento, presença atual, projeto e objetivo são enviados ao mesmo e-mail utilizado pelo formulário institucional: cub4studio@gmail.com. UTMs são preservadas no pedido, sem repassar parâmetros arbitrários nem dados pessoais da URL.
 
 Não existe banco D1, CRM ou painel nesta implementação. Os pedidos vão por e-mail via FormSubmit. O endereço receptor precisa estar ativado no serviço. Respostas de ativação e falhas não exibem confirmação nem disparam Lead. O serviço externo ainda precisa ser verificado com um envio real e recebimento no e-mail antes de usar a página em campanha.
 

@@ -1,6 +1,6 @@
 // Same receiving address as the existing institutional contact form.
 const ENDPOINT = 'https://formsubmit.co/ajax/cub4studio@gmail.com';
-const LABELS = {name:'Nome',phone:'WhatsApp',email:'email',company:'Empresa',city:'Cidade',segment:'Segmento',decision:'Responsável pela decisão',current:'Presença atual',project:'Projeto',timing:'Prazo desejado',budget:'Investimento previsto',goal:'Objetivo'};
+const LABELS = {name:'Nome',phone:'WhatsApp',social:'Instagram ou Facebook do empreendimento',segment:'Segmento',current:'Presença atual',project:'Projeto',goal:'Objetivo'};
 
 export function validPhone(value) {
   const digits = value.replace(/\D/g, '');
@@ -16,7 +16,7 @@ export function attribution(search) {
 }
 export function whatsappLink(values) {
   // No email or phone in a query string; these are already in the submitted lead.
-  const text = `Olá! Enviei meu pedido pelo site da cub4Studio. Minha empresa é ${values.company}. Tenho interesse em ${values.project}. Podemos conversar sobre a proposta?`;
+  const text = `Olá! Enviei meu pedido pelo site da cub4Studio. O perfil do meu empreendimento é ${values.social}. Tenho interesse em ${values.project}. Podemos conversar sobre a proposta?`;
   return `https://wa.me/5547999940399?text=${encodeURIComponent(text)}`;
 }
 
@@ -36,8 +36,8 @@ if (typeof document !== 'undefined') {
       form.elements.namedItem('phone').focus();
       return;
     }
-    if (!values.name || !values.company || !values.city) {
-      status.textContent = 'Preencha seu nome, empresa e cidade.';
+    if (!values.name || !values.social) {
+      status.textContent = 'Preencha seu nome e o Instagram ou Facebook do empreendimento.';
       return;
     }
     button.disabled = true;
@@ -51,9 +51,8 @@ if (typeof document !== 'undefined') {
       body.append('Consentimento', 'Autorizou contato sobre este pedido');
       body.append('Página', `${location.origin}${location.pathname}`);
       for (const [key, value] of Object.entries(attribution(location.search))) body.append(key, value);
-      body.append('_subject', `Solicitação de site — ${values.company}`);
+      body.append('_subject', `Solicitação de site — ${values.name}`);
       body.append('_template', 'table');
-      body.append('_replyto', values.email);
       const response = await fetch(ENDPOINT, {method:'POST', headers:{Accept:'application/json'}, body, signal:controller.signal});
       const result = await response.json();
       if (!response.ok || !confirmedDelivery(result)) throw new Error('delivery');
