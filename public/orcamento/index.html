@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Seu site próprio começa aqui — cub4Studio</title>
+  <meta name="description" content="Conte sobre sua empresa e solicite uma proposta de site profissional à cub4Studio. Projeto em 5 dias, recorrência e suporte humanizado.">
+  <meta name="theme-color" content="#0d0817">
+  <link rel="canonical" href="https://cub4studio.com/orcamento/">
+  <link rel="icon" href="/img/favicon-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./form.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#briefing">Ir para o formulário</a>
+  <header class="wrap"><a class="brand" href="/" aria-label="cub4Studio — início"><img src="/img/icon-transparent.png" alt="" width="40" height="40">cub<span>4</span>Studio</a><a class="portfolio" href="/#portfolio" target="_blank" rel="noopener">Ver portfólio ↗</a></header>
+  <main class="wrap layout">
+    <section class="pitch" aria-labelledby="headline">
+      <p class="eyebrow">SEU NEGÓCIO. SEU SITE. SUA MARCA.</p>
+      <h1 id="headline">Sua empresa merece <span>mais que um link na bio.</span></h1>
+      <p class="intro">Apresente seus serviços, seus diferenciais e seu contato em um site próprio, com a identidade da sua empresa.</p>
+      <div class="comparison" aria-label="Exemplo ilustrativo: link genérico e domínio próprio">
+        <div><small>HOJE</small><strong>linktr.ee/suaempresa</strong><span>Vários destinos</span></div>
+        <div><small>SEU PRÓXIMO PASSO</small><strong>suaempresa.com</strong><span>Uma presença com sua marca</span></div>
+      </div>
+      <p class="offer">Realizamos seu projeto em <b>5 dias.</b><br>Recorrência e suporte humanizado.</p>
+      <p class="fine">Prazo contado após aprovação do escopo e recebimento dos materiais, conforme a proposta. Domínio sujeito à disponibilidade.</p>
+      <ul class="benefits"><li>Design pensado para celular e computador</li><li>Serviços e diferenciais em um só lugar</li><li>Contato fácil pelo WhatsApp</li></ul>
+      <p class="next">Você conta o que precisa. Nós avaliamos o projeto e enviamos uma proposta com escopo, prazo e investimento.</p>
+    </section>
+    <section class="card" id="briefing" aria-labelledby="form-title">
+      <div id="form-content">
+        <p class="eyebrow">VAMOS CONHECER SUA EMPRESA</p>
+        <h2 id="form-title">Como seria o seu site?</h2>
+        <p>Preencha em cerca de 2 minutos. Solicitar a proposta é gratuito e sem compromisso.</p>
+        <form id="lead-form">
+          <div class="honey" aria-hidden="true"><label>Não preencha este campo<input name="website_confirm" tabindex="-1" autocomplete="off"></label></div>
+          <fieldset><legend>01 · Você e seu negócio</legend>
+            <div class="fields"><label>Seu nome<input name="name" required maxlength="100" autocomplete="name"></label><label>WhatsApp com DDD<input name="phone" type="tel" required maxlength="25" autocomplete="tel" placeholder="(47) 99999-9999"></label></div>
+            <label>E-mail<input name="email" type="email" required maxlength="254" autocomplete="email"></label>
+            <div class="fields"><label>Nome da empresa<input name="company" required maxlength="150" autocomplete="organization"></label><label>Cidade / UF<input name="city" required maxlength="100" placeholder="Joinville / SC"></label></div>
+            <label>Segmento do negócio<select name="segment" required><option value="">Selecione</option><option>Beleza e estética</option><option>Saúde e bem-estar</option><option>Alimentação</option><option>Comércio e lojas</option><option>Serviços profissionais</option><option>Construção e imóveis</option><option>Outro</option></select></label>
+            <label>Você decide sobre a contratação?<select name="decision" required><option value="">Selecione</option><option>Sim, sou responsável pela decisão</option><option>Decido com outra pessoa</option><option>Estou pesquisando para a empresa</option></select></label>
+          </fieldset>
+          <fieldset><legend>02 · Seu projeto</legend>
+            <label>Hoje, sua empresa tem site?<select name="current" required><option value="">Selecione</option><option>Não, uso Instagram e WhatsApp</option><option>Não, uso uma página de links</option><option>Sim, mas quero melhorar ou trocar</option><option>Estou começando meu negócio</option></select></label>
+            <label>Qual projeto você procura?<select name="project" required><option value="">Selecione</option><option>Site para apresentar a empresa</option><option>Landing page para divulgar uma oferta</option><option>Catálogo de produtos ou serviços</option><option>Loja virtual</option><option>Preciso de orientação</option></select></label>
+            <div class="fields"><label>Quando quer começar?<select name="timing" required><option value="">Selecione</option><option>O quanto antes</option><option>Nos próximos 30 dias</option><option>Em 1 a 3 meses</option><option>Estou apenas pesquisando</option></select></label><label>Investimento previsto<select name="budget" required><option value="">Selecione</option><option>Até R$ 1.000</option><option>R$ 1.000 a R$ 3.000</option><option>R$ 3.000 a R$ 5.000</option><option>Acima de R$ 5.000</option><option>Quero orientação sobre valores</option></select></label></div>
+            <p class="fine">As faixas ajudam a entender seu projeto; não são preços ou pacotes.</p>
+            <label>O que você quer alcançar? <span class="optional">(opcional)</span><textarea name="goal" maxlength="1500" rows="3" placeholder="Ex.: apresentar meus serviços e receber pedidos de orçamento."></textarea></label>
+          </fieldset>
+          <label class="check"><input name="consent" type="checkbox" required><span>Concordo em ser contatado pela cub4Studio sobre este pedido. <a href="#privacidade">Como usamos seus dados</a>.</span></label>
+          <button id="submit" type="submit">Quero uma proposta para meu site ↗</button>
+          <p id="form-status" role="status" aria-live="polite"></p>
+          <noscript><p>Ative o JavaScript para enviar o formulário ou <a href="https://wa.me/5547999940399">fale pelo WhatsApp</a>.</p></noscript>
+        </form>
+      </div>
+      <div id="success" hidden tabindex="-1"><p class="eyebrow">PEDIDO ENVIADO</p><h2>Recebemos seu projeto.</h2><p>A cub4Studio vai avaliar as informações e entrar em contato para conversar sobre a proposta.</p><a id="whatsapp" class="button" href="https://wa.me/5547999940399" target="_blank" rel="noopener">Agilizar atendimento no WhatsApp ↗</a><p class="fine">As informações já foram enviadas. Abrir o WhatsApp é opcional.</p><a href="/#portfolio">Enquanto isso, conheça nossos projetos ↗</a></div>
+    </section>
+  </main>
+  <footer class="wrap" id="privacidade"><p><b>Privacidade do seu pedido</b><br>Usamos seus dados para avaliar o projeto e entrar em contato sobre esta solicitação. O envio é processado pelo FormSubmit, serviço já utilizado pela cub4Studio. Para pedir acesso, correção ou exclusão dos dados, escreva para <a href="mailto:cub4studio@gmail.com">cub4studio@gmail.com</a>.</p><p>cub4Studio · <a href="/">Voltar ao site</a></p></footer>
+</body>
+</html>
